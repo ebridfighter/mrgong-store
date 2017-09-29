@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_1">首页</string>
+    <string name="tab_2">下单</string>
+    <string name="app_name">供鲜生</string>
+    <string name="tab_3">库存</string>
+    <string name="tab_4">消息</string>
+    <string name="tab_5">更多</string>
+    <string name="action_settings">设置</string>
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Cancel</string>
+    <string name="dialog_error_title">Sorry</string>
+
+    <string name="empty_ribots">There aren\'t any ribots</string>
+    <string name="error_loading_ribots">There was a problem loading the ribots</string>
+
+
+</resources>
