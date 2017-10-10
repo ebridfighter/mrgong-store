@@ -2,6 +2,7 @@ package uk.co.ribot.androidboilerplate.data.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,7 +15,7 @@ public class PreferencesHelper {
     public static final String PREF_FILE_NAME = "android_boilerplate_pref_file";
     public static final String PREF_KEY_DATABASE = "pref_key_database";
     public static final String PREF_KEY_COOKIES = "pref_key_cookies";
-    public static final String DEFAULT_DATABASE_NAME = "LBZTest0927";
+    public static final String DEFAULT_DATABASE_NAME = "";
 
 
     private  static SharedPreferences mPref = null;
@@ -22,6 +23,10 @@ public class PreferencesHelper {
     @Inject
     public PreferencesHelper(@ApplicationContext Context context) {
         mPref = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
+    }
+
+    public boolean isLogin(){
+        return !TextUtils.isEmpty(getCookie());
     }
 
     /**
@@ -47,7 +52,7 @@ public class PreferencesHelper {
      * @return
      */
     public static void setCookie(String cookie) {
-        mPref.edit().putString(PREF_KEY_COOKIES,cookie);
+        mPref.edit().putString(PREF_KEY_COOKIES,cookie).commit();
     }
 
 

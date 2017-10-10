@@ -16,8 +16,8 @@ import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.test.common.TestDataFactory;
-import uk.co.ribot.androidboilerplate.ui.view_interface.MainMvpView;
-import uk.co.ribot.androidboilerplate.ui.presenter.MainPresenter;
+import uk.co.ribot.androidboilerplate.ui.presenter.ExamplePresenter;
+import uk.co.ribot.androidboilerplate.ui.view_interface.ExampleMvpView;
 import uk.co.ribot.androidboilerplate.util.RxSchedulersOverrideRule;
 
 import static org.mockito.Mockito.never;
@@ -25,24 +25,25 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MainPresenterTest {
+public class ExamplePresenterTest {
 
-    @Mock MainMvpView mMockMainMvpView;
+    @Mock
+    ExampleMvpView mMockMainMvpView;
     @Mock DataManager mMockDataManager;
-    private MainPresenter mMainPresenter;
+    private ExamplePresenter mExamplePresenter;
 
     @Rule
     public final RxSchedulersOverrideRule mOverrideSchedulersRule = new RxSchedulersOverrideRule();
 
     @Before
     public void setUp() {
-        mMainPresenter = new MainPresenter(mMockDataManager);
-        mMainPresenter.attachView(mMockMainMvpView);
+        mExamplePresenter = new ExamplePresenter(mMockDataManager);
+        mExamplePresenter.attachView(mMockMainMvpView);
     }
 
     @After
     public void tearDown() {
-        mMainPresenter.detachView();
+        mExamplePresenter.detachView();
     }
 
     @Test
@@ -51,7 +52,7 @@ public class MainPresenterTest {
         when(mMockDataManager.getRibots())
                 .thenReturn(Observable.just(ribots));
 
-        mMainPresenter.loadRibots();
+        mExamplePresenter.loadRibots();
         verify(mMockMainMvpView).showRibots(ribots);
         verify(mMockMainMvpView, never()).showRibotsEmpty();
         verify(mMockMainMvpView, never()).showError();
@@ -62,7 +63,7 @@ public class MainPresenterTest {
         when(mMockDataManager.getRibots())
                 .thenReturn(Observable.just(Collections.<Ribot>emptyList()));
 
-        mMainPresenter.loadRibots();
+        mExamplePresenter.loadRibots();
         verify(mMockMainMvpView).showRibotsEmpty();
         verify(mMockMainMvpView, never()).showRibots(ArgumentMatchers.<Ribot>anyList());
         verify(mMockMainMvpView, never()).showError();
@@ -73,7 +74,7 @@ public class MainPresenterTest {
         when(mMockDataManager.getRibots())
                 .thenReturn(Observable.<List<Ribot>>error(new RuntimeException()));
 
-        mMainPresenter.loadRibots();
+        mExamplePresenter.loadRibots();
         verify(mMockMainMvpView).showError();
         verify(mMockMainMvpView, never()).showRibotsEmpty();
         verify(mMockMainMvpView, never()).showRibots(ArgumentMatchers.<Ribot>anyList());

@@ -14,7 +14,7 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
-import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.util.AndroidComponentUtil;
 import uk.co.ribot.androidboilerplate.util.NetworkUtil;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
@@ -50,9 +50,30 @@ public class SyncService extends Service {
         }
 
         RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.syncRibots()
+//        mSubscription = mDataManager.syncRibots()
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Observer<Ribot>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        Timber.i("Synced successfully!");
+//                        stopSelf(startId);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Timber.w(e, "Error syncing.");
+//                        stopSelf(startId);
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Ribot ribot) {
+//                    }
+//                });
+
+        mSubscription = mDataManager.syncProducts()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<Ribot>() {
+                .subscribe(new Observer<ProductListResponse.Product>() {
                     @Override
                     public void onCompleted() {
                         Timber.i("Synced successfully!");
@@ -67,7 +88,7 @@ public class SyncService extends Service {
                     }
 
                     @Override
-                    public void onNext(Ribot ribot) {
+                    public void onNext(ProductListResponse.Product product) {
                     }
                 });
 

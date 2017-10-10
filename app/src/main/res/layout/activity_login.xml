@@ -73,7 +73,7 @@
                         android:textColorHint="#b7b7b7"
                         android:textSize="14sp"
                         android:layout_marginRight="12dp"
-                        android:text="S00001"
+                        android:text="DZ29031"
                         android:singleLine="true"
                         />
                     <ImageView

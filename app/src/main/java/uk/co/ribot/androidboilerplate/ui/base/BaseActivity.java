@@ -12,7 +12,7 @@ import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
-import uk.co.ribot.androidboilerplate.injection.component.MainActivityComponent;
+import uk.co.ribot.androidboilerplate.injection.component.ExampleActivityComponent;
 import uk.co.ribot.androidboilerplate.util.ToastUtil;
 
 /**
@@ -26,7 +26,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final AtomicLong NEXT_ID = new AtomicLong(0);
     private static final Map<Long, ConfigPersistentComponent> sComponentsMap = new HashMap<>();
 
-    private MainActivityComponent mActivityComponent;
+    private ExampleActivityComponent mActivityComponent;
     private long mActivityId;
     protected ConfigPersistentComponent configPersistentComponent;
 
@@ -34,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create the MainActivityComponent and reuses cached ConfigPersistentComponent if this is
+        // Create the ExampleActivityComponent and reuses cached ConfigPersistentComponent if this is
         // being called after a configuration change.
         mActivityId = savedInstanceState != null ?
                 savedInstanceState.getLong(KEY_ACTIVITY_ID) : NEXT_ID.getAndIncrement();

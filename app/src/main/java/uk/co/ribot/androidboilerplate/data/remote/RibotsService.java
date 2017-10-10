@@ -16,6 +16,7 @@ import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.GetCookiesInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.HttpLoggingInterceptor;
@@ -24,7 +25,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RibotsService {
 
     boolean test = true;
-    String ENDPOINT = test ? "http://develop.runwise.cn/" : "https://api.ribot.io/";
+    String ENDPOINT = test ? "http://erp.runwise.cn/" : "https://api.ribot.io/";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
@@ -60,5 +61,8 @@ public interface RibotsService {
 
     @POST("gongfu/v2/authenticate")
     Observable<LoginResponse> login(@Body LoginRequest loginRequest);
+
+    @POST("gongfu/v2/product/list")
+    Observable<List<ProductListResponse.Product>> getProducts();
 
 }

@@ -88,6 +88,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @Override
     public void onSuccess() {
         toast("登录成功");
+        startActivity(MainActivity.getStartIntent(LoginActivity.this));
     }
 
     @Override

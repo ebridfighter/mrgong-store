@@ -6,7 +6,7 @@ apply plugin: 'com.github.triplet.play'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    buildToolsVersion '25.0.2'
 
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
@@ -95,7 +95,6 @@ dependencies {
     final AUTO_VALUE_GSON_VERSION = '0.4.2'
 
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
-    provided 'javax.annotation:jsr250-api:1.0'
     def jUnit = "junit:junit:4.12"
     def mockito = "org.mockito:mockito-core:$MOCKITO_VERSION"
 
@@ -158,12 +157,14 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'com.jakewharton.timber:timber:4.1.2'
+    compile 'com.contrarywind:Android-PickerView:3.2.6'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     testCompile 'org.robolectric:robolectric:3.1'
     annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.4-rc2'
     annotationProcessor 'com.squareup:javapoet:1.7.0'
+    provided 'javax.annotation:jsr250-api:1.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile 'com.contrarywind:Android-PickerView:3.2.6'
-    compile 'com.nineoldandroids:library:2.4.0'
 }
 
 // Log out test results to console

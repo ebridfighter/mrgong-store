@@ -7,6 +7,7 @@ import java.util.Date;
 
 import uk.co.ribot.androidboilerplate.data.model.Name;
 import uk.co.ribot.androidboilerplate.data.model.Profile;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 
 public class Db {
 
@@ -62,4 +63,97 @@ public class Db {
                     .build();
         }
     }
+
+    public abstract static class ProductProfileTable{
+        public static final String TABLE_NAME = "product_profile";
+
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_IS_TWOUNIT = "isTwoUnit";
+        public static final String COLUMN_SETTLE_PRICE = "settlePrice";
+
+        public static final String COLUMN_UOM = "uom";
+        public static final String COLUMN_SETTLEUOMID = "settleUomId";
+        public static final String COLUMN_PRICE = "price";
+
+        public static final String COLUMN_BARCODE = "barcode";
+        public static final String COLUMN_DEFAULTCODE = "defaultCode";
+        public static final String COLUMN_STOCKTYPE = "stockType";
+
+        public static final String COLUMN_CATEGORY = "category";
+        public static final String COLUMN_UNIT = "unit";
+        public static final String COLUMN_PRODUCTUOM = "productUom";
+
+        public static final String COLUMN_PRODUCTID= "productID";
+        public static final String COLUMN_TRACKING = "tracking";
+
+        public static final String CREATE =
+                "CREATE TABLE " + TABLE_NAME + " (" +
+                        COLUMN_PRODUCTID + " INTEGER PRIMARY KEY, " +
+                        COLUMN_NAME + " TEXT NOT NULL, " +
+                        COLUMN_IS_TWOUNIT + " INTEGER NOT NULL, " +
+                        COLUMN_SETTLE_PRICE + " FLOAT NOT NULL, " +
+                        COLUMN_UOM + " TEXT NOT NULL, " +
+                        COLUMN_SETTLEUOMID + " TEXT NOT NULL, " +
+                        COLUMN_PRICE + " DOUBLE, " +
+                        COLUMN_BARCODE + " TEXT, " +
+                        COLUMN_DEFAULTCODE + " TEXT, " +
+                        COLUMN_STOCKTYPE + " TEXT, " +
+                        COLUMN_CATEGORY + " TEXT, " +
+                        COLUMN_UNIT + " TEXT, " +
+                        COLUMN_PRODUCTUOM + " TEXT, " +
+                        COLUMN_TRACKING + " TEXT" +
+                        " ); ";
+        public static ContentValues toContentValues(ProductListResponse.Product product) {
+            ContentValues values = new ContentValues();
+
+            values.put(COLUMN_PRODUCTID, product.getProductID());
+            values.put(COLUMN_NAME, product.getName());
+            if (product.isTwoUnit()){
+                values.put(COLUMN_IS_TWOUNIT, 1);
+            }else{
+                values.put(COLUMN_IS_TWOUNIT, 0);
+            }
+
+            values.put(COLUMN_SETTLE_PRICE, product.getSettlePrice());
+            values.put(COLUMN_UOM, product.getUom());
+            values.put(COLUMN_SETTLEUOMID, product.getSettleUomId());
+
+            values.put(COLUMN_PRICE, product.getPrice());
+            values.put(COLUMN_BARCODE, product.getBarcode());
+            values.put(COLUMN_DEFAULTCODE, product.getDefaultCode());
+
+            values.put(COLUMN_STOCKTYPE, product.getStockType());
+            values.put(COLUMN_CATEGORY, product.getCategory());
+            values.put(COLUMN_UNIT, product.getUnit());
+
+            values.put(COLUMN_PRODUCTUOM, product.getProductUom());
+            values.put(COLUMN_TRACKING, product.getTracking());
+
+            return values;
+        }
+        public static ProductListResponse.Product parseCursor(Cursor cursor) {
+            ProductListResponse.Product product = new ProductListResponse.Product();
+            product.setProductID(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRODUCTID)));
+            product.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
+            product.setTwoUnit(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_TWOUNIT))==1);
+
+            product.setSettlePrice(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SETTLE_PRICE)));
+            product.setUom(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UOM)));
+            product.setSettleUomId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SETTLEUOMID)));
+
+            product.setPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PRICE)));
+            product.setBarcode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BARCODE)));
+            product.setDefaultCode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DEFAULTCODE)));
+
+            product.setStockType(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STOCKTYPE)));
+            product.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)));
+            product.setUnit(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UNIT)));
+
+            product.setProductUom(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PRODUCTUOM)));
+            product.setTracking(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRACKING)));
+
+            return product;
+        }
+    }
+
 }

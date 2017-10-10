@@ -36,7 +36,7 @@ public class GetCookiesInterceptor implements Interceptor {
                     .subscribe(new Action1<String>() {
                         @Override
                         public void call(String cookie) {
-                            cookieBuffer.append(cookie).append(";");
+                            cookieBuffer.append(cookie);
                         }
                     });
             PreferencesHelper.setCookie(cookieBuffer.toString());

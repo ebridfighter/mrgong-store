@@ -1,7 +1,5 @@
 package uk.co.ribot.androidboilerplate.data.model.net.response;
 
-import uk.co.ribot.androidboilerplate.data.model.UserInfo;
-
 /**
  * Created by mike on 2017/9/28.
  */
@@ -9,7 +7,7 @@ import uk.co.ribot.androidboilerplate.data.model.UserInfo;
 public class LoginResponse {
     private String isSuccess;
     private String mobile;
-    private UserInfo user;
+    private UserInfoResponse user;
 
     public String getIsSuccess() {
         return isSuccess;
@@ -19,11 +17,11 @@ public class LoginResponse {
         this.isSuccess = isSuccess;
     }
 
-    public UserInfo getUser() {
+    public UserInfoResponse getUser() {
         return user;
     }
 
-    public void setUser(UserInfo user) {
+    public void setUser(UserInfoResponse user) {
         this.user = user;
     }
 

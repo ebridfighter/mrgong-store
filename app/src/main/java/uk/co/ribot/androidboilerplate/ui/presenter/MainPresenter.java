@@ -10,15 +10,16 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
-import uk.co.ribot.androidboilerplate.data.model.Ribot;
-import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.MainMvpView;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
 
-@ConfigPersistent
-public class MainPresenter extends BasePresenter<MainMvpView> {
+/**
+ * Created by mike on 2017/9/29.
+ */
 
+public class MainPresenter extends BasePresenter<MainMvpView>{
     private final DataManager mDataManager;
     private Subscription mSubscription;
 
@@ -38,13 +39,13 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
-    public void loadRibots() {
+    public void loadProducts() {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.getRibots()
+        mSubscription = mDataManager.getProducts()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<Ribot>>() {
+                .subscribe(new Subscriber<List<ProductListResponse.Product>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -56,14 +57,13 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     }
 
                     @Override
-                    public void onNext(List<Ribot> ribots) {
-                        if (ribots.isEmpty()) {
-                            getMvpView().showRibotsEmpty();
+                    public void onNext(List<ProductListResponse.Product> products) {
+                        if (products.isEmpty()) {
+                            getMvpView().showProductsEmpty();
                         } else {
-                            getMvpView().showRibots(ribots);
+                            getMvpView().showProducts(products);
                         }
                     }
                 });
     }
-
 }

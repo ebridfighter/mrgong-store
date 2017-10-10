@@ -17,6 +17,7 @@ import rx.Subscriber;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 
 @Singleton
 public class DatabaseHelper {
@@ -63,6 +64,40 @@ public class DatabaseHelper {
                     @Override
                     public Ribot call(Cursor cursor) {
                         return Ribot.create(Db.RibotProfileTable.parseCursor(cursor));
+                    }
+                });
+    }
+
+    public Observable<ProductListResponse.Product> setProducts(final Collection<ProductListResponse.Product> newProducts) {
+        return Observable.create(new Observable.OnSubscribe<ProductListResponse.Product>() {
+            @Override
+            public void call(Subscriber<? super ProductListResponse.Product> subscriber) {
+                if (subscriber.isUnsubscribed()) return;
+                BriteDatabase.Transaction transaction = mDb.newTransaction();
+                try {
+                    mDb.delete(Db.ProductProfileTable.TABLE_NAME, null);
+                    for (ProductListResponse.Product product : newProducts) {
+                        long result = mDb.insert(Db.ProductProfileTable.TABLE_NAME,
+                                Db.ProductProfileTable.toContentValues(product),
+                                SQLiteDatabase.CONFLICT_REPLACE);
+                        if (result >= 0) subscriber.onNext(product);
+                    }
+                    transaction.markSuccessful();
+                    subscriber.onCompleted();
+                } finally {
+                    transaction.end();
+                }
+            }
+        });
+    }
+
+    public Observable<List<ProductListResponse.Product>> getProducts() {
+        return mDb.createQuery(Db.ProductProfileTable.TABLE_NAME,
+                "SELECT * FROM " + Db.ProductProfileTable.TABLE_NAME)
+                .mapToList(new Func1<Cursor, ProductListResponse.Product>() {
+                    @Override
+                    public ProductListResponse.Product call(Cursor cursor) {
+                        return Db.ProductProfileTable.parseCursor(cursor);
                     }
                 });
     }

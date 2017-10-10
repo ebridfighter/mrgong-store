@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.data.model;
+package uk.co.ribot.androidboilerplate.data.model.net.response;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by mychao on 2016/10/30.
  */
 
-public class UserInfo implements Serializable {
+public class UserInfoResponse implements Serializable {
 
     /**
      * username : 黄天

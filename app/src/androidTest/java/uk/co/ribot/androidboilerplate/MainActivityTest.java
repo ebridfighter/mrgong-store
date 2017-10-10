@@ -18,7 +18,7 @@ import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.test.common.TestComponentRule;
 import uk.co.ribot.androidboilerplate.test.common.TestDataFactory;
-import uk.co.ribot.androidboilerplate.ui.activity.MainActivity;
+import uk.co.ribot.androidboilerplate.ui.activity.ExampleActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -32,14 +32,14 @@ public class MainActivityTest {
 
     public final TestComponentRule component =
             new TestComponentRule(InstrumentationRegistry.getTargetContext());
-    public final ActivityTestRule<MainActivity> main =
-            new ActivityTestRule<MainActivity>(MainActivity.class, false, false) {
+    public final ActivityTestRule<ExampleActivity> main =
+            new ActivityTestRule<ExampleActivity>(ExampleActivity.class, false, false) {
                 @Override
                 protected Intent getActivityIntent() {
                     // Override the default intent so we pass a false flag for syncing so it doesn't
                     // start a sync service in the background that would affect  the behaviour of
                     // this test.
-                    return MainActivity.getStartIntent(
+                    return ExampleActivity.getStartIntent(
                             InstrumentationRegistry.getTargetContext(), false);
                 }
             };

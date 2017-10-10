@@ -9,17 +9,17 @@ import java.util.List;
 
 public class ProductListResponse implements Serializable {
 
-    private List<ListBean> list;
+    private List<Product> list;
 
-    public List<ListBean> getList() {
+    public List<Product> getList() {
         return list;
     }
 
-    public void setList(List<ListBean> list) {
+    public void setList(List<Product> list) {
         this.list = list;
     }
 
-    public static class ListBean implements Serializable {
+    public static class Product implements Serializable {
         /**
          * name : 黑鱼（大型）
          * image : {"imageMedium":"/gongfu/image/product/8/image_medium/","image":"/gongfu/image/product/8/image/","imageSmall":"/gongfu/image/product/8/image_small/","imageID":8}
