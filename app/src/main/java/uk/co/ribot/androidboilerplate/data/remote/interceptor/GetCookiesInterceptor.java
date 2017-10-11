@@ -1,5 +1,7 @@
 package uk.co.ribot.androidboilerplate.data.remote.interceptor;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -39,7 +41,10 @@ public class GetCookiesInterceptor implements Interceptor {
                             cookieBuffer.append(cookie);
                         }
                     });
-            PreferencesHelper.setCookie(cookieBuffer.toString());
+            if (cookieBuffer.toString().contains("session_id")){
+                PreferencesHelper.setCookie(cookieBuffer.toString());
+                Log.i("session_id",cookieBuffer.toString());
+            }
         }
         return originalResponse;
     }

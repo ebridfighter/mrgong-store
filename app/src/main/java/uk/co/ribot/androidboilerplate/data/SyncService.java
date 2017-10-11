@@ -73,7 +73,7 @@ public class SyncService extends Service {
 
         mSubscription = mDataManager.syncProducts()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<ProductListResponse.Product>() {
+                .subscribe(new Observer<ProductListResponse>() {
                     @Override
                     public void onCompleted() {
                         Timber.i("Synced successfully!");
@@ -88,7 +88,7 @@ public class SyncService extends Service {
                     }
 
                     @Override
-                    public void onNext(ProductListResponse.Product product) {
+                    public void onNext(ProductListResponse productListResponse) {
                     }
                 });
 

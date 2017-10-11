@@ -68,19 +68,19 @@ public class DatabaseHelper {
                 });
     }
 
-    public Observable<ProductListResponse.Product> setProducts(final Collection<ProductListResponse.Product> newProducts) {
-        return Observable.create(new Observable.OnSubscribe<ProductListResponse.Product>() {
+    public Observable<ProductListResponse> setProducts(final ProductListResponse productListResponse) {
+        return Observable.create(new Observable.OnSubscribe<ProductListResponse>() {
             @Override
-            public void call(Subscriber<? super ProductListResponse.Product> subscriber) {
+            public void call(Subscriber<? super ProductListResponse> subscriber) {
                 if (subscriber.isUnsubscribed()) return;
                 BriteDatabase.Transaction transaction = mDb.newTransaction();
                 try {
                     mDb.delete(Db.ProductProfileTable.TABLE_NAME, null);
-                    for (ProductListResponse.Product product : newProducts) {
+                    for (ProductListResponse.Product product : productListResponse.getList()) {
                         long result = mDb.insert(Db.ProductProfileTable.TABLE_NAME,
                                 Db.ProductProfileTable.toContentValues(product),
                                 SQLiteDatabase.CONFLICT_REPLACE);
-                        if (result >= 0) subscriber.onNext(product);
+                        if (result >= 0) subscriber.onNext(productListResponse);
                     }
                     transaction.markSuccessful();
                     subscriber.onCompleted();

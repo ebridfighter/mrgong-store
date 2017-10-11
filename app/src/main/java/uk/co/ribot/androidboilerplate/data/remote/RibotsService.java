@@ -8,15 +8,16 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.GetCookiesInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.HttpLoggingInterceptor;
@@ -25,7 +26,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RibotsService {
 
     boolean test = true;
-    String ENDPOINT = test ? "http://erp.runwise.cn/" : "https://api.ribot.io/";
+    String ENDPOINT = test ? "http://develop.runwise.cn/" : "https://api.ribot.io/";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
@@ -49,7 +50,7 @@ public interface RibotsService {
             Retrofit retrofit = new Retrofit.Builder()
                     .client(client)
                     .baseUrl(RibotsService.ENDPOINT)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(CustomGsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
             return retrofit.create(RibotsService.class);
@@ -63,6 +64,6 @@ public interface RibotsService {
     Observable<LoginResponse> login(@Body LoginRequest loginRequest);
 
     @POST("gongfu/v2/product/list")
-    Observable<List<ProductListResponse.Product>> getProducts();
+    Observable<ProductListResponse> getProducts(@Body EmptyRequest emptyRequest);
 
 }
