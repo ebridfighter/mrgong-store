@@ -15,7 +15,7 @@ public class PreferencesHelper {
     public static final String PREF_FILE_NAME = "android_boilerplate_pref_file";
     public static final String PREF_KEY_DATABASE = "pref_key_database";
     public static final String PREF_KEY_COOKIES = "pref_key_cookies";
-    public static final String DEFAULT_DATABASE_NAME = "LBZTest0927";
+    public static final String DEFAULT_DATABASE_NAME = "LBZTest1012";
 
 
     private  static SharedPreferences mPref = null;
