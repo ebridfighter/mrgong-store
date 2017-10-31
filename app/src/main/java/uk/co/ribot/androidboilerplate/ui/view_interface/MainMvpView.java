@@ -1,8 +1,5 @@
 package uk.co.ribot.androidboilerplate.ui.view_interface;
 
-import java.util.List;
-
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 
 /**
@@ -10,9 +7,4 @@ import uk.co.ribot.androidboilerplate.ui.base.MvpView;
  */
 
 public interface MainMvpView extends MvpView {
-    void showProducts(List<ProductListResponse.Product> products);
-
-    void showProductsEmpty();
-
-    void showError();
 }

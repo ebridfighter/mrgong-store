@@ -160,6 +160,7 @@ dependencies {
     compile 'com.contrarywind:Android-PickerView:3.2.6'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'com.android.support:design:23.2.0'
     testCompile 'org.robolectric:robolectric:3.1'
     annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.4-rc2'
     annotationProcessor 'com.squareup:javapoet:1.7.0'

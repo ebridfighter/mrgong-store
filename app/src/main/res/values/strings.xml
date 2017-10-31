@@ -13,6 +13,11 @@
 
     <string name="empty_ribots">There aren\'t any ribots</string>
     <string name="error_loading_ribots">There was a problem loading the ribots</string>
+    <string name="fragment_home_page">首页</string>
+    <string name="fragment_palce_order">下单</string>
+    <string name="fragment_stock">库存</string>
+    <string name="fragment_message">消息</string>
+    <string name="fragment_more">更多</string>
 
 
 </resources>

@@ -3,9 +3,12 @@ package uk.co.ribot.androidboilerplate.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,23 +17,31 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.SyncService;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.injection.component.MainActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
-import uk.co.ribot.androidboilerplate.ui.adapter.ProductsAdapter;
+import uk.co.ribot.androidboilerplate.ui.adapter.FragmentAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
+import uk.co.ribot.androidboilerplate.ui.fragment.HomePageFragment;
+import uk.co.ribot.androidboilerplate.ui.fragment.MessageFragment;
+import uk.co.ribot.androidboilerplate.ui.fragment.MoreFragment;
+import uk.co.ribot.androidboilerplate.ui.fragment.PlaceOrderFragment;
+import uk.co.ribot.androidboilerplate.ui.fragment.StockFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.MainPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.MainMvpView;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
 
-
-    @BindView(R.id.rv_product)
-    RecyclerView mRvProduct;
     @Inject
     MainPresenter mMainPresenter;
-    @Inject
-    ProductsAdapter mProductsAdapter;
+    @BindView(R.id.tl)
+    TabLayout mTl;
+    @BindView(R.id.vp)
+    ViewPager mVp;
+    @BindView(R.id.constraintLayout)
+    RelativeLayout mConstraintLayout;
+
+    List<Fragment> mFragmentList;
+    List<String> mTitleList;
 
     public static Intent getStartIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -42,31 +53,39 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         MainActivityComponent activityComponent = configPersistentComponent.mainActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
-
-        mRvProduct.setAdapter(mProductsAdapter);
-        mRvProduct.setLayoutManager(new LinearLayoutManager(this));
-
         mMainPresenter.attachView(this);
-        mMainPresenter.loadProducts();
         startService(SyncService.getStartIntent(this));
 
+        setUpFragmentList();
+        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), mTitleList, mFragmentList);
+        mVp.setAdapter(fragmentAdapter);
+        mVp.setOffscreenPageLimit(mFragmentList.size());
+        mTl.setupWithViewPager(mVp);
     }
 
-    @Override
-    public void showProducts(List<ProductListResponse.Product> products) {
-        mProductsAdapter.setRibots(products);
-        mProductsAdapter.notifyDataSetChanged();
+    private void setUpFragmentList() {
+        HomePageFragment homePageFragment = new HomePageFragment();
+        PlaceOrderFragment placeOrderFragment = new PlaceOrderFragment();
+        StockFragment stockFragment = new StockFragment();
+        MessageFragment messageFragment = new MessageFragment();
+        MoreFragment moreFragment = new MoreFragment();
+
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(homePageFragment);
+        mFragmentList.add(placeOrderFragment);
+        mFragmentList.add(stockFragment);
+        mFragmentList.add(messageFragment);
+        mFragmentList.add(moreFragment);
+
+        mTitleList = new ArrayList<>();
+        mTitleList.add(getString(R.string.fragment_home_page));
+        mTitleList.add(getString(R.string.fragment_palce_order));
+        mTitleList.add(getString(R.string.fragment_stock));
+        mTitleList.add(getString(R.string.fragment_message));
+        mTitleList.add(getString(R.string.fragment_more));
     }
 
-    @Override
-    public void showProductsEmpty() {
-
-    }
-
-    @Override
-    public void showError() {
-
-    }
 }

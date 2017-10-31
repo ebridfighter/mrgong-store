@@ -21,6 +21,7 @@ public class HttpLoggingInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         Log.i(TAG, "request:" + request.url().toString());
+        Log.i(TAG, "request:" + request.headers().toString());
         long t1 = System.nanoTime();
         okhttp3.Response response = chain.proceed(chain.request());
         long t2 = System.nanoTime();
