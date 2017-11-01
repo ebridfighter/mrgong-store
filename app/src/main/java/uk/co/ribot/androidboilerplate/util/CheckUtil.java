@@ -23,7 +23,7 @@ public class CheckUtil {
 		}
 	}
 
-	public static boolean isMobileNumber(String mobiles) {
+	public static boolean isMobileNumber(String mobiles) { 
 		/*
 		 * 修改起来就是11位数字
 		 */
