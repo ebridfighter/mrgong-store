@@ -1,5 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +30,11 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
     ProductListPresenter mProductListPresenter;
     @Inject
     ProductsAdapter mProductsAdapter;
+
+    public static Intent getIntent(Context context){
+        Intent intent = new Intent(context,ProductListActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,12 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
 
     @Override
     public void showError() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
     }
 }

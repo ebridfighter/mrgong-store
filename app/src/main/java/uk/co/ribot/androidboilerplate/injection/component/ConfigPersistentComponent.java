@@ -20,5 +20,4 @@ public interface ConfigPersistentComponent {
     LoginActivityComponent loginActivityComponent(ActivityModule activityModule);
     MainActivityComponent mainActivityComponent(ActivityModule activityModule);
     ProductListActivityComponent productListActivityComponent(ActivityModule activityModule);
-
 }

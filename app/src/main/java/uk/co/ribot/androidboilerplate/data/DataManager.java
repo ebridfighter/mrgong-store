@@ -15,20 +15,21 @@ import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
-import uk.co.ribot.androidboilerplate.data.remote.RibotsService;
+import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 
 @Singleton
 public class DataManager {
 
-    private final RibotsService mRibotsService;
+    private final RunwiseService mRunwiseService;
     private final DatabaseHelper mDatabaseHelper;
     private final PreferencesHelper mPreferencesHelper;
 
     @Inject
-    public DataManager(RibotsService ribotsService, PreferencesHelper preferencesHelper,
+    public DataManager(RunwiseService runwiseService, PreferencesHelper preferencesHelper,
                        DatabaseHelper databaseHelper) {
-        mRibotsService = ribotsService;
+        mRunwiseService = runwiseService;
         mPreferencesHelper = preferencesHelper;
         mDatabaseHelper = databaseHelper;
     }
@@ -38,7 +39,7 @@ public class DataManager {
     }
 
     public Observable<Ribot> syncRibots() {
-        return mRibotsService.getRibots()
+        return mRunwiseService.getRibots()
                 .concatMap(new Func1<List<Ribot>, Observable<Ribot>>() {
                     @Override
                     public Observable<Ribot> call(List<Ribot> ribots) {
@@ -56,11 +57,11 @@ public class DataManager {
     }
 
     public Observable<LoginResponse> login(LoginRequest loginRequest) {
-        return mRibotsService.login(loginRequest);
+        return mRunwiseService.login(loginRequest);
     }
 
     public Observable<ProductListResponse> syncProducts() {
-        return mRibotsService.getProducts(new EmptyRequest())
+        return mRunwiseService.getProducts(new EmptyRequest())
                 .concatMap(new Func1<ProductListResponse, Observable<ProductListResponse>>() {
             @Override
             public Observable<ProductListResponse> call(ProductListResponse productListResponse) {
@@ -70,9 +71,25 @@ public class DataManager {
             @Override
             public ProductListResponse call(Throwable throwable) {
                 Log.i("onErrorReturn", throwable.toString());
-                return null;
+           return null;
             }
         });
+    }
+
+    public Observable<OrderListResponse> syncOrders() {
+        return mRunwiseService.getOrders(new EmptyRequest())
+                .concatMap(new Func1<OrderListResponse, Observable<OrderListResponse>>() {
+                    @Override
+                    public Observable<OrderListResponse> call(OrderListResponse orderListResponse) {
+                        return mDatabaseHelper.setOrders(orderListResponse);
+                    }
+                }).onErrorReturn(new Func1<Throwable, OrderListResponse>() {
+                    @Override
+                    public OrderListResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
     }
 
 

@@ -1,7 +1,7 @@
 package uk.co.ribot.androidboilerplate.injection.component;
 
 import dagger.Component;
-import uk.co.ribot.androidboilerplate.data.remote.RibotsService;
+import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 import uk.co.ribot.androidboilerplate.injection.module.PreferenceModule;
 
 /**
@@ -9,5 +9,5 @@ import uk.co.ribot.androidboilerplate.injection.module.PreferenceModule;
  */
 @Component(modules = PreferenceModule.class)
 public interface PreferenceComponent {
-    void inject(RibotsService.Creator creator);
+    void inject(RunwiseService.Creator creator);
 }

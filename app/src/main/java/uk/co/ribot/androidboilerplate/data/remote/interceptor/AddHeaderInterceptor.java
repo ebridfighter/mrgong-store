@@ -7,8 +7,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 
-import static uk.co.ribot.androidboilerplate.data.remote.RibotsService.HEAD_KEY_COOKIE;
-import static uk.co.ribot.androidboilerplate.data.remote.RibotsService.HEAD_KEY_DATABASE;
+import static uk.co.ribot.androidboilerplate.data.remote.RunwiseService.HEAD_KEY_COOKIE;
+import static uk.co.ribot.androidboilerplate.data.remote.RunwiseService.HEAD_KEY_DATABASE;
 
 /**
  * Created by mike on 2017/9/29.

@@ -16,6 +16,7 @@ import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
@@ -23,7 +24,7 @@ import uk.co.ribot.androidboilerplate.data.remote.interceptor.GetCookiesIntercep
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.HttpLoggingInterceptor;
 import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 
-public interface RibotsService {
+public interface RunwiseService {
 
     boolean test = true;
     String ENDPOINT = test ? "http://erp2.runwise.cn/" : "https://api.ribot.io/";
@@ -34,7 +35,7 @@ public interface RibotsService {
 
     class Creator {
         /******** Helper class that sets up a new services *******/
-        public static RibotsService newRibotsService() {
+        public static RunwiseService newRibotsService() {
             Gson gson = new GsonBuilder()
                     .registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create())
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -49,11 +50,11 @@ public interface RibotsService {
 
             Retrofit retrofit = new Retrofit.Builder()
                     .client(client)
-                    .baseUrl(RibotsService.ENDPOINT)
+                    .baseUrl(RunwiseService.ENDPOINT)
                     .addConverterFactory(CustomGsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
-            return retrofit.create(RibotsService.class);
+            return retrofit.create(RunwiseService.class);
         }
     }
 
@@ -65,5 +66,8 @@ public interface RibotsService {
 
     @POST("gongfu/v2/product/list")
     Observable<ProductListResponse> getProducts(@Body EmptyRequest emptyRequest);
+
+    @POST("gongfu/v2/order/undone_orders")
+    Observable<OrderListResponse> getOrders(@Body EmptyRequest emptyRequest);
 
 }

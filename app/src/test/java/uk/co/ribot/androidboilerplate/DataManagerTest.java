@@ -16,7 +16,7 @@ import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
-import uk.co.ribot.androidboilerplate.data.remote.RibotsService;
+import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 import uk.co.ribot.androidboilerplate.test.common.TestDataFactory;
 
 import static org.mockito.Mockito.never;
@@ -37,12 +37,12 @@ public class DataManagerTest {
     @Mock DatabaseHelper mMockDatabaseHelper;
     @Mock PreferencesHelper mMockPreferencesHelper;
     @Mock
-    RibotsService mMockRibotsService;
+    RunwiseService mMockRunwiseService;
     private DataManager mDataManager;
 
     @Before
     public void setUp() {
-        mDataManager = new DataManager(mMockRibotsService, mMockPreferencesHelper,
+        mDataManager = new DataManager(mMockRunwiseService, mMockPreferencesHelper,
                 mMockDatabaseHelper);
     }
 
@@ -66,24 +66,24 @@ public class DataManagerTest {
 
         mDataManager.syncRibots().subscribe();
         // Verify right calls to helper methods
-        verify(mMockRibotsService).getRibots();
+        verify(mMockRunwiseService).getRibots();
         verify(mMockDatabaseHelper).setRibots(ribots);
     }
 
     @Test
     public void syncRibotsDoesNotCallDatabaseWhenApiFails() {
-        when(mMockRibotsService.getRibots())
+        when(mMockRunwiseService.getRibots())
                 .thenReturn(Observable.<List<Ribot>>error(new RuntimeException()));
 
         mDataManager.syncRibots().subscribe(new TestSubscriber<Ribot>());
         // Verify right calls to helper methods
-        verify(mMockRibotsService).getRibots();
+        verify(mMockRunwiseService).getRibots();
         verify(mMockDatabaseHelper, never()).setRibots(ArgumentMatchers.<Ribot>anyList());
     }
 
     private void stubSyncRibotsHelperCalls(List<Ribot> ribots) {
         // Stub calls to the ribot service and database helper.
-        when(mMockRibotsService.getRibots())
+        when(mMockRunwiseService.getRibots())
                 .thenReturn(Observable.just(ribots));
         when(mMockDatabaseHelper.setRibots(ribots))
                 .thenReturn(Observable.from(ribots));

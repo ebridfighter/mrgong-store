@@ -17,6 +17,7 @@ import rx.Subscriber;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 
 @Singleton
@@ -87,6 +88,16 @@ public class DatabaseHelper {
                 } finally {
                     transaction.end();
                 }
+            }
+        });
+    }
+
+    public Observable<OrderListResponse> setOrders(final OrderListResponse orderListResponse) {
+        return Observable.create(new Observable.OnSubscribe<OrderListResponse>() {
+            @Override
+            public void call(Subscriber<? super OrderListResponse> subscriber) {
+                if (subscriber.isUnsubscribed()) return;
+//               做保存订单操作
             }
         });
     }

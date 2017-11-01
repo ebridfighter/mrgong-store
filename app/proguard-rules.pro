@@ -67,7 +67,7 @@
 }
 # TODO change to match your Retrofit services (only if using inner models withing the service)
 # Some models used by gson are inner classes inside the retrofit service
--keepclassmembers class uk.co.ribot.androidboilerplate.data.remote.RibotsService$** {
+-keepclassmembers class uk.co.ribot.androidboilerplate.data.remote.RunwiseService$** {
     !static !private <fields>;
 }
 
