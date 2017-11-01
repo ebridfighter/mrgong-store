@@ -78,12 +78,12 @@ public class DataManager {
 
     public Observable<OrderListResponse> syncOrders() {
         return mRunwiseService.getOrders(new EmptyRequest())
-                .concatMap(new Func1<OrderListResponse, Observable<OrderListResponse>>() {
+               /* .concatMap(new Func1<OrderListResponse, Observable<OrderListResponse>>() {
                     @Override
                     public Observable<OrderListResponse> call(OrderListResponse orderListResponse) {
                         return mDatabaseHelper.setOrders(orderListResponse);
                     }
-                }).onErrorReturn(new Func1<Throwable, OrderListResponse>() {
+                })*/.onErrorReturn(new Func1<Throwable, OrderListResponse>() {
                     @Override
                     public OrderListResponse call(Throwable throwable) {
                         Log.i("onErrorReturn", throwable.toString());

@@ -30,9 +30,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     public void setRibots(List<OrderListResponse.ListBean> orders) {
-        mOrders.clear();
-        mOrders.addAll(orders);
-        notifyDataSetChanged();
+        mOrders = orders;
     }
 
     @Override

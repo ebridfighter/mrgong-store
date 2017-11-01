@@ -62,6 +62,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
     @Override
     public void showOrders(List<OrderListResponse.ListBean> orders) {
         mOrderAdapter.setRibots(orders);
+        mOrderAdapter.notifyDataSetChanged();
     }
 
     @Override
