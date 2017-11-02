@@ -37,6 +37,10 @@ public class BaseFragment extends Fragment {
                 .build();
     }
 
+    protected View getLayout(int layoutId){
+       return LayoutInflater.from(getActivity()).inflate(layoutId,null);
+    }
+
     protected void toast(int textId){
         Toast.makeText(getActivity(), getString(textId), Toast.LENGTH_SHORT).show();
     }

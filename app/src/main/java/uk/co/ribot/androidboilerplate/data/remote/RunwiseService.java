@@ -14,7 +14,9 @@ import retrofit2.http.POST;
 import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
@@ -28,7 +30,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RunwiseService {
 
     boolean test = true;
-    String ENDPOINT = test ? "http://erp2.runwise.cn/" : "https://api.ribot.io/";
+    String ENDPOINT = test ? "http://erp2.runwise.cn" : "https://api.ribot.io";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
@@ -59,19 +61,22 @@ public interface RunwiseService {
         }
     }
 
-    @GET("ribots")
+    @GET("/ribots")
     Observable<List<Ribot>> getRibots();
 
-    @POST("gongfu/v2/authenticate")
+    @POST("/gongfu/v2/authenticate")
     Observable<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("gongfu/v2/product/list")
+    @POST("/gongfu/v2/product/list")
     Observable<ProductListResponse> getProducts(@Body EmptyRequest emptyRequest);
 
-    @POST("gongfu/v2/order/undone_orders")
+    @POST("/gongfu/v2/order/undone_orders")
     Observable<OrderListResponse> getOrders(@Body EmptyRequest emptyRequest);
 
-    @POST("gongfu/v2/return_order/undone")
+    @POST("/gongfu/v2/return_order/undone")
     Observable<ReturnOrderListResponse> getReturnOrders(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/blog/post/list/login")
+    Observable<HomePageBannerResponse> getHomePageBanner(@Body HomePageBannerRequest emptyRequest);
 
 }

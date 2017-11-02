@@ -10,6 +10,7 @@ import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.injection.component.ApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ApplicationModule;
+import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 
 public class BoilerplateApplication extends Application  {
 

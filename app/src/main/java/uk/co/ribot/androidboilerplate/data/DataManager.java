@@ -13,7 +13,9 @@ import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
@@ -103,6 +105,18 @@ public class DataManager {
                 })*/.onErrorReturn(new Func1<Throwable, ReturnOrderListResponse>() {
                     @Override
                     public ReturnOrderListResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+    public Observable<HomePageBannerResponse> getHomePageBanner(String tag) {
+        HomePageBannerRequest homePageBannerRequest = new HomePageBannerRequest();
+        homePageBannerRequest.setTag(tag);
+        return mRunwiseService.getHomePageBanner(homePageBannerRequest)
+             .onErrorReturn(new Func1<Throwable, HomePageBannerResponse>() {
+                    @Override
+                    public HomePageBannerResponse call(Throwable throwable) {
                         Log.i("onErrorReturn", throwable.toString());
                         return null;
                     }

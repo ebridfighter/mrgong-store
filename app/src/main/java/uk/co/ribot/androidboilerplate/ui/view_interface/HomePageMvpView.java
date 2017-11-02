@@ -13,8 +13,10 @@ import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 public interface HomePageMvpView extends MvpView {
     void showOrders(List<OrderListResponse.ListBean> orders);
     void showReturnOrders(List<ReturnOrderListResponse.ListBean> orders);
+    void showHomePageBanner(List<String> imageUrls);
     void showOrdersEmpty();
     void showReturnOrdersEmpty();
     void showOrdersError();
-    void showReturnOrdersError();;
+    void showReturnOrdersError();
+    void showHomePageBannerError();
 }

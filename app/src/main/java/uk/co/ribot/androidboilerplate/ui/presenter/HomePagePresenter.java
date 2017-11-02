@@ -1,13 +1,18 @@
 package uk.co.ribot.androidboilerplate.ui.presenter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -22,6 +27,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
     private final DataManager mDataManager;
     private Subscription mOrderSubscription;
     private Subscription mReturnOrderSubscription;
+    private Subscription mHomePageBannerSubscription;
 
     @Inject
     public HomePagePresenter(DataManager dataManager) {
@@ -89,9 +95,45 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
                 });
     }
 
+    public void getHomePageBanner(String tag) {
+        checkViewAttached();
+        RxUtil.unsubscribe(mHomePageBannerSubscription);
+        mHomePageBannerSubscription = mDataManager.getHomePageBanner(tag)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).map(new Func1<HomePageBannerResponse, List<String>>() {
+                @Override
+                    public List<String> call(HomePageBannerResponse homePageBannerResponse){
+                    List<HomePageBannerResponse.PostResponse> imageResponses = homePageBannerResponse.getPost_list();
+                    List<String> imageUrls = new ArrayList<String>();
+                    for (HomePageBannerResponse.PostResponse postResponse:imageResponses){
+                        imageUrls.add(postResponse.getCover_url());
+                    }
+                    return imageUrls;
+                }
+                })
+                .subscribe(new Subscriber<List<String>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "There was an error loading the HomePageBanner.");
+                        getMvpView().showHomePageBannerError();
+                    }
+
+                    @Override
+                    public void onNext(List<String> imageUrls) {
+                            getMvpView().showHomePageBanner(imageUrls);
+                    }
+                });
+    }
+
     @Override
     public void detachView() {
         super.detachView();
         if (mOrderSubscription != null) mOrderSubscription.unsubscribe();
+        if (mReturnOrderSubscription != null) mReturnOrderSubscription.unsubscribe();
+        if (mHomePageBannerSubscription != null) mHomePageBannerSubscription.unsubscribe();
     }
 }
