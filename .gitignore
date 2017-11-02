@@ -13,3 +13,7 @@
 /app/build/
 /gradle/
 /.gradle/
+ucrop/
+/gradle.properties
+/gradlew
+/gradlew.bat

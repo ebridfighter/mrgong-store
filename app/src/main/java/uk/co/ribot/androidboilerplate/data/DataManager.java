@@ -15,6 +15,7 @@ import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
@@ -66,17 +67,17 @@ public class DataManager {
     public Observable<ProductListResponse> syncProducts() {
         return mRunwiseService.getProducts(new EmptyRequest())
                 .concatMap(new Func1<ProductListResponse, Observable<ProductListResponse>>() {
-            @Override
-            public Observable<ProductListResponse> call(ProductListResponse productListResponse) {
-                return mDatabaseHelper.setProducts(productListResponse);
-            }
-        }).onErrorReturn(new Func1<Throwable, ProductListResponse>() {
-            @Override
-            public ProductListResponse call(Throwable throwable) {
-                Log.i("onErrorReturn", throwable.toString());
-           return null;
-            }
-        });
+                    @Override
+                    public Observable<ProductListResponse> call(ProductListResponse productListResponse) {
+                        return mDatabaseHelper.setProducts(productListResponse);
+                    }
+                }).onErrorReturn(new Func1<Throwable, ProductListResponse>() {
+                    @Override
+                    public ProductListResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
     }
 
     public Observable<OrderListResponse> syncOrders() {
@@ -110,13 +111,25 @@ public class DataManager {
                     }
                 });
     }
+
     public Observable<HomePageBannerResponse> getHomePageBanner(String tag) {
         HomePageBannerRequest homePageBannerRequest = new HomePageBannerRequest();
         homePageBannerRequest.setTag(tag);
         return mRunwiseService.getHomePageBanner(homePageBannerRequest)
-             .onErrorReturn(new Func1<Throwable, HomePageBannerResponse>() {
+                .onErrorReturn(new Func1<Throwable, HomePageBannerResponse>() {
                     @Override
                     public HomePageBannerResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+
+    public Observable<DashBoardResponse> getDashboard() {
+        return mRunwiseService.getDashboard(new EmptyRequest())
+                .onErrorReturn(new Func1<Throwable, DashBoardResponse>() {
+                    @Override
+                    public DashBoardResponse call(Throwable throwable) {
                         Log.i("onErrorReturn", throwable.toString());
                         return null;
                     }
