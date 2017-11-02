@@ -2,6 +2,7 @@ package uk.co.ribot.androidboilerplate.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.injection.component.frament.HomePageFragmentComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.adapter.OrderAdapter;
@@ -29,7 +31,6 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
  */
 
 public class HomePageFragment extends BaseFragment implements HomePageMvpView {
-
     @Inject
     HomePagePresenter mHomePagePresenter;
     @Inject
@@ -55,24 +56,43 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
                 homePageFragmentComponent(new ActivityModule(getActivity()));
         homePageFragmentComponent.inject(this);
         mRvProduct.setAdapter(mOrderAdapter);
+        mRvProduct.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         mHomePagePresenter.attachView(this);
         mHomePagePresenter.syncOrders();
+        mHomePagePresenter.syncReturnOrders();
     }
 
     @Override
     public void showOrders(List<OrderListResponse.ListBean> orders) {
-        mOrderAdapter.setRibots(orders);
+        mOrderAdapter.setOrders(orders);
+        mOrderAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showReturnOrders(List<ReturnOrderListResponse.ListBean> orders) {
+        mOrderAdapter.setReturnOrders(orders);
         mOrderAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showOrdersEmpty() {
-
+        toast(R.string.toast_order_empty);
     }
 
     @Override
-    public void showError() {
+    public void showReturnOrdersEmpty() {
+        toast(R.string.toast_return_order_empty);
+    }
 
+    @Override
+    public void showOrdersError() {
+        toast(R.string.toast_get_order_list_error);
+    }
+
+    @Override
+    public void showReturnOrdersError() {
+        toast(R.string.toast_get_return_order_list_error);
     }
 
     @Override

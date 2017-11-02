@@ -9,6 +9,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
@@ -19,7 +20,8 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
     private final DataManager mDataManager;
-    private Subscription mSubscription;
+    private Subscription mOrderSubscription;
+    private Subscription mReturnOrderSubscription;
 
     @Inject
     public HomePagePresenter(DataManager dataManager) {
@@ -33,8 +35,8 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
 
     public void syncOrders() {
         checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.syncOrders()
+        RxUtil.unsubscribe(mOrderSubscription);
+        mOrderSubscription = mDataManager.syncOrders()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<OrderListResponse>() {
@@ -45,7 +47,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
                     @Override
                     public void onError(Throwable e) {
                         Timber.e(e, "There was an error loading the ribots.");
-                        getMvpView().showError();
+                        getMvpView().showOrdersError();
                     }
 
                     @Override
@@ -59,9 +61,37 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
                 });
     }
 
+    public void syncReturnOrders() {
+        checkViewAttached();
+        RxUtil.unsubscribe(mReturnOrderSubscription);
+        mReturnOrderSubscription = mDataManager.syncReturnOrders()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<ReturnOrderListResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "There was an error loading the ribots.");
+                        getMvpView().showReturnOrdersError();
+                    }
+
+                    @Override
+                    public void onNext(ReturnOrderListResponse returnOrderListResponse) {
+                        if (returnOrderListResponse.getList().isEmpty()) {
+                            getMvpView().showReturnOrdersEmpty();
+                        } else {
+                            getMvpView().showReturnOrders(returnOrderListResponse.getList());
+                        }
+                    }
+                });
+    }
+
     @Override
     public void detachView() {
         super.detachView();
-        if (mSubscription != null) mSubscription.unsubscribe();
+        if (mOrderSubscription != null) mOrderSubscription.unsubscribe();
     }
 }

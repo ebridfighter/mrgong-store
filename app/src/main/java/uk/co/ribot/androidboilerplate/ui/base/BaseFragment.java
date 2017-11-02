@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
+import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerFragmentBaseComponent;
 import uk.co.ribot.androidboilerplate.injection.component.FragmentBaseComponent;
 
@@ -22,7 +24,9 @@ public class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.navigation_bar,container);
+        return rootView;
     }
 
     @Override
@@ -31,5 +35,9 @@ public class BaseFragment extends Fragment {
         mFragmentBaseComponent = DaggerFragmentBaseComponent.builder().
                 applicationComponent(BoilerplateApplication.get(getActivity()).getComponent())
                 .build();
+    }
+
+    protected void toast(int textId){
+        Toast.makeText(getActivity(), getString(textId), Toast.LENGTH_SHORT).show();
     }
 }

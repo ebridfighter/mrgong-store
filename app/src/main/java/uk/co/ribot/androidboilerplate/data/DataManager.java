@@ -17,6 +17,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 
 @Singleton
@@ -86,6 +87,22 @@ public class DataManager {
                 })*/.onErrorReturn(new Func1<Throwable, OrderListResponse>() {
                     @Override
                     public OrderListResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+
+    public Observable<ReturnOrderListResponse> syncReturnOrders() {
+        return mRunwiseService.getReturnOrders(new EmptyRequest())
+               /* .concatMap(new Func1<OrderListResponse, Observable<OrderListResponse>>() {
+                    @Override
+                    public Observable<OrderListResponse> call(OrderListResponse orderListResponse) {
+                        return mDatabaseHelper.setOrders(orderListResponse);
+                    }
+                })*/.onErrorReturn(new Func1<Throwable, ReturnOrderListResponse>() {
+                    @Override
+                    public ReturnOrderListResponse call(Throwable throwable) {
                         Log.i("onErrorReturn", throwable.toString());
                         return null;
                     }
