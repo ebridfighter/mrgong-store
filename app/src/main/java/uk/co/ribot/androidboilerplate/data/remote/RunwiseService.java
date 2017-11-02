@@ -14,21 +14,25 @@ import retrofit2.http.POST;
 import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.GetCookiesInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.HttpLoggingInterceptor;
 import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 
-public interface RibotsService {
+public interface RunwiseService {
 
     boolean test = true;
-    String ENDPOINT = test ? "http://erp2.runwise.cn/" : "https://api.ribot.io/";
+    String ENDPOINT = test ? "http://erp2.runwise.cn" : "https://api.ribot.io";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
@@ -36,7 +40,7 @@ public interface RibotsService {
 
     class Creator {
         /******** Helper class that sets up a new services *******/
-        public static RibotsService newRibotsService() {
+        public static RunwiseService newRibotsService() {
             Gson gson = new GsonBuilder()
                     .registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create())
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -51,23 +55,33 @@ public interface RibotsService {
 
             Retrofit retrofit = new Retrofit.Builder()
                     .client(client)
-                    .baseUrl(RibotsService.ENDPOINT)
+                    .baseUrl(RunwiseService.ENDPOINT)
                     .addConverterFactory(CustomGsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
-            return retrofit.create(RibotsService.class);
+            return retrofit.create(RunwiseService.class);
         }
     }
 
-    @GET("ribots")
+    @GET("/ribots")
     Observable<List<Ribot>> getRibots();
 
-    @POST("gongfu/v2/authenticate")
+    @POST("/gongfu/v2/authenticate")
     Observable<LoginResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("gongfu/v2/product/list")
+    @POST("/gongfu/v2/product/list")
     Observable<ProductListResponse> getProducts(@Body EmptyRequest emptyRequest);
 
     @POST("/api/v2/stock/list")
     Observable<StockListResponse> getStockList(@Body StockListRequest request);
+
+    @POST("/gongfu/v2/order/undone_orders")
+    Observable<OrderListResponse> getOrders(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/v2/return_order/undone")
+    Observable<ReturnOrderListResponse> getReturnOrders(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/blog/post/list/login")
+    Observable<HomePageBannerResponse> getHomePageBanner(@Body HomePageBannerRequest emptyRequest);
+
 }

@@ -52,10 +52,16 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
             throw new ApiException(errorCode, errorMessage);
         }
         //判断是否有数据体返回
-        if (baseResponse.getResult() != null && baseResponse.getResult().getData() != null) {
+        if (baseResponse.getResult() != null ) {
             try {
                 JSONObject responseJson = new JSONObject(response);
-                JSONObject dataJson =  responseJson.optJSONObject("result").optJSONObject("data");
+                JSONObject dataJson;
+                if (baseResponse.getResult().getData() != null){
+                    dataJson =  responseJson.optJSONObject("result").optJSONObject("data");
+                }else{
+                    //有数据返回,但是没有data这个key
+                    dataJson =  responseJson.optJSONObject("result");
+                }
                 StringReader stringReader = new StringReader(dataJson.toString());
                 try {
                     return adapter.read(gson.newJsonReader(stringReader));
@@ -66,6 +72,7 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
                 e.printStackTrace();
             }
         }
+
         //没有数据体返回,不做处理，原样返回
         JsonReader jsonReader = gson.newJsonReader(value.charStream());
         try {

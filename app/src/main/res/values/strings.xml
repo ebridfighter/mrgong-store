@@ -18,6 +18,11 @@
     <string name="fragment_stock">库存</string>
     <string name="fragment_message">消息</string>
     <string name="fragment_more">更多</string>
+    <string name="toast_order_empty">订单列表为空!</string>
+    <string name="toast_return_order_empty">退货订单列表为空!</string>
+    <string name="toast_get_order_list_error">获取订单列表出错!</string>
+    <string name="toast_get_return_order_list_error">获取退货订单列表出错!</string>
+    <string name="tag_meal_side">餐户端</string>
 
 
 </resources>

@@ -166,6 +166,9 @@ dependencies {
     annotationProcessor 'com.squareup:javapoet:1.7.0'
     provided 'javax.annotation:jsr250-api:1.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.zhy:base-rvadapter:3.0.3'
+    compile 'com.youth.banner:banner:1.4.10'  //最新版本
+    compile 'com.facebook.fresco:fresco:0.12.0'
 }
 
 // Log out test results to console
