@@ -23,6 +23,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.base.BaseResponse;
 public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     private final Gson gson;
     private final TypeAdapter<T> adapter;
+    public static final int CODE_LOGOUT = 100;
 
 
     GsonResponseBodyConverter(Gson gson, TypeAdapter<T> adapter) {
@@ -44,6 +45,10 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
             if (baseResponse.getError() != null) {
                 errorMessage = baseResponse.getError().getMessage();
                 errorCode = baseResponse.getError().getCode();
+                //sessino失效,通知界面退出登陆
+                if (CODE_LOGOUT == errorCode) {
+
+                }
             }
         }
         HttpStatus httpStatus = new HttpStatus(state, errorMessage);
@@ -52,15 +57,15 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
             throw new ApiException(errorCode, errorMessage);
         }
         //判断是否有数据体返回
-        if (baseResponse.getResult() != null ) {
+        if (baseResponse.getResult() != null) {
             try {
                 JSONObject responseJson = new JSONObject(response);
                 JSONObject dataJson;
-                if (baseResponse.getResult().getData() != null){
-                    dataJson =  responseJson.optJSONObject("result").optJSONObject("data");
-                }else{
+                if (baseResponse.getResult().getData() != null) {
+                    dataJson = responseJson.optJSONObject("result").optJSONObject("data");
+                } else {
                     //有数据返回,但是没有data这个key
-                    dataJson =  responseJson.optJSONObject("result");
+                    dataJson = responseJson.optJSONObject("result");
                 }
                 StringReader stringReader = new StringReader(dataJson.toString());
                 try {

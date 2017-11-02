@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.youth.banner.Banner;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.injection.component.frament.HomePageFragmentComponent;
@@ -31,6 +33,8 @@ import uk.co.ribot.androidboilerplate.ui.adapter.OrderAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.HomePagePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
+
+import static uk.co.ribot.androidboilerplate.R.id.lastMonthBuy;
 
 /**
  * Created by mike on 2017/10/18.
@@ -78,6 +82,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         mHomePagePresenter.syncOrders();
         mHomePagePresenter.syncReturnOrders();
         mHomePagePresenter.getHomePageBanner(getString(R.string.tag_meal_side));
+        mHomePagePresenter.getDashBoard();
     }
 
     @Override
@@ -97,6 +102,29 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
     @Override
     public void showHomePageBanner(List<String> imageUrls) {
         mViewHolder.mBannerAdvertisement.setImages(imageUrls).setImageLoader(new FrescoImageLoader()).start();
+    }
+
+    @Override
+    public void showDashBoard(DashBoardResponse dashBoardResponse) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        double adventValue = dashBoardResponse.getAdventValue();
+        double maturityValue = dashBoardResponse.getMaturityValue();
+        mViewHolder.mTvLastWeekBuy.setText(df.format(dashBoardResponse.getPurchaseAmount()/10000));//万元单位
+        mViewHolder.mTvLastMonthBuy.setText(df.format(adventValue));
+        mViewHolder.mTvPayAccount.setText(df.format(maturityValue));
+        
+    }
+
+    @Override
+    public void showDashBoardWithoutPrice(DashBoardResponse dashBoardResponse) {
+        mViewHolder.mTvLastWeek.setText("上周采购量(件)");
+        mViewHolder.mTvLqCount.setText("临期食材(件)");
+        mViewHolder.mTvDqCount.setText("到期食材(件)");
+        mViewHolder.mTvLastWeekBuy.setText(String.valueOf((int)dashBoardResponse.getTotalNumber()));
+        int adventNum = (int) dashBoardResponse.getAdventNum();
+        int maturityNum = (int) dashBoardResponse.getMaturityNum();
+        mViewHolder.mTvLastMonthBuy.setText(String.valueOf(adventNum));
+        mViewHolder.mTvPayAccount.setText(String.valueOf(maturityNum));
     }
 
     @Override
@@ -121,7 +149,12 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
 
     @Override
     public void showHomePageBannerError() {
+        toast(R.string.toast_get_banner_error);
+    }
 
+    @Override
+    public void showDashBoardError() {
+        toast(R.string.toast_get_dashboard_error);
     }
 
     @Override
@@ -142,8 +175,8 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         LinearLayout mLlProcurement;
         @BindView(R.id.tv_lq_count)
         TextView mTvLqCount;
-        @BindView(R.id.lastMonthBuy)
-        TextView mLastMonthBuy;
+        @BindView(lastMonthBuy)
+        TextView mTvLastMonthBuy;
         @BindView(R.id.ll_lq)
         LinearLayout mLlLq;
         @BindView(R.id.tv_dq_count)

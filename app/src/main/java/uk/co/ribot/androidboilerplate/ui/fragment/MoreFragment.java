@@ -11,7 +11,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.event.LogOutEvent;
 import uk.co.ribot.androidboilerplate.ui.activity.ProductListActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
@@ -40,9 +42,16 @@ public class MoreFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.btn_product_list)
-    public void onViewClicked() {
-        startActivity(ProductListActivity.getIntent(getActivity()));
+    @OnClick({R.id.btn_product_list, R.id.btn_logout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_product_list:
+                startActivity(ProductListActivity.getIntent(getActivity()));
+                break;
+            case R.id.btn_logout:
+                BoilerplateApplication.get(getActivity()).getComponent().eventBus().post(new LogOutEvent());
+                break;
+        }
     }
 }
 

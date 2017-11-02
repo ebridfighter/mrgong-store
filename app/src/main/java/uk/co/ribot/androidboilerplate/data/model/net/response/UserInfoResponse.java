@@ -60,6 +60,7 @@ public class UserInfoResponse implements Serializable {
     private boolean hasNewInvoice;
     private String company;
 
+
     public String getIsZicai() {
         return isZicai;
     }

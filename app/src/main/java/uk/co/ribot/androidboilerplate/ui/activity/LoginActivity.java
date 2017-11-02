@@ -1,6 +1,8 @@
 package uk.co.ribot.androidboilerplate.ui.activity;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -51,6 +53,10 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     @Inject
     LoginPresenter mLoginPresenter;
+    public static Intent getStartIntent(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,9 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
         LoginActivityComponent activityComponent = configPersistentComponent.loginActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mLoginPresenter.attachView(this);
+        if (mLoginPresenter.isLogin()){
+            startActivity(MainActivity.getStartIntent(getActivityContext()));
+        }
     }
 
     @OnClick(R.id.login_btn)
