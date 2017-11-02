@@ -14,8 +14,10 @@ import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RibotsService;
 
 @Singleton
@@ -75,5 +77,15 @@ public class DataManager {
         });
     }
 
-
+    /**
+     * 获取库存信息
+     *
+     * @param pageIndex 分页页号
+     * @param pageLimit 每页多少条
+     * @param stockType 类型category
+     * @param searchKeyword 搜索的关键字
+     */
+    public Observable<StockListResponse> getStockList(int pageIndex, int pageLimit, String stockType, String searchKeyword){
+        return mRibotsService.getStockList(new StockListRequest(pageLimit,pageIndex,searchKeyword,stockType));
+    }
 }

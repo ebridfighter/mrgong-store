@@ -15,8 +15,10 @@ import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.GetCookiesInterceptor;
@@ -66,4 +68,6 @@ public interface RibotsService {
     @POST("gongfu/v2/product/list")
     Observable<ProductListResponse> getProducts(@Body EmptyRequest emptyRequest);
 
+    @POST("/api/v2/stock/list")
+    Observable<StockListResponse> getStockList(@Body StockListRequest request);
 }
