@@ -42,7 +42,7 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="#6BB400"
-                android:text="3.8"/>
+                android:text="--"/>
         </LinearLayout>
         <View
             android:layout_width="0.5dp"
@@ -76,7 +76,7 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="#FF9B00"
-                android:text="¥2.45"/>
+                android:text="--"/>
         </LinearLayout>
         <View
             android:layout_width="0.5dp"
@@ -110,7 +110,7 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="#FF3B30"
-                android:text="¥1.53"/>
+                android:text="--"/>
 
         </LinearLayout>
     </LinearLayout>

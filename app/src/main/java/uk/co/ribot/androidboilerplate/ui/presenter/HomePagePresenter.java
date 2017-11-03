@@ -12,9 +12,11 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
@@ -23,11 +25,12 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
  * Created by mike on 2017/11/1.
  */
 
-public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
+public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     private final DataManager mDataManager;
     private Subscription mOrderSubscription;
     private Subscription mReturnOrderSubscription;
     private Subscription mHomePageBannerSubscription;
+    private Subscription mDashBoardSubscription;
 
     @Inject
     public HomePagePresenter(DataManager dataManager) {
@@ -101,15 +104,15 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
         mHomePageBannerSubscription = mDataManager.getHomePageBanner(tag)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).map(new Func1<HomePageBannerResponse, List<String>>() {
-                @Override
-                    public List<String> call(HomePageBannerResponse homePageBannerResponse){
-                    List<HomePageBannerResponse.PostResponse> imageResponses = homePageBannerResponse.getPost_list();
-                    List<String> imageUrls = new ArrayList<String>();
-                    for (HomePageBannerResponse.PostResponse postResponse:imageResponses){
-                        imageUrls.add(postResponse.getCover_url());
+                    @Override
+                    public List<String> call(HomePageBannerResponse homePageBannerResponse) {
+                        List<HomePageBannerResponse.PostResponse> imageResponses = homePageBannerResponse.getPost_list();
+                        List<String> imageUrls = new ArrayList<String>();
+                        for (HomePageBannerResponse.PostResponse postResponse : imageResponses) {
+                            imageUrls.add(postResponse.getCover_url());
+                        }
+                        return imageUrls;
                     }
-                    return imageUrls;
-                }
                 })
                 .subscribe(new Subscriber<List<String>>() {
                     @Override
@@ -124,7 +127,36 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
 
                     @Override
                     public void onNext(List<String> imageUrls) {
-                            getMvpView().showHomePageBanner(imageUrls);
+                        getMvpView().showHomePageBanner(imageUrls);
+                    }
+                });
+    }
+
+    public void getDashBoard() {
+        checkViewAttached();
+        RxUtil.unsubscribe(mDashBoardSubscription);
+        mDashBoardSubscription = mDataManager.getDashboard()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<DashBoardResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "There was an error loading the DashBoardResponse.");
+                        getMvpView().showDashBoardError();
+                    }
+
+                    @Override
+                    public void onNext(DashBoardResponse dashBoardResponse) {
+                        UserInfoResponse userInfoResponse = mDataManager.getUserInfo();
+                        if (userInfoResponse != null && userInfoResponse.isCanSeePrice()){
+                            getMvpView().showDashBoard(dashBoardResponse);
+                        }else{
+                            getMvpView().showDashBoardWithoutPrice(dashBoardResponse);
+                        }
                     }
                 });
     }
@@ -135,5 +167,6 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView>{
         if (mOrderSubscription != null) mOrderSubscription.unsubscribe();
         if (mReturnOrderSubscription != null) mReturnOrderSubscription.unsubscribe();
         if (mHomePageBannerSubscription != null) mHomePageBannerSubscription.unsubscribe();
+        if (mDashBoardSubscription != null) mDashBoardSubscription.unsubscribe();
     }
 }
