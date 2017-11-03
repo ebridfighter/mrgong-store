@@ -22,6 +22,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 
 @Singleton
@@ -63,6 +64,14 @@ public class DataManager {
 
     public Observable<LoginResponse> login(LoginRequest loginRequest) {
         return mRunwiseService.login(loginRequest);
+    }
+
+    public void saveUser(UserInfoResponse userInfoResponse) {
+        mPreferencesHelper.setUserInfo(userInfoResponse);
+    }
+
+    public UserInfoResponse getUserInfo() {
+        return mPreferencesHelper.getUserInfo();
     }
 
     public Observable<ProductListResponse> syncProducts() {

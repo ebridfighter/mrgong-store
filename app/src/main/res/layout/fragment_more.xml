@@ -14,5 +14,10 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:text="商品列表"/>
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="登出测试"/>
 
 </LinearLayout>

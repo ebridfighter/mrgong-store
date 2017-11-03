@@ -8,11 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import rx.Subscriber;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
+import uk.co.ribot.androidboilerplate.data.event.LogOutEvent;
 import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.ExampleActivityComponent;
+import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
+import uk.co.ribot.androidboilerplate.util.ActivityUtil;
 import uk.co.ribot.androidboilerplate.util.ToastUtil;
 
 /**
@@ -33,7 +37,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ActivityUtil.getInstance().addActivity(this);
         // Create the ExampleActivityComponent and reuses cached ConfigPersistentComponent if this is
         // being called after a configuration change.
         mActivityId = savedInstanceState != null ?
@@ -48,6 +52,28 @@ public class BaseActivity extends AppCompatActivity {
             Timber.i("Reusing ConfigPersistentComponent id=%d", mActivityId);
             configPersistentComponent = sComponentsMap.get(mActivityId);
         }
+
+        BoilerplateApplication.get(this).getComponent().eventBus().observable().subscribe(new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Object object) {
+                //收到了登出事件
+                if (LogOutEvent.class.isInstance(object)){
+                    ActivityUtil.getInstance().finishAll();
+                    startActivity(LoginActivity.getStartIntent(getActivityContext()));
+                    BoilerplateApplication.get(getActivityContext()).getComponent().preferencesHelper().clear();
+                }
+            }
+        });
     }
 
     @Override
@@ -62,6 +88,7 @@ public class BaseActivity extends AppCompatActivity {
             Timber.i("Clearing ConfigPersistentComponent id=%d", mActivityId);
             sComponentsMap.remove(mActivityId);
         }
+        ActivityUtil.getInstance().removeActivity(this);
         super.onDestroy();
     }
 

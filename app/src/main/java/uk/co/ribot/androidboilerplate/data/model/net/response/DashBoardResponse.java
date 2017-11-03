@@ -15,18 +15,18 @@ public class DashBoardResponse {
      * totalNumber:0
      */
 
-    private int maturityNum;
+    private double maturityNum;
     private double purchaseAmount;
-    private int adventNum;
+    private double adventNum;
     private double maturityValue;
     private double adventValue;
-    private int totalNumber;
+    private double totalNumber;
 
-    public int getMaturityNum() {
+    public double getMaturityNum() {
         return maturityNum;
     }
 
-    public void setMaturityNum(int maturityNum) {
+    public void setMaturityNum(double maturityNum) {
         this.maturityNum = maturityNum;
     }
 
@@ -38,11 +38,11 @@ public class DashBoardResponse {
         this.purchaseAmount = purchaseAmount;
     }
 
-    public int getAdventNum() {
+    public double getAdventNum() {
         return adventNum;
     }
 
-    public void setAdventNum(int adventNum) {
+    public void setAdventNum(double adventNum) {
         this.adventNum = adventNum;
     }
 
@@ -62,11 +62,11 @@ public class DashBoardResponse {
         this.adventValue = adventValue;
     }
 
-    public void setTotalNumber(int totalNumber) {
+    public void setTotalNumber(double totalNumber) {
         this.totalNumber = totalNumber;
     }
 
-    public int getTotalNumber() {
+    public double getTotalNumber() {
         return totalNumber;
     }
 }

@@ -36,6 +36,10 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         super.attachView(mvpView);
     }
 
+    public boolean isLogin(){
+        return mDataManager.getPreferencesHelper().isLogin();
+    }
+
     public void login(String account, String password) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
@@ -43,6 +47,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         loginRequest.setLogin(account);
         loginRequest.setPassword(password);
         loginRequest.setRegistrationID("test");
+        getMvpView().showProgressDialog();
         mSubscription = mDataManager.login(loginRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -57,6 +62,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                         super.onError(e);
                         Timber.e(e, "网络错误");
                         getMvpView().showError();
+                        getMvpView().hideProgressDialog();
                     }
 
                     @Override
@@ -66,8 +72,10 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                         if (TextUtils.isEmpty(success)||"false".equals(success)) {
                             getMvpView().showError();
                         } else {
+                            mDataManager.saveUser(loginResponse.getUser());
                             getMvpView().onSuccess();
                         }
+                        getMvpView().hideProgressDialog();
                     }
                 });
     }
