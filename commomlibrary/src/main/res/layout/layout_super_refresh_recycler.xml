@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     >
 
-    <com.example.liangmutian.airrecyclerview.swipetoloadlayout.SwipeToLoadLayout
+    <com.runwise.commomlibrary.swipetoloadlayout.SwipeToLoadLayout
         android:id="@+id/swipe_to_load"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.example.liangmutian.airrecyclerview.swipetoloadlayout.RefreshHeaderView
+        <com.runwise.commomlibrary.swipetoloadlayout.RefreshHeaderView
             android:id="@+id/swipe_refresh_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -20,13 +20,13 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
 
-        <com.example.liangmutian.airrecyclerview.swipetoloadlayout.SwipeLoadMoreFooterLayout
+        <com.runwise.commomlibrary.swipetoloadlayout.SwipeLoadMoreFooterLayout
             android:id="@+id/swipe_load_more_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </com.example.liangmutian.airrecyclerview.swipetoloadlayout.SwipeLoadMoreFooterLayout>
-    </com.example.liangmutian.airrecyclerview.swipetoloadlayout.SwipeToLoadLayout>
+        </com.runwise.commomlibrary.swipetoloadlayout.SwipeLoadMoreFooterLayout>
+    </com.runwise.commomlibrary.swipetoloadlayout.SwipeToLoadLayout>
 
     <RelativeLayout
         android:id="@+id/layout_empty"

@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.example.liangmutian.airrecyclerview.R;
+import com.runwise.commomlibrary.R;
 
 
 /**
  * Created by ex-liyongqiang001 on 16/6/30.
  */
-public class SuperRefreshRecyclerView extends FrameLayout {
+public class RefreshRecyclerView extends FrameLayout {
 
     private RelativeLayout emptyView,errorView;
     private SwipeToLoadLayout swipeToLoadLayout;
@@ -27,17 +27,17 @@ public class SuperRefreshRecyclerView extends FrameLayout {
 
     private Context mContext;
 
-    public SuperRefreshRecyclerView(Context context) {
+    public RefreshRecyclerView(Context context) {
         super(context);
         initView(context);
     }
 
-    public SuperRefreshRecyclerView(Context context, AttributeSet attrs) {
+    public RefreshRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public SuperRefreshRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RefreshRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
@@ -53,11 +53,14 @@ public class SuperRefreshRecyclerView extends FrameLayout {
     }
 
 
-    public void init(RecyclerView.LayoutManager layoutManager,OnRefreshListener onRefreshListener,OnLoadMoreListener onLoadMoreListener){
+    public void init(android.support.v7.widget.LinearLayoutManager layoutManager, OnRefreshListener onRefreshListener, OnLoadMoreListener onLoadMoreListener){
         recyclerView.setLayoutManager(layoutManager);
         this.layoutManager=layoutManager;
         swipeToLoadLayout.setOnRefreshListener(onRefreshListener);
         swipeToLoadLayout.setOnLoadMoreListener(onLoadMoreListener);
+        if (onLoadMoreListener == null){
+            setLoadingMoreEnable(false);
+        }
         recyclerView.setOnScrollListener(new RecyclerViewListener());
     }
 
@@ -124,7 +127,7 @@ public class SuperRefreshRecyclerView extends FrameLayout {
 
     public void moveToPosition(int n) {
         mIndex=n;
-        LinearLayoutManager  mLinearLayoutManager=(LinearLayoutManager)layoutManager;
+        LinearLayoutManager mLinearLayoutManager=(LinearLayoutManager)layoutManager;
         int firstItem = mLinearLayoutManager.findFirstVisibleItemPosition();
         int lastItem = mLinearLayoutManager.findLastVisibleItemPosition();
         //然后区分情况

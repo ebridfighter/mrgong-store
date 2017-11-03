@@ -3,14 +3,10 @@ package uk.co.ribot.androidboilerplate;
 import android.app.Application;
 import android.content.Context;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.injection.component.ApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ApplicationModule;
-import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 
 public class BoilerplateApplication extends Application  {
 
@@ -22,7 +18,7 @@ public class BoilerplateApplication extends Application  {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-            Fabric.with(this, new Crashlytics());
+//            Fabric.with(this, new Crashlytics());
         }
     }
 

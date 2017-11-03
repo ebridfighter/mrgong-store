@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Scroller;
 
-import com.example.liangmutian.airrecyclerview.R;
+import com.runwise.commomlibrary.R;
 
 
 /**

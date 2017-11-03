@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
-import com.example.liangmutian.airrecyclerview.R;
+import com.runwise.commomlibrary.R;
 
 
 /**

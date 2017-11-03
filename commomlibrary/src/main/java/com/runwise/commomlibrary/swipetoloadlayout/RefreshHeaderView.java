@@ -11,13 +11,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.liangmutian.airrecyclerview.R;
+import com.runwise.commomlibrary.R;
 
 
 /**
  * Created by ex-liyongqiang001 on 16/7/28.
  */
-public class RefreshHeaderView extends FrameLayout implements SwipeRefreshTrigger,SwipeTrigger   {
+public class RefreshHeaderView extends FrameLayout implements SwipeRefreshTrigger,SwipeTrigger{
 
     private Context mcontext;
     private TextView tvTip;

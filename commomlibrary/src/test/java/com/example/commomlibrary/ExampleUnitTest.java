@@ -1,4 +1,4 @@
-package com.example.commomlibrary;
+package com.runwise.commomlibrary;
 
 import org.junit.Test;
 

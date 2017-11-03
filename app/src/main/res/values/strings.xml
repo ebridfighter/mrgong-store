@@ -25,6 +25,7 @@
     <string name="tag_meal_side">餐户端</string>
     <string name="toast_get_banner_error">获取广告轮播图出错!</string>
     <string name="toast_get_dashboard_error">获取仪表板数据出错!</string>
+    <string name="toast_refreshing">正在刷新</string>
 
 
 </resources>
