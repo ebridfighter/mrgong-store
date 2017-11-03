@@ -1,5 +1,6 @@
 package uk.co.ribot.androidboilerplate.data.remote;
 
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,6 +20,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
@@ -82,5 +84,8 @@ public interface RunwiseService {
 
     @POST("/gongfu/v2/shop/stock/dashboard")
     Observable<DashBoardResponse> getDashboard(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/message/list")
+    Observable<MessageResponse> getMessage(@Body EmptyRequest emptyRequest);
 
 }
