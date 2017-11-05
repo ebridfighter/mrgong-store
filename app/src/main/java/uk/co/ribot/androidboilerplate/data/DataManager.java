@@ -16,6 +16,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
@@ -139,6 +140,16 @@ public class DataManager {
                 .onErrorReturn(new Func1<Throwable, DashBoardResponse>() {
                     @Override
                     public DashBoardResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+    public Observable<EmptyResponse> logout() {
+        return mRunwiseService.logout(new EmptyRequest())
+                .onErrorReturn(new Func1<Throwable, EmptyResponse>() {
+                    @Override
+                    public EmptyResponse call(Throwable throwable) {
                         Log.i("onErrorReturn", throwable.toString());
                         return null;
                     }
