@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
 import com.runwise.commomlibrary.swipetoloadlayout.RefreshRecyclerView;
 import com.youth.banner.Banner;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -41,7 +40,7 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
  * 首页Fragment
  */
 
-public class HomePageFragment extends BaseFragment implements HomePageMvpView,OnRefreshListener {
+public class HomePageFragment extends BaseFragment implements HomePageMvpView {
     @Inject
     HomePagePresenter mHomePagePresenter;
     @Inject
@@ -88,6 +87,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,On
         mHomePagePresenter.syncReturnOrders();
         mHomePagePresenter.getHomePageBanner(getString(R.string.tag_meal_side));
         mHomePagePresenter.getDashBoard();
+//        mHomePagePresenter.pollingOrders();
     }
 
     private void refreshCurrentRequestFinishCount(){
@@ -135,9 +135,9 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,On
 
     @Override
     public void showDashBoardWithoutPrice(DashBoardResponse dashBoardResponse) {
-        mViewHolder.mTvLastWeek.setText("上周采购量(件)");
-        mViewHolder.mTvLqCount.setText("临期食材(件)");
-        mViewHolder.mTvDqCount.setText("到期食材(件)");
+        mViewHolder.mTvLastWeek.setText(R.string.last_week_purchase_amount);
+        mViewHolder.mTvLqCount.setText(R.string.advent_food_amount);
+        mViewHolder.mTvDqCount.setText(R.string.expire_food_amount);
         mViewHolder.mTvLastWeekBuy.setText(String.valueOf((int)dashBoardResponse.getTotalNumber()));
         int adventNum = (int) dashBoardResponse.getAdventNum();
         int maturityNum = (int) dashBoardResponse.getMaturityNum();

@@ -2,9 +2,11 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -40,6 +42,42 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     @Override
     public void attachView(HomePageMvpView mvpView) {
         super.attachView(mvpView);
+    }
+
+    public void pollingOrders(){
+        checkViewAttached();
+        RxUtil.unsubscribe(mOrderSubscription);
+        Observable.interval(2, TimeUnit.SECONDS).compose(this.<Long>bindLife())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<Long>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "There was an error loading the ribots.");
+                getMvpView().showOrdersError();
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+            }
+        });
+    }
+
+    protected <T> Observable.Transformer<T, T> bindLife() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> observable) {
+                return observable.takeUntil(mDataManager.syncOrders().skipWhile(new Func1<OrderListResponse, Boolean>() {
+                    @Override
+                    public Boolean call(OrderListResponse orderListResponse) {
+                        return true;
+                    }
+                }));
+            }
+        };
     }
 
     public void syncOrders() {

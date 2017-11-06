@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="11dp"
         android:paddingLeft="30dp"
-        android:text="上次采购额 ¥450.5"
+        android:text="上次采购额 ---"
         android:textColor="#999999"
         android:textSize="14sp" />
 

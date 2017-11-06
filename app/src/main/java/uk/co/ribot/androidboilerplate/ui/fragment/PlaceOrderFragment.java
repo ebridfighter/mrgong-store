@@ -9,12 +9,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
+import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
+import uk.co.ribot.androidboilerplate.ui.presenter.PlaceOrderPresenter;
+import uk.co.ribot.androidboilerplate.ui.view_interface.PlaceOrderMvpView;
 import uk.co.ribot.androidboilerplate.view.SystemUpgradeLayout;
 
 /**
@@ -22,7 +30,7 @@ import uk.co.ribot.androidboilerplate.view.SystemUpgradeLayout;
  * 下单fragment
  */
 
-public class PlaceOrderFragment extends BaseFragment {
+public class PlaceOrderFragment extends BaseFragment implements PlaceOrderMvpView{
 
 
     @BindView(R.id.tv_self_help)
@@ -48,20 +56,31 @@ public class PlaceOrderFragment extends BaseFragment {
     @BindView(R.id.btn_sure)
     Button mBtnSure;
     Unbinder unbinder;
+    @Inject
+    PlaceOrderPresenter mPlaceOrderPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_place_irder, null);
+        View view = inflater.inflate(R.layout.fragment_place_order, null);
         unbinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mFragmentBaseComponent.placeOrderFragmentComponent(new ActivityModule(getActivity())).inject(this);
+        mPlaceOrderPresenter.attachView(this);
+        mPlaceOrderPresenter.getLastBuy();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        mPlaceOrderPresenter.detachView();
     }
 
     @OnClick({R.id.tv_self_help, R.id.tv_day_week, R.id.tv_safe, R.id.tv_safe_value, R.id.btn_sure})
@@ -78,5 +97,17 @@ public class PlaceOrderFragment extends BaseFragment {
             case R.id.btn_sure:
                 break;
         }
+    }
+
+    @Override
+    public void showLastOrderAmount(LastBuyResponse lastBuyResponse) {
+        double amount = lastBuyResponse.getAmout();
+        DecimalFormat df = new DecimalFormat("#.#");
+        mTvLastBuy.setText("上次采购额 ¥"+df.format(amount));
+    }
+
+    @Override
+    public void showLastOrderAmountError() {
+
     }
 }

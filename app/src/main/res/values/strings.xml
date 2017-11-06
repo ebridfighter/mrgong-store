@@ -27,6 +27,9 @@
     <string name="toast_get_dashboard_error">获取仪表板数据出错!</string>
     <string name="toast_refreshing">正在刷新</string>
     <string name="toast_logout_fail">登出失败</string>
+    <string name="last_week_purchase_amount">上周采购量(件)</string>
+    <string name="advent_food_amount">临期食材(件)</string>
+    <string name="expire_food_amount">到期食材(件)</string>
 
 
 </resources>

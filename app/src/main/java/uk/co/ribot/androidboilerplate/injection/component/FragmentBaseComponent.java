@@ -4,6 +4,7 @@ import dagger.Component;
 import uk.co.ribot.androidboilerplate.injection.ConfigPersistent;
 import uk.co.ribot.androidboilerplate.injection.component.frament.HomePageFragmentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.frament.MoreFragmentComponent;
+import uk.co.ribot.androidboilerplate.injection.component.frament.PlaceOrderFragmentComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 
 /**
@@ -14,4 +15,5 @@ import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 public interface FragmentBaseComponent {
     HomePageFragmentComponent homePageFragmentComponent(ActivityModule activityModule);
     MoreFragmentComponent moreFragmentComponent(ActivityModule activityModule);
+    PlaceOrderFragmentComponent placeOrderFragmentComponent(ActivityModule activityModule);
 }
