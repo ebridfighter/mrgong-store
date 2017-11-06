@@ -18,6 +18,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerReque
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
@@ -87,5 +88,7 @@ public interface RunwiseService {
 
     @POST("/gongfu/v2/shop/stock/dashboard")
     Observable<DashBoardResponse> getDashboard(@Body EmptyRequest emptyRequest);
+    @POST("/gongfu/logout")
+    Observable<EmptyResponse> logout(@Body EmptyRequest emptyRequest);
 
 }

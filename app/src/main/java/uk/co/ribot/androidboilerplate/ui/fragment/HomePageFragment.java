@@ -3,13 +3,14 @@ package uk.co.ribot.androidboilerplate.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
+import com.runwise.commomlibrary.swipetoloadlayout.RefreshRecyclerView;
 import com.youth.banner.Banner;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -34,24 +35,25 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.HomePagePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
 
-import static uk.co.ribot.androidboilerplate.R.id.lastMonthBuy;
 
 /**
  * Created by mike on 2017/10/18.
  * 首页Fragment
  */
 
-public class HomePageFragment extends BaseFragment implements HomePageMvpView {
+public class HomePageFragment extends BaseFragment implements HomePageMvpView,OnRefreshListener {
     @Inject
     HomePagePresenter mHomePagePresenter;
     @Inject
     OrderAdapter mOrderAdapter;
     @BindView(R.id.rv_product)
-    RecyclerView mRvProduct;
+    RefreshRecyclerView mRvProduct;
     Unbinder unbinder;
 
     HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     ViewHolder mViewHolder;
+    int mCurrentRequestFinishCount = 0;
+    public static final int REQUEST_FINISH_COUNT = 4;
 
     @Nullable
     @Override
@@ -75,8 +77,11 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         mViewHolder = new ViewHolder(headerAdvertisementView);
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mOrderAdapter);
         mHeaderAndFooterWrapper.addHeaderView(headerAdvertisementView);
+
+        mRvProduct.init(new LinearLayoutManager(getActivity()), this,null);
+        mRvProduct.setRefreshEnabled(true);
+
         mRvProduct.setAdapter(mHeaderAndFooterWrapper);
-        mRvProduct.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mHomePagePresenter.attachView(this);
         mHomePagePresenter.syncOrders();
@@ -85,11 +90,21 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         mHomePagePresenter.getDashBoard();
     }
 
+    private void refreshCurrentRequestFinishCount(){
+        mCurrentRequestFinishCount++;
+        if (mCurrentRequestFinishCount == REQUEST_FINISH_COUNT){
+            mRvProduct.setRefreshing(false);
+            mCurrentRequestFinishCount = 0;
+        }
+
+    }
+
     @Override
     public void showOrders(List<OrderListResponse.ListBean> orders) {
         mOrderAdapter.setOrders(orders);
         mOrderAdapter.notifyDataSetChanged();
         mHeaderAndFooterWrapper.notifyDataSetChanged();
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
@@ -97,11 +112,13 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         mOrderAdapter.setReturnOrders(orders);
         mOrderAdapter.notifyDataSetChanged();
         mHeaderAndFooterWrapper.notifyDataSetChanged();
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
     public void showHomePageBanner(List<String> imageUrls) {
         mViewHolder.mBannerAdvertisement.setImages(imageUrls).setImageLoader(new FrescoImageLoader()).start();
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
@@ -112,6 +129,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         mViewHolder.mTvLastWeekBuy.setText(df.format(dashBoardResponse.getPurchaseAmount()/10000));//万元单位
         mViewHolder.mTvLastMonthBuy.setText(df.format(adventValue));
         mViewHolder.mTvPayAccount.setText(df.format(maturityValue));
+        refreshCurrentRequestFinishCount();
         
     }
 
@@ -125,36 +143,43 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         int maturityNum = (int) dashBoardResponse.getMaturityNum();
         mViewHolder.mTvLastMonthBuy.setText(String.valueOf(adventNum));
         mViewHolder.mTvPayAccount.setText(String.valueOf(maturityNum));
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
     public void showOrdersEmpty() {
         toast(R.string.toast_order_empty);
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
     public void showReturnOrdersEmpty() {
         toast(R.string.toast_return_order_empty);
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
     public void showOrdersError() {
         toast(R.string.toast_get_order_list_error);
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
     public void showReturnOrdersError() {
         toast(R.string.toast_get_return_order_list_error);
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
     public void showHomePageBannerError() {
         toast(R.string.toast_get_banner_error);
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
     public void showDashBoardError() {
         toast(R.string.toast_get_dashboard_error);
+        refreshCurrentRequestFinishCount();
     }
 
     @Override
@@ -163,6 +188,16 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         unbinder.unbind();
         mHomePagePresenter.detachView();
     }
+
+    @Override
+    public void onRefresh() {
+        mCurrentRequestFinishCount = 0;
+        mHomePagePresenter.syncOrders();
+        mHomePagePresenter.syncReturnOrders();
+        mHomePagePresenter.getHomePageBanner(getString(R.string.tag_meal_side));
+        mHomePagePresenter.getDashBoard();
+    }
+
 
     static class ViewHolder {
         @BindView(R.id.banner_advertisement)
@@ -175,7 +210,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         LinearLayout mLlProcurement;
         @BindView(R.id.tv_lq_count)
         TextView mTvLqCount;
-        @BindView(lastMonthBuy)
+        @BindView(R.id.lastMonthBuy)
         TextView mTvLastMonthBuy;
         @BindView(R.id.ll_lq)
         LinearLayout mLlLq;

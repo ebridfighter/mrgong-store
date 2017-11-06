@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.runwise.commomlibrary.view.LoadingDialog;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -67,13 +69,14 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onNext(Object object) {
                 //收到了登出事件
-                if (LogOutEvent.class.isInstance(object)){
+                if (LogOutEvent.class.isInstance(object)) {
+                    BoilerplateApplication.get(getActivityContext()).getComponent().preferencesHelper().clear();
                     ActivityUtil.getInstance().finishAll();
                     startActivity(LoginActivity.getStartIntent(getActivityContext()));
-                    BoilerplateApplication.get(getActivityContext()).getComponent().preferencesHelper().clear();
                 }
             }
         });
+        mLoadingDialog = new LoadingDialog(getActivityContext());
     }
 
     @Override
@@ -92,16 +95,26 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    protected Activity getActivityContext(){
+    protected Activity getActivityContext() {
         return BaseActivity.this;
     }
 
-    protected void toast(String text){
-        ToastUtil.show(getActivityContext(),text);
+    protected void toast(String text) {
+        ToastUtil.show(getActivityContext(), text);
     }
 
-    protected void toast(int textId){
-        ToastUtil.show(getActivityContext(),getString(textId));
+    protected void toast(int textId) {
+        ToastUtil.show(getActivityContext(), getString(textId));
+    }
+
+    LoadingDialog mLoadingDialog;
+
+    protected void showLoadingDialog() {
+        mLoadingDialog.show();
+    }
+
+    protected void dismissLoadingDialog() {
+        mLoadingDialog.dismiss();
     }
 
 
