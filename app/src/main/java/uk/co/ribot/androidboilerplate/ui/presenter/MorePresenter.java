@@ -60,4 +60,9 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
                     }
                 });
     }
+    public void logoutLocal() {
+        checkViewAttached();
+        RxUtil.unsubscribe(mSubscription);
+        getMvpView().logout();
+    }
 }

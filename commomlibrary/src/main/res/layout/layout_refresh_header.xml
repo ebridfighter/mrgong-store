@@ -17,7 +17,7 @@
             android:id="@+id/icon_refresh"
             android:layout_width="55dp"
             android:layout_height="45dp"
-            android:src="@mipmap/icon_refresh" />
+            android:src="@drawable/icon_refresh" />
 
         <ProgressBar
             android:id="@+id/pull_to_refresh_progress"

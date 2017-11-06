@@ -107,7 +107,7 @@ public class RefreshHeaderView extends FrameLayout implements SwipeRefreshTrigge
     public void onReset() {
         //重置
         tvTip.setText("下拉刷新");
-        iconRefresh.setImageResource(R.mipmap.icon_refresh);
+        iconRefresh.setImageResource(R.drawable.icon_refresh);
         Log.i("info","onReset");
     }
 }
