@@ -7,28 +7,34 @@ import java.util.List;
  * Created by leo on 17-11-2.
  */
 
-public class MessageResponse {
+public class MessageResponse
+{
 
     private List<OrderBean> order;
     private List<ChannelBean> channel;
 
-    public List<OrderBean> getOrder() {
+    public List<OrderBean> getOrder()
+    {
         return order;
     }
 
-    public void setOrder(List<OrderBean> order) {
+    public void setOrder(List<OrderBean> order)
+    {
         this.order = order;
     }
 
-    public List<ChannelBean> getChannel() {
+    public List<ChannelBean> getChannel()
+    {
         return channel;
     }
 
-    public void setChannel(List<ChannelBean> channel) {
+    public void setChannel(List<ChannelBean> channel)
+    {
         this.channel = channel;
     }
 
-    public static class OrderBean implements Serializable {
+    public static class OrderBean implements Serializable
+    {
         /**
          * is_today : false
          * done_datetime : 2017-08-25 11:20:25
@@ -74,55 +80,68 @@ public class MessageResponse {
         private int id;
         private double amount_total;
 
-        public String getDeliveryType() {
+        public String getDeliveryType()
+        {
             return deliveryType;
         }
 
-        public void setDeliveryType(String deliveryType) {
+        public void setDeliveryType(String deliveryType)
+        {
             this.deliveryType = deliveryType;
         }
 
-        public String getOrderID() {
+        public String getOrderID()
+        {
             return orderID;
         }
 
-        public void setOrderID(String orderID) {
+        public void setOrderID(String orderID)
+        {
             this.orderID = orderID;
         }
 
-        public boolean isIs_today() {
+        public boolean isIs_today()
+        {
             return is_today;
         }
 
-        public void setIs_today(boolean is_today) {
+        public void setIs_today(boolean is_today)
+        {
             this.is_today = is_today;
         }
 
-        public String getDone_datetime() {
+        public String getDone_datetime()
+        {
             return done_datetime;
         }
 
-        public void setDone_datetime(String done_datetime) {
+        public void setDone_datetime(String done_datetime)
+        {
             this.done_datetime = done_datetime;
         }
 
-        public String getCreate_date() {
+        public String getCreate_date()
+        {
             return create_date;
         }
 
-        public void setCreate_date(String create_date) {
+        public void setCreate_date(String create_date)
+        {
             this.create_date = create_date;
         }
 
-        public String getName() {
+        public String getName()
+        {
             return name;
         }
 
-        public void setName(String name) {
+        public void setName(String name)
+        {
             this.name = name;
         }
 
-        public String getConfirmation_date() {
+        public String getConfirmation_date()
+        {
             return confirmation_date;
         }
 
@@ -130,7 +149,8 @@ public class MessageResponse {
             this.confirmation_date = confirmation_date;
         }
 
-        public String getEstimated_time() {
+        public String getEstimated_time()
+        {
             return estimated_time;
         }
 
@@ -138,24 +158,29 @@ public class MessageResponse {
             this.estimated_time = estimated_time;
         }
 
-        public WaybillBean getWaybill() {
+        public WaybillBean getWaybill()
+        {
             return waybill;
         }
 
-        public void setWaybill(WaybillBean waybill) {
+        public void setWaybill(WaybillBean waybill)
+        {
             this.waybill = waybill;
         }
 
 
-        public int getAmount() {
+        public int getAmount()
+        {
             return amount;
         }
 
-        public void setAmount(int amount) {
+        public void setAmount(int amount)
+        {
             this.amount = amount;
         }
 
-        public String getEnd_unload_datetime() {
+        public String getEnd_unload_datetime()
+        {
             return end_unload_datetime;
         }
 
@@ -163,7 +188,8 @@ public class MessageResponse {
             this.end_unload_datetime = end_unload_datetime;
         }
 
-        public boolean isIsThirdPartLog() {
+        public boolean isIsThirdPartLog()
+        {
             return isThirdPartLog;
         }
 
@@ -171,7 +197,8 @@ public class MessageResponse {
             this.isThirdPartLog = isThirdPartLog;
         }
 
-        public LastMessageBean getLast_message() {
+        public LastMessageBean getLast_message()
+        {
             return last_message;
         }
 
@@ -179,39 +206,48 @@ public class MessageResponse {
             this.last_message = last_message;
         }
 
-        public String getState() {
+        public String getState()
+        {
             return state;
         }
 
-        public void setState(String state) {
+        public void setState(String state)
+        {
             this.state = state;
         }
 
-        public String getOrder_type_id() {
+        public String getOrder_type_id()
+        {
             return order_type_id;
         }
 
-        public void setOrder_type_id(String order_type_id) {
+        public void setOrder_type_id(String order_type_id)
+        {
             this.order_type_id = order_type_id;
         }
 
-        public String getRecent_trends() {
+        public String getRecent_trends()
+        {
             return recent_trends;
         }
 
-        public void setRecent_trends(String recent_trends) {
+        public void setRecent_trends(String recent_trends)
+        {
             this.recent_trends = recent_trends;
         }
 
-        public String getStart_unload_datetime() {
+        public String getStart_unload_datetime()
+        {
             return start_unload_datetime;
         }
 
-        public void setStart_unload_datetime(String start_unload_datetime) {
+        public void setStart_unload_datetime(String start_unload_datetime)
+        {
             this.start_unload_datetime = start_unload_datetime;
         }
 
-        public String getCreate_user_name() {
+        public String getCreate_user_name()
+        {
             return create_user_name;
         }
 
@@ -219,31 +255,38 @@ public class MessageResponse {
             this.create_user_name = create_user_name;
         }
 
-        public String getLoading_time() {
+        public String getLoading_time()
+        {
             return loading_time;
         }
 
-        public void setLoading_time(String loading_time) {
+        public void setLoading_time(String loading_time)
+        {
             this.loading_time = loading_time;
         }
 
-        public int getId() {
+        public int getId()
+        {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(int id)
+        {
             this.id = id;
         }
 
-        public double getAmount_total() {
+        public double getAmount_total()
+        {
             return amount_total;
         }
 
-        public void setAmount_total(double amount_total) {
+        public void setAmount_total(double amount_total)
+        {
             this.amount_total = amount_total;
         }
 
-        public static class WaybillBean implements Serializable{
+        public static class WaybillBean implements Serializable
+        {
             /**
              * user : {"mobile":"15542154698","avatar_url":"","name":"黄飞"}
              * vehicle : {"name":"Audi/A4/999999999999","license_plate":"999999999999"}
@@ -256,35 +299,43 @@ public class MessageResponse {
             private String name;
             private String id;
 
-            public UserBean getUser() {
+            public UserBean getUser()
+            {
                 return user;
             }
 
-            public void setUser(UserBean user) {
+            public void setUser(UserBean user)
+            {
                 this.user = user;
             }
 
-            public VehicleBean getVehicle() {
+            public VehicleBean getVehicle()
+            {
                 return vehicle;
             }
 
-            public void setVehicle(VehicleBean vehicle) {
+            public void setVehicle(VehicleBean vehicle)
+            {
                 this.vehicle = vehicle;
             }
 
-            public String getName() {
+            public String getName()
+            {
                 return name;
             }
 
-            public void setName(String name) {
+            public void setName(String name)
+            {
                 this.name = name;
             }
 
-            public String getId() {
+            public String getId()
+            {
                 return id;
             }
 
-            public void setId(String id) {
+            public void setId(String id)
+            {
                 this.id = id;
             }
 
@@ -299,32 +350,39 @@ public class MessageResponse {
                 private String avatar_url;
                 private String name;
 
-                public String getMobile() {
+                public String getMobile()
+                {
                     return mobile;
                 }
 
-                public void setMobile(String mobile) {
+                public void setMobile(String mobile)
+                {
                     this.mobile = mobile;
                 }
 
-                public String getAvatar_url() {
+                public String getAvatar_url()
+                {
                     return avatar_url;
                 }
 
-                public void setAvatar_url(String avatar_url) {
+                public void setAvatar_url(String avatar_url)
+                {
                     this.avatar_url = avatar_url;
                 }
 
-                public String getName() {
+                public String getName()
+                {
                     return name;
                 }
 
-                public void setName(String name) {
+                public void setName(String name)
+                {
                     this.name = name;
                 }
             }
 
-            public static class VehicleBean implements Serializable{
+            public static class VehicleBean implements Serializable
+            {
                 /**
                  * name : Audi/A4/999999999999
                  * license_plate : 999999999999
@@ -333,25 +391,30 @@ public class MessageResponse {
                 private String name;
                 private String license_plate;
 
-                public String getName() {
+                public String getName()
+                {
                     return name;
                 }
 
-                public void setName(String name) {
+                public void setName(String name)
+                {
                     this.name = name;
                 }
 
-                public String getLicense_plate() {
+                public String getLicense_plate()
+                {
                     return license_plate;
                 }
 
-                public void setLicense_plate(String license_plate) {
+                public void setLicense_plate(String license_plate)
+                {
                     this.license_plate = license_plate;
                 }
             }
         }
 
-        public static class LastMessageBean implements Serializable{
+        public static class LastMessageBean implements Serializable
+        {
             /**
              * body : Hello
              * id : 22908
@@ -368,23 +431,28 @@ public class MessageResponse {
             private String model;
             private AuthorIdBean author_id;
 
-            public String getBody() {
+            public String getBody()
+            {
                 return body;
             }
 
-            public void setBody(String body) {
+            public void setBody(String body)
+            {
                 this.body = body;
             }
 
-            public int getId() {
+            public int getId()
+            {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(int id)
+            {
                 this.id = id;
             }
 
-            public String getDate() {
+            public String getDate()
+            {
                 return date;
             }
 
@@ -392,23 +460,28 @@ public class MessageResponse {
                 this.date = date;
             }
 
-            public boolean isSeen() {
+            public boolean isSeen()
+            {
                 return seen;
             }
 
-            public void setSeen(boolean seen) {
+            public void setSeen(boolean seen)
+            {
                 this.seen = seen;
             }
 
-            public String getModel() {
+            public String getModel()
+            {
                 return model;
             }
 
-            public void setModel(String model) {
+            public void setModel(String model)
+            {
                 this.model = model;
             }
 
-            public AuthorIdBean getAuthor_id() {
+            public AuthorIdBean getAuthor_id()
+            {
                 return author_id;
             }
 
@@ -427,34 +500,41 @@ public class MessageResponse {
                 private int id;
                 private String name;
 
-                public String getAvatar_url() {
+                public String getAvatar_url()
+                {
                     return avatar_url;
                 }
 
-                public void setAvatar_url(String avatar_url) {
+                public void setAvatar_url(String avatar_url)
+                {
                     this.avatar_url = avatar_url;
                 }
 
-                public int getId() {
+                public int getId()
+                {
                     return id;
                 }
 
-                public void setId(int id) {
+                public void setId(int id)
+                {
                     this.id = id;
                 }
 
-                public String getName() {
+                public String getName()
+                {
                     return name;
                 }
 
-                public void setName(String name) {
+                public void setName(String name)
+                {
                     this.name = name;
                 }
             }
         }
     }
 
-    public static class ChannelBean {
+    public static class ChannelBean
+    {
         /**
          * read : true
          * last_message : {}
@@ -499,7 +579,8 @@ public class MessageResponse {
             this.name = name;
         }
 
-        public static class LastMessageBeanX {
+        public static class LastMessageBeanX
+        {
 
             /**
              * body : 各门店请注意，“拍黄瓜”将会从6月8号到7月1号期间暂停供应，请留意，不便之处敬请原谅。
@@ -549,23 +630,28 @@ public class MessageResponse {
                 this.seen = seen;
             }
 
-            public String getModel() {
+            public String getModel()
+            {
                 return model;
             }
 
-            public void setModel(String model) {
+            public void setModel(String model)
+            {
                 this.model = model;
             }
 
-            public AuthorIdBean getAuthor_id() {
+            public AuthorIdBean getAuthor_id()
+            {
                 return author_id;
             }
 
-            public void setAuthor_id(AuthorIdBean author_id) {
+            public void setAuthor_id(AuthorIdBean author_id)
+            {
                 this.author_id = author_id;
             }
 
-            public static class AuthorIdBean {
+            public static class AuthorIdBean
+            {
                 /**
                  * avatar_url :
                  * id : 3
@@ -576,27 +662,33 @@ public class MessageResponse {
                 private int id;
                 private String name;
 
-                public String getAvatar_url() {
+                public String getAvatar_url()
+                {
                     return avatar_url;
                 }
 
-                public void setAvatar_url(String avatar_url) {
+                public void setAvatar_url(String avatar_url)
+                {
                     this.avatar_url = avatar_url;
                 }
 
-                public int getId() {
+                public int getId()
+                {
                     return id;
                 }
 
-                public void setId(int id) {
+                public void setId(int id)
+                {
                     this.id = id;
                 }
 
-                public String getName() {
+                public String getName()
+                {
                     return name;
                 }
 
-                public void setName(String name) {
+                public void setName(String name)
+                {
                     this.name = name;
                 }
             }

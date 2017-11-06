@@ -13,6 +13,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
@@ -28,28 +30,31 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.MessageMvpView;
 
 public class MessageFragment extends BaseFragment implements MessageMvpView {
 
-    @BindView(R.id.rv_product)
-    RecyclerView mRvMessage;
     @Inject
     MessagePresenter mMessagePresenter;
     @Inject
     MessageAdapter mMessageAdapter;
 
+    Unbinder unbinder;
+    @BindView(R.id.rv_message)
+    RecyclerView rvMessage;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_message,null);
+        View view = inflater.inflate(R.layout.fragment_message, null);
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         MessageFragmentComponent messageFragmentComponent = mFragmentBaseComponent.
                 messageFragmentComponent(new ActivityModule(getActivity()));
         messageFragmentComponent.inject(this);
-        mRvMessage.setAdapter(mMessageAdapter);
-        mRvMessage.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        rvMessage.setAdapter(mMessageAdapter);
+        rvMessage.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
         mMessagePresenter.attachView(this);
@@ -77,5 +82,11 @@ public class MessageFragment extends BaseFragment implements MessageMvpView {
     @Override
     public void showMessagesError() {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
