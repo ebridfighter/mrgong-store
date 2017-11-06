@@ -16,6 +16,7 @@ import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.event.LogOutEvent;
+import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.activity.ProductListActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.MorePresenter;
@@ -45,6 +46,8 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mFragmentBaseComponent.moreFragmentComponent(new ActivityModule(getActivity())).inject(this);
+        mMorePresenter.attachView(this);
     }
 
     @Override
@@ -54,7 +57,7 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
         mMorePresenter.detachView();
     }
 
-    @OnClick({R.id.btn_product_list, R.id.btn_logout})
+    @OnClick({R.id.btn_product_list, R.id.btn_logout,R.id.btn_logout_local})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_product_list:
@@ -62,6 +65,9 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
                 break;
             case R.id.btn_logout:
                 mMorePresenter.logout();
+                break;
+            case R.id.btn_logout_local:
+                mMorePresenter.logoutLocal();
                 break;
         }
     }
@@ -73,7 +79,7 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
 
     @Override
     public void logoutError() {
-//        toast(R.string.toast_logout_fail);
+        toast(R.string.toast_logout_fail);
     }
 }
 

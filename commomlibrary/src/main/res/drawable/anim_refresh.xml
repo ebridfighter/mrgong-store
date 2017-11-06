@@ -3,20 +3,20 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:oneshot="false"
 	>
-	<item android:drawable="@mipmap/n1" android:duration="50"></item>
-	<item android:drawable="@mipmap/n2" android:duration="50"></item>
-	<item android:drawable="@mipmap/n3" android:duration="50"></item>
-	<item android:drawable="@mipmap/n4" android:duration="50"></item>
-	<item android:drawable="@mipmap/n5" android:duration="50"></item>
-	<!--<item android:drawable="@mipmap/gpk" android:duration="15"></item>-->
-	<!--<item android:drawable="@mipmap/gpl" android:duration="15"></item>-->
-	<!--<item android:drawable="@mipmap/gpm" android:duration="15"></item>-->
-	<!--<item android:drawable="@mipmap/gpn" android:duration="15"></item>-->
-	<!--<item android:drawable="@mipmap/gpo" android:duration="15"></item>-->
-	<!--<item android:drawable="@mipmap/gpq" android:duration="15"></item>-->
-	<!--<item android:drawable="@mipmap/gpr" android:duration="15" ></item>-->
-<!--	<item android:drawable="@mipmap/gps" android:duration="150"></item>
-	<item android:drawable="@mipmap/gpt" android:duration="150"></item>
-	<item android:drawable="@mipmap/gpu" android:duration="150"></item>
-	<item android:drawable="@mipmap/gpv" android:duration="150"></item>-->
+	<item android:drawable="@drawable/n1" android:duration="50"></item>
+	<item android:drawable="@drawable/n2" android:duration="50"></item>
+	<item android:drawable="@drawable/n3" android:duration="50"></item>
+	<item android:drawable="@drawable/n4" android:duration="50"></item>
+	<item android:drawable="@drawable/n5" android:duration="50"></item>
+	<!--<item android:drawable="@drawable/gpk" android:duration="15"></item>-->
+	<!--<item android:drawable="@drawable/gpl" android:duration="15"></item>-->
+	<!--<item android:drawable="@drawable/gpm" android:duration="15"></item>-->
+	<!--<item android:drawable="@drawable/gpn" android:duration="15"></item>-->
+	<!--<item android:drawable="@drawable/gpo" android:duration="15"></item>-->
+	<!--<item android:drawable="@drawable/gpq" android:duration="15"></item>-->
+	<!--<item android:drawable="@drawable/gpr" android:duration="15" ></item>-->
+<!--	<item android:drawable="@drawable/gps" android:duration="150"></item>
+	<item android:drawable="@drawable/gpt" android:duration="150"></item>
+	<item android:drawable="@drawable/gpu" android:duration="150"></item>
+	<item android:drawable="@drawable/gpv" android:duration="150"></item>-->
 </animation-list>
