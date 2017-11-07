@@ -15,7 +15,7 @@ import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
 
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.injection.component.DaggerFragmentBaseComponent;
+import uk.co.ribot.androidboilerplate.injection.component.frament.DaggerFragmentBaseComponent;
 import uk.co.ribot.androidboilerplate.injection.component.frament.FragmentBaseComponent;
 
 /**

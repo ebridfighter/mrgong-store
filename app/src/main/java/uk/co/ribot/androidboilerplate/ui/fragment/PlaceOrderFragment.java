@@ -133,7 +133,7 @@ public class PlaceOrderFragment extends BaseFragment implements PlaceOrderMvpVie
             case R.id.btn_sure:
                 if (checkInput()) {
                     startActivity(IntelligentPlaceOrderActivity.getStartIntent(getActivity(), Double.parseDouble(mEtMoney.getText().toString())
-                            , Double.parseDouble(mTvSafeValue.getText().toString())));
+                            , Double.parseDouble(mSafeArr.get(mSelectedIndex))));
                 }
                 break;
         }
