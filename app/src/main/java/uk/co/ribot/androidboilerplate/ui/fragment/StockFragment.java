@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
@@ -15,6 +17,9 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
  */
 
 public class StockFragment extends BaseFragment {
+
+    @Inject
+    public StockFragment(){}
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

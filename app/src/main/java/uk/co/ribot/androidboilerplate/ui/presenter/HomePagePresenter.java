@@ -2,9 +2,11 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -28,6 +30,7 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
 public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     private final DataManager mDataManager;
     private Subscription mOrderSubscription;
+    private Subscription mOrderPollingSubscription;
     private Subscription mReturnOrderSubscription;
     private Subscription mHomePageBannerSubscription;
     private Subscription mDashBoardSubscription;
@@ -41,6 +44,44 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     public void attachView(HomePageMvpView mvpView) {
         super.attachView(mvpView);
     }
+
+    public void pollingOrders(){
+        checkViewAttached();
+        RxUtil.unsubscribe(mOrderPollingSubscription);
+        mOrderPollingSubscription =  Observable.interval(0,5, TimeUnit.SECONDS).flatMap(new Func1<Long, Observable<OrderListResponse>>() {
+            @Override
+            public Observable<OrderListResponse> call(Long aLong) {
+                return mDataManager.syncOrders()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io());
+            }
+        }).takeUntil(new Func1<OrderListResponse, Boolean>() {
+            @Override
+            public Boolean call(OrderListResponse orderListResponse) {
+                return !getMvpView().isVisiable();
+            }
+        }).subscribe(new Subscriber<OrderListResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "There was an error loading the orders.");
+                getMvpView().showOrdersError();
+            }
+
+            @Override
+            public void onNext(OrderListResponse orderListResponse) {
+                if (orderListResponse.getList().isEmpty()) {
+                    getMvpView().showOrdersEmpty();
+                } else {
+                    getMvpView().showOrders(orderListResponse.getList());
+                }
+            }
+        });
+    }
+
 
     public void syncOrders() {
         checkViewAttached();

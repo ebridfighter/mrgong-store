@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.data.model;
+package uk.co.ribot.androidboilerplate.data.model.business;
 
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
