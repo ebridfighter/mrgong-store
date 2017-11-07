@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.business.OrderDoAction;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
@@ -33,6 +35,7 @@ import uk.co.ribot.androidboilerplate.ui.adapter.OrderAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.HomePagePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
+import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
 
 
 /**
@@ -40,7 +43,7 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
  * 首页Fragment
  */
 
-public class HomePageFragment extends BaseFragment implements HomePageMvpView {
+public class HomePageFragment extends BaseFragment implements HomePageMvpView,OrderAdapter.DoActionInterface {
     @Inject
     HomePagePresenter mHomePagePresenter;
     @Inject
@@ -214,6 +217,126 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         mHomePagePresenter.syncReturnOrders();
         mHomePagePresenter.getHomePageBanner(getString(R.string.tag_meal_side));
         mHomePagePresenter.getDashBoard();
+    }
+
+    @Override
+    public void doAction(OrderDoAction action, int postion) {
+        switch (action) {
+            case CANCLE:
+                mDialog.setTitle("提示");
+                mDialog.setMessage("确认取消订单?");
+                mDialog.setMessageGravity();
+                mDialog.setRightBtnListener("确认", new RunwiseDialog.DialogListener() {
+                    @Override
+                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
+                        //发送取消订单请求
+//                        cancleOrderRequest(position);
+                    }
+                });
+                mDialog.show();
+                break;
+            case UPLOAD:
+//                Intent uIntent = new Intent(mContext, UploadPayedPicActivity.class);
+//                int ordereId = ((OrderResponse.ListBean) adapter.getItem(position)).getOrderID();
+//                String orderNmae = ((OrderResponse.ListBean) adapter.getItem(position)).getName();
+//                uIntent.putExtra("orderid", ordereId);
+//                uIntent.putExtra("ordername", orderNmae);
+//                startActivity(uIntent);
+                break;
+            case LOOK:
+//                hasattachment
+//                Intent lIntent = new Intent(mContext, UploadPayedPicActivity.class);
+//                int ordereId2 = ((OrderResponse.ListBean) adapter.getItem(position)).getOrderID();
+//                String orderNmae2 = ((OrderResponse.ListBean) adapter.getItem(position)).getName();
+//                lIntent.putExtra("orderid", ordereId2);
+//                lIntent.putExtra("ordername", orderNmae2);
+//                lIntent.putExtra("hasattachment", true);
+//                startActivity(lIntent);
+
+                break;
+            case TALLY:
+                //点货，计入结算单位
+//                Intent tIntent = new Intent(mContext, ReceiveActivity.class);
+//                Bundle tBundle = new Bundle();
+//                tBundle.putParcelable("order", (OrderResponse.ListBean) adapter.getItem(position));
+//                tBundle.putInt("mode", 1);
+//                tIntent.putExtras(tBundle);
+//                startActivity(tIntent);
+                break;
+            case TALLYING:
+                String name = mOrderAdapter.getItem(postion).getOrderListBean().getTallyingUserName();
+                mDialog.setMessageGravity();
+                mDialog.setMessage(name + "正在点货");
+                mDialog.setModel(RunwiseDialog.RIGHT);
+                mDialog.setRightBtnListener("我知道了", new RunwiseDialog.DialogListener() {
+                    @Override
+                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
+                        mDialog.dismiss();
+                    }
+                });
+                mDialog.show();
+                break;
+            case RATE:
+                //评价
+//                Intent rIntent = new Intent(mContext, EvaluateActivity.class);
+//                final OrderResponse.ListBean bean = (OrderResponse.ListBean) adapter.getList().get(position);
+//                Bundle rBundle = new Bundle();
+//                rBundle.putParcelable("order", bean);
+//                rIntent.putExtras(rBundle);
+//                startActivity(rIntent);
+                break;
+            case RECEIVE://正常收货
+//                Intent intent = new Intent(mContext, ReceiveActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putParcelable("order", (OrderResponse.ListBean) adapter.getItem(position));
+//                bundle.putInt("mode", 0);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+                break;
+            case SETTLERECEIVE:
+                //点货，计入结算单位
+//                Intent sIntent = new Intent(mContext, ReceiveActivity.class);
+//                Bundle sBundle = new Bundle();
+//                sBundle.putParcelable("order", (OrderResponse.ListBean) adapter.getItem(position));
+//                sBundle.putInt("mode", 2);
+//                sIntent.putExtras(sBundle);
+//                startActivity(sIntent);
+                break;
+            case SELFTALLY:
+                mDialog.setMessageGravity();
+                mDialog.setMessage("您已经点过货了，应由其他人完成收货");
+                mDialog.setRightBtnListener("确认", new RunwiseDialog.DialogListener() {
+                    @Override
+                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
+
+                    }
+                });
+                mDialog.show();
+                break;
+            case FINISH_RETURN:
+//                mSelectBean = (ReturnOrderBean.ListBean) adapter.getList().get(position);
+//                mDialog.setTitle("提示");
+//                mDialog.setMessageGravity();
+//                mDialog.setMessage("确认数量一致?");
+//                mDialog.setRightBtnListener("确认", new RunwiseDialog.DialogListener() {
+//                    @Override
+//                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
+//                        Object request = null;
+//                        sendConnection("/gongfu/v2/return_order/" +
+//                                mSelectBean.getReturnOrderID() +
+//                                "/done", request, FINISHRETURN, false, FinishReturnResponse.class);
+//                    }
+//                });
+//                mDialog.show();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void call(String phone) {
+
     }
 
 

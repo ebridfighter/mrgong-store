@@ -40,7 +40,6 @@ import uk.co.ribot.androidboilerplate.view.SystemUpgradeLayout;
 
 public class PlaceOrderFragment extends BaseFragment implements PlaceOrderMvpView {
 
-
     @BindView(R.id.tv_self_help)
     TextView mTvSelfHelp;
     @BindView(R.id.layout_system_upgrade_notice)
