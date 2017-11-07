@@ -92,6 +92,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         return mOrderListWraps.get(position).getOrderListBean() != null ? VIEW_TYPE_ORDER : VIEW_TYPE_RETURN_ORDER;
     }
 
+   public OrderListWrap getItem(int position){
+        return mOrderListWraps.get(position);
+    }
+
     @Override
     public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
@@ -116,29 +120,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
         if (getItemViewType(position) == VIEW_TYPE_ORDER) {
             final OrderListResponse.ListBean bean = mOrderListWraps.get(position).getOrderListBean();
-            holder.mIbArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Boolean isExpand;
-                    //更改boolean状态
-                    if (mExpandMap.get(Integer.valueOf(bean.getOrderID())) != null) {
-                        isExpand = mExpandMap.get(Integer.valueOf(bean.getOrderID())).booleanValue();
-                        isExpand = !isExpand;
-                    } else {
-                        isExpand = true;
-                    }
-                    mExpandMap.put(Integer.valueOf(bean.getOrderID()), isExpand);
-                    if (isExpand) {
-                        //只有点击时，才去放timeline的内容
-                        setTimeLineContent(v.getContext(), bean.getStateTracker(), holder.mRecyclerView);
-                        holder.mTimelineLL.setVisibility(View.VISIBLE);
-                        holder.mIbArrow.setImageResource(R.drawable.login_btn_dropup);
-                    } else {
-                        holder.mTimelineLL.setVisibility(View.GONE);
-                        holder.mIbArrow.setImageResource(R.drawable.login_btn_dropdown);
-                    }
-                }
-            });
+            setUpExpandListener(holder,bean.getOrderID(),bean.getStateTracker());
             holder.mBtnDo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -181,13 +163,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.mDriverLL.setVisibility(View.GONE);
             }
             if (bean.getWaybill() != null && bean.getWaybill().getDeliverUser() != null) {
-                holder.mSenderTv.setText(bean.getWaybill().getDeliverUser().getName());
-                holder.mSenderTv.setVisibility(View.VISIBLE);
+                holder.mTvSender.setText(bean.getWaybill().getDeliverUser().getName());
+                holder.mTvSender.setVisibility(View.VISIBLE);
             } else {
-                holder.mSenderTv.setText("未指派");
-                holder.mSenderTv.setVisibility(View.GONE);
+                holder.mTvSender.setText("未指派");
+                holder.mTvSender.setVisibility(View.GONE);
             }
-            holder.mCallIb.setOnClickListener(new View.OnClickListener() {
+            holder.mIbCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (bean != null && bean.getWaybill() != null && bean.getWaybill().getDeliverUser() != null
@@ -209,10 +191,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             holder.mTvMoney.setText(NumberUtil.getIOrD(bean.getAmountTotal()));
             StringBuffer drawableSb = new StringBuffer("state_restaurant_");
             drawableSb.append(bean.getState());
-            if (getResIdByDrawableName(holder.mImg.getContext(),drawableSb.toString()) == 0) {
-                holder.mImg.setImageResource(R.drawable.state_restaurant_draft);
+            if (getResIdByDrawableName(holder.mIvOrderState.getContext(),drawableSb.toString()) == 0) {
+                holder.mIvOrderState.setImageResource(R.drawable.state_restaurant_draft);
             } else {
-                holder.mImg.setImageResource(getResIdByDrawableName(holder.mImg.getContext(),drawableSb.toString()));
+                holder.mIvOrderState.setImageResource(getResIdByDrawableName(holder.mIvOrderState.getContext(),drawableSb.toString()));
             }
             String doString = OrderActionUtils.getDoBtnTextByState(bean);
             if (!TextUtils.isEmpty(doString)) {
@@ -246,7 +228,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             holder.mTvReturn.setVisibility(View.GONE);
             holder.mTvReal.setVisibility(View.GONE);
             holder.mTvToPay.setVisibility(View.GONE);
-            holder.mImg.setImageResource(R.drawable.more_restaurant_returnrecord);
+            holder.mIvOrderState.setImageResource(R.drawable.more_restaurant_returnrecord);
             holder.mTvOrderTime.setText(bean.getName());
             holder.mTvState.setText("退货中");
             holder.mTvState.setTextColor(Color.parseColor("#FA694D"));
@@ -259,20 +241,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             if (!TextUtils.isEmpty(bean.getDriveMobile())) {
                 holder.mTvCarNum.setText(bean.getVehicle());
                 holder.mTvCarNum.setVisibility(View.VISIBLE);
-                holder.mCallIb.setVisibility(View.VISIBLE);
+                holder.mIbCall.setVisibility(View.VISIBLE);
                 holder.mDriverLL.setVisibility(View.VISIBLE);
             } else {
                 holder.mTvCarNum.setText("未指派");
                 holder.mTvCarNum.setVisibility(View.GONE);
-                holder.mCallIb.setVisibility(View.GONE);
+                holder.mIbCall.setVisibility(View.GONE);
                 holder.mDriverLL.setVisibility(View.GONE);
             }
             if (!TextUtils.isEmpty(bean.getDriver())) {
-                holder.mSenderTv.setText(bean.getDriver());
+                holder.mTvSender.setText(bean.getDriver());
             } else {
-                holder.mSenderTv.setText("未指派");
+                holder.mTvSender.setText("未指派");
             }
-            holder.mCallIb.setOnClickListener(new View.OnClickListener() {
+            holder.mIbCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (!TextUtils.isEmpty(bean.getDriveMobile())) {
@@ -282,29 +264,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     }
                 }
             });
-            holder.mIbArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //更改boolean状态
-                    Boolean isExpand = mExpandMap.get(Integer.valueOf(bean.getOrderID()));
-                    if (isExpand != null) {
-                        isExpand = !isExpand;
-                    } else {
-                        isExpand = true;
-                    }
-                    mExpandMap.put(Integer.valueOf(bean.getOrderID()), isExpand);
-                    if (isExpand) {
-                        //只有点击时，才去放timeline的内容
-                        setTimeLineContent(v.getContext(),bean.getStateTracker(), holder.mRecyclerView);
-                        holder.mTimelineLL.setVisibility(View.VISIBLE);
-                        holder.mIbArrow.setImageResource(R.drawable.login_btn_dropup);
-                    } else {
-                        holder.mTimelineLL.setVisibility(View.GONE);
-                        holder.mIbArrow.setImageResource(R.drawable.login_btn_dropdown);
-                    }
-
-                }
-            });
+            setUpExpandListener(holder,bean.getOrderID(),bean.getStateTracker());
             if (mExpandMap.get(Integer.valueOf(bean.getOrderID())) != null && mExpandMap.get(Integer.valueOf(bean.getOrderID())).booleanValue()) {
                 holder.mTimelineLL.setVisibility(View.VISIBLE);
                 //重刷一次，免得重复
@@ -329,7 +289,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                         if (callback != null) {
                             callback.doAction(OrderDoAction.FINISH_RETURN, position);
                         }
-
                     }
                 });
             } else {
@@ -339,6 +298,33 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
 
     }
+
+    private void setUpExpandListener(final OrderViewHolder orderViewHolder, final int orderId, final List<String> stateTracker){
+        orderViewHolder.mIbArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //更改boolean状态
+                Boolean isExpand = mExpandMap.get(Integer.valueOf(orderId));
+                if (isExpand != null) {
+                    isExpand = !isExpand;
+                } else {
+                    isExpand = true;
+                }
+                mExpandMap.put(Integer.valueOf(orderId), isExpand);
+                if (isExpand) {
+                    //只有点击时，才去放timeline的内容
+                    setTimeLineContent(v.getContext(),stateTracker, orderViewHolder.mRecyclerView);
+                    orderViewHolder.mTimelineLL.setVisibility(View.VISIBLE);
+                    orderViewHolder.mIbArrow.setImageResource(R.drawable.login_btn_dropup);
+                } else {
+                    orderViewHolder.mTimelineLL.setVisibility(View.GONE);
+                    orderViewHolder.mIbArrow.setImageResource(R.drawable.login_btn_dropdown);
+                }
+
+            }
+        });
+    }
+
 
     private void setTimeLineContent(Context context, List<String> stList, RecyclerView recyclerView) {
         TimeLineAdapter adapter = new TimeLineAdapter(context, stList);
@@ -369,7 +355,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     static class OrderViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.img)
-        ImageView mImg;
+        ImageView mIvOrderState;
         @BindView(R.id.tv_order_num)
         TextView mTvOrderNum;
         @BindView(R.id.tv_real)
@@ -403,9 +389,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         @BindView(R.id.carNumTv)
         TextView mTvCarNum;
         @BindView(R.id.senderTv)
-        TextView mSenderTv;
+        TextView mTvSender;
         @BindView(R.id.callIb)
-        ImageButton mCallIb;
+        ImageButton mIbCall;
         @BindView(R.id.driverLL)
         LinearLayout mDriverLL;
         @BindView(R.id.recyclerView)

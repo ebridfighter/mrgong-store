@@ -13,10 +13,13 @@ import android.widget.Toast;
 import com.runwise.commomlibrary.swipetoloadlayout.OnLoadMoreListener;
 import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
 
+import javax.inject.Inject;
+
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.frament.DaggerFragmentBaseComponent;
 import uk.co.ribot.androidboilerplate.injection.component.frament.FragmentBaseComponent;
+import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
 
 /**
  * Created by mike on 2017/10/31.
@@ -25,6 +28,8 @@ import uk.co.ribot.androidboilerplate.injection.component.frament.FragmentBaseCo
 public class BaseFragment extends Fragment implements OnRefreshListener,OnLoadMoreListener {
 
     protected FragmentBaseComponent mFragmentBaseComponent;
+    @Inject
+    protected RunwiseDialog mDialog;
 
     @Nullable
     @Override
