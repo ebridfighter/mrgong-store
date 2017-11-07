@@ -12,6 +12,7 @@ import uk.co.ribot.androidboilerplate.ui.base.MvpView;
  */
 
 public interface HomePageMvpView extends MvpView {
+    boolean isVisiable();
     void showOrders(List<OrderListResponse.ListBean> orders);
     void showReturnOrders(List<ReturnOrderListResponse.ListBean> orders);
     void showHomePageBanner(List<String> imageUrls);

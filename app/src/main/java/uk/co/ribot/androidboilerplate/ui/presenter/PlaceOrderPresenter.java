@@ -9,6 +9,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.PlaceOrderMvpView;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
@@ -29,6 +30,14 @@ public class PlaceOrderPresenter extends BasePresenter<PlaceOrderMvpView> {
     @Override
     public void attachView(PlaceOrderMvpView mvpView) {
         super.attachView(mvpView);
+    }
+
+    public boolean canSeePrice(){
+        UserInfoResponse userInfoResponse = mDataManager.getUserInfo();
+        if (userInfoResponse != null){
+            return userInfoResponse.isCanSeePrice();
+        }
+        return false;
     }
 
     public void getLastBuy() {
@@ -54,5 +63,7 @@ public class PlaceOrderPresenter extends BasePresenter<PlaceOrderMvpView> {
                     }
                 });
     }
+
+
 
 }

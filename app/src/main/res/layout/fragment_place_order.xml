@@ -173,7 +173,6 @@
                 android:layout_toRightOf="@id/tv_safe"
                 android:gravity="center_vertical|right"
                 android:paddingRight="19dp"
-
                 android:text="+10 %" />
         </RelativeLayout>
 
