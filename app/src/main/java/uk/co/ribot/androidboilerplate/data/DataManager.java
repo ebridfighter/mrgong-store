@@ -16,8 +16,10 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
@@ -134,6 +136,8 @@ public class DataManager {
                 });
     }
 
+
+
     public Observable<DashBoardResponse> getDashboard() {
         return mRunwiseService.getDashboard(new EmptyRequest())
                 .onErrorReturn(new Func1<Throwable, DashBoardResponse>() {
@@ -144,6 +148,27 @@ public class DataManager {
                     }
                 });
     }
+    public Observable<EmptyResponse> logout() {
+        return mRunwiseService.logout(new EmptyRequest())
+                .onErrorReturn(new Func1<Throwable, EmptyResponse>() {
+                    @Override
+                    public EmptyResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+    public Observable<MessageResponse> getMessages() {
+        return mRunwiseService.getMessage(new EmptyRequest())
+                .onErrorReturn(new Func1<Throwable, MessageResponse>() {
+                    @Override
+                    public MessageResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+
 
 
 }

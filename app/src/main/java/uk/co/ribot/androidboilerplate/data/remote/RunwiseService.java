@@ -1,6 +1,5 @@
 package uk.co.ribot.androidboilerplate.data.remote;
 
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

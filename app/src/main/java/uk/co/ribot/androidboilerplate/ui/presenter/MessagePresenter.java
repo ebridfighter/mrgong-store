@@ -9,6 +9,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.MessageMvpView;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
@@ -53,5 +54,13 @@ public class MessagePresenter extends BasePresenter<MessageMvpView> {
                         }
                     }
                 });
+    }
+
+    public boolean isCanSeePrice(){
+        UserInfoResponse userInfoResponse = mDataManager.getUserInfo();
+        if (userInfoResponse != null){
+            return userInfoResponse.isCanSeePrice();
+        }
+        return  false;
     }
 }

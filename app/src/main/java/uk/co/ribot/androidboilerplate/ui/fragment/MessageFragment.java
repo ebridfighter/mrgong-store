@@ -59,6 +59,7 @@ public class MessageFragment extends BaseFragment implements MessageMvpView {
 
         mMessagePresenter.attachView(this);
         mMessagePresenter.getMessages();
+        mMessageAdapter.setCanSeePrice(mMessagePresenter.isCanSeePrice());
 
     }
 
