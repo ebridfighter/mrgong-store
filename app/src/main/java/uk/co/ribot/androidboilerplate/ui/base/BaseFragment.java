@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.runwise.commomlibrary.swipetoloadlayout.OnLoadMoreListener;
+import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
+
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerFragmentBaseComponent;
@@ -17,7 +20,7 @@ import uk.co.ribot.androidboilerplate.injection.component.FragmentBaseComponent;
  * Created by mike on 2017/10/31.
  */
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements OnRefreshListener,OnLoadMoreListener {
 
     protected FragmentBaseComponent mFragmentBaseComponent;
 
@@ -43,5 +46,15 @@ public class BaseFragment extends Fragment {
 
     protected void toast(int textId){
         Toast.makeText(getActivity(), getString(textId), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }
