@@ -39,6 +39,16 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     ViewPager mVp;
     @BindView(R.id.constraintLayout)
     RelativeLayout mConstraintLayout;
+    @Inject
+    HomePageFragment mHomePageFragment;
+    @Inject
+    PlaceOrderFragment mPlaceOrderFragment;
+    @Inject
+    StockFragment mStockFragment;
+    @Inject
+    MessageFragment mMessageFragment;
+    @Inject
+    MoreFragment mMoreFragment;
 
     List<Fragment> mFragmentList;
     List<String> mTitleList;
@@ -64,21 +74,37 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mVp.setAdapter(fragmentAdapter);
         mVp.setOffscreenPageLimit(mFragmentList.size());
         mTl.setupWithViewPager(mVp);
+        mVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0;i<mFragmentList.size();i++){
+                    if (i != position){
+                        mFragmentList.get(i).setUserVisibleHint(false);
+                    }else{
+                        mFragmentList.get(i).setUserVisibleHint(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void setUpFragmentList() {
-        HomePageFragment homePageFragment = new HomePageFragment();
-        PlaceOrderFragment placeOrderFragment = new PlaceOrderFragment();
-        StockFragment stockFragment = new StockFragment();
-        MessageFragment messageFragment = new MessageFragment();
-        MoreFragment moreFragment = new MoreFragment();
-
         mFragmentList = new ArrayList<>();
-        mFragmentList.add(homePageFragment);
-        mFragmentList.add(placeOrderFragment);
-        mFragmentList.add(stockFragment);
-        mFragmentList.add(messageFragment);
-        mFragmentList.add(moreFragment);
+        mFragmentList.add(mHomePageFragment);
+        mFragmentList.add(mPlaceOrderFragment);
+        mFragmentList.add(mStockFragment);
+        mFragmentList.add(mMessageFragment);
+        mFragmentList.add(mMoreFragment);
 
         mTitleList = new ArrayList<>();
         mTitleList.add(getString(R.string.fragment_home_page));

@@ -34,6 +34,9 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
     @Inject
     MorePresenter mMorePresenter;
 
+    @Inject
+    public MoreFragment(){}
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

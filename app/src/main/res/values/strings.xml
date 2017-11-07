@@ -30,6 +30,12 @@
     <string name="last_week_purchase_amount">上周采购量(件)</string>
     <string name="advent_food_amount">临期食材(件)</string>
     <string name="expire_food_amount">到期食材(件)</string>
+    <string name="toast_estimated_turnover_empty">你还没填写预估营业额!</string>
+    <string name="toast_safety_factor_empty">你还没选择安全系数!</string>
+    <string name="color_titile_safe_dialog">#F3F9EF</string>
+    <string name="color_cancle_text_safe_dialog">#2E2E2E</string>
+    <string name="color_submit_text_safe_dialog">#2E2E2E</string>
+    <string name="dialog_title_safe_factor">选择安全系数</string>
 
 
 </resources>

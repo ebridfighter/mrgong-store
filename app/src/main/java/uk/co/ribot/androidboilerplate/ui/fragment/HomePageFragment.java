@@ -54,6 +54,9 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
     int mCurrentRequestFinishCount = 0;
     public static final int REQUEST_FINISH_COUNT = 4;
 
+    @Inject
+    public HomePageFragment(){}
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
         mHomePagePresenter.syncReturnOrders();
         mHomePagePresenter.getHomePageBanner(getString(R.string.tag_meal_side));
         mHomePagePresenter.getDashBoard();
-//        mHomePagePresenter.pollingOrders();
+        mHomePagePresenter.pollingOrders();
     }
 
     private void refreshCurrentRequestFinishCount(){
@@ -97,6 +100,21 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView {
             mCurrentRequestFinishCount = 0;
         }
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser){
+            if (mHomePagePresenter.isViewAttached()){
+                mHomePagePresenter.pollingOrders();
+            }
+        }
+    }
+
+    @Override
+    public boolean isVisiable() {
+        return getUserVisibleHint();
     }
 
     @Override

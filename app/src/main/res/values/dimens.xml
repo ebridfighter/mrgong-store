@@ -26,6 +26,13 @@
     <dimen name="text_body">15sp</dimen>
     <dimen name="text_small_body">12sp</dimen>
 
+    <dimen name="super_large_title">25sp</dimen>
+    <dimen name="large_title">18sp</dimen>
+    <dimen name="title">16sp</dimen>
+    <dimen name="second_title">14sp</dimen>
+    <dimen name="third_title">12sp</dimen>
+    <dimen name="small_title">10sp</dimen>
+
     <dimen name="header_footer_left_right_padding">24dp</dimen>
     <dimen name="header_footer_top_bottom_padding">12dp</dimen>
     <dimen name="indicator_right_padding">10dp</dimen>

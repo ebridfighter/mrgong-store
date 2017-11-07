@@ -15,6 +15,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import javax.inject.Inject;
+
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
@@ -39,6 +41,11 @@ public class MessageFragment extends BaseFragment implements MessageMvpView {
     @BindView(R.id.rv_message)
     RecyclerView rvMessage;
 
+public class MessageFragment extends BaseFragment {
+
+    @Inject
+    public MessageFragment(){}
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);

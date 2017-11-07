@@ -30,6 +30,7 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
 public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     private final DataManager mDataManager;
     private Subscription mOrderSubscription;
+    private Subscription mOrderPollingSubscription;
     private Subscription mReturnOrderSubscription;
     private Subscription mHomePageBannerSubscription;
     private Subscription mDashBoardSubscription;
@@ -46,39 +47,41 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
 
     public void pollingOrders(){
         checkViewAttached();
-        RxUtil.unsubscribe(mOrderSubscription);
-        Observable.interval(2, TimeUnit.SECONDS).compose(this.<Long>bindLife())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<Long>() {
+        RxUtil.unsubscribe(mOrderPollingSubscription);
+        mOrderPollingSubscription =  Observable.interval(0,5, TimeUnit.SECONDS).flatMap(new Func1<Long, Observable<OrderListResponse>>() {
+            @Override
+            public Observable<OrderListResponse> call(Long aLong) {
+                return mDataManager.syncOrders()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io());
+            }
+        }).takeUntil(new Func1<OrderListResponse, Boolean>() {
+            @Override
+            public Boolean call(OrderListResponse orderListResponse) {
+                return !getMvpView().isVisiable();
+            }
+        }).subscribe(new Subscriber<OrderListResponse>() {
             @Override
             public void onCompleted() {
             }
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "There was an error loading the ribots.");
+                Timber.e(e, "There was an error loading the orders.");
                 getMvpView().showOrdersError();
             }
 
             @Override
-            public void onNext(Long aLong) {
+            public void onNext(OrderListResponse orderListResponse) {
+                if (orderListResponse.getList().isEmpty()) {
+                    getMvpView().showOrdersEmpty();
+                } else {
+                    getMvpView().showOrders(orderListResponse.getList());
+                }
             }
         });
     }
 
-    protected <T> Observable.Transformer<T, T> bindLife() {
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable.takeUntil(mDataManager.syncOrders().skipWhile(new Func1<OrderListResponse, Boolean>() {
-                    @Override
-                    public Boolean call(OrderListResponse orderListResponse) {
-                        return true;
-                    }
-                }));
-            }
-        };
-    }
 
     public void syncOrders() {
         checkViewAttached();
