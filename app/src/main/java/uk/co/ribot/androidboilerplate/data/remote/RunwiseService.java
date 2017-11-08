@@ -24,6 +24,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnRespon
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
@@ -90,6 +91,9 @@ public interface RunwiseService {
 
     @POST("/gongfu/logout")
     Observable<EmptyResponse> logout(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/message/list")
+    Observable<MessageResponse> getMessage(@Body EmptyRequest emptyRequest);
 
     @POST("/gongfu/v2/order/last_order_amout")
     Observable<LastBuyResponse> getLastOrderAmount(@Body EmptyRequest emptyRequest);
