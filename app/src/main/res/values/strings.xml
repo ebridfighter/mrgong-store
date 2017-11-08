@@ -36,6 +36,13 @@
     <string name="color_cancle_text_safe_dialog">#2E2E2E</string>
     <string name="color_submit_text_safe_dialog">#2E2E2E</string>
     <string name="dialog_title_safe_factor">选择安全系数</string>
+    <string name="dialog_title_tip">提示</string>
+    <string name="dialog_message_cancel_order">确认取消订单?</string>
+    <string name="dialog_message_tallying">正在点货</string>
+    <string name="dialog_btn_i_know">我知道了</string>
+    <string name="dialog_message_the_goods_have_been_ordered">您已经点过货了，应由其他人完成收货</string>
+    <string name="toast_finish_return_order_success">退货成功</string>
+    <string name="toast_cancel_order_success">取消订单成功</string>
 
 
 </resources>
