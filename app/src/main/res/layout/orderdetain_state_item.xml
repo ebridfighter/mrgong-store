@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:background="#FFFFFF"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+    <TextView
+        android:id="@+id/orderStateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="15dp"
+        android:text=""
+        android:textStyle="bold"
+        android:textColor="#2E2E2E"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/tipTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/orderStateTv"
+        android:layout_below="@id/orderStateTv"
+        android:layout_marginTop="7dp"
+        android:text=""
+        android:textColor="#999999"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/dateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="19dp"
+        android:text=""
+        android:textColor="#999999"
+        android:textSize="13sp"
+        />
+
+    <TextView
+        android:id="@+id/gotoStateBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tipTv"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:drawableRight="@drawable/orderdetail_greenarrow"
+        android:drawablePadding="2.5dp"
+        android:text="更多状态"
+        android:textSize="@dimen/second_title"
+        android:textColor="#6BB400"/>
+</RelativeLayout>
