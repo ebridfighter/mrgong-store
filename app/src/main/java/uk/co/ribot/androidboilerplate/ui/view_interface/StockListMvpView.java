@@ -16,7 +16,7 @@ public interface StockListMvpView extends MvpView {
     /**
      * 显示库存
      */
-    void showStocks(List<StockItem> stockItemList);
+    void showStocks(List<StockItem> stockItemList, boolean isRefresh);
 
     /**
      * 没有数据

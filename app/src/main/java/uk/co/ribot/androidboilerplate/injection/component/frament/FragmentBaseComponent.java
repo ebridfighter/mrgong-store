@@ -14,4 +14,5 @@ public interface FragmentBaseComponent {
     HomePageFragmentComponent homePageFragmentComponent(ActivityModule activityModule);
     MoreFragmentComponent moreFragmentComponent(ActivityModule activityModule);
     PlaceOrderFragmentComponent placeOrderFragmentComponent(ActivityModule activityModule);
+    StockListContainerFragmentComponent stockListContainerFragmentComponent(ActivityModule activityModule);
 }

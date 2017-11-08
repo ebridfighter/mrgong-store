@@ -14,9 +14,11 @@ import retrofit2.http.POST;
 import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
@@ -96,4 +98,6 @@ public interface RunwiseService {
     @POST("/gongfu/v2/order/last_order_amout")
     Observable<LastBuyResponse> getLastOrderAmount(@Body EmptyRequest emptyRequest);
 
+    @POST("/gongfu/api/product/category")
+    Observable<CategoryResponse> getCategory(@Body GetCategoryRequest request);
 }

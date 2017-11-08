@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/windowBackground">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            <uk.co.ribot.androidboilerplate.view.SystemUpgradeLayout
+                android:id="@+id/layout_system_upgrade_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp">
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/indicator"
+                    style="@style/TabLayout"
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="42dp"
+                    android:layout_marginRight="30dp"
+                    app:tabMode="scrollable"/>
+                <ImageView
+                    android:id="@+id/iv_open"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/arrow"
+                    android:padding="15dp"
+                    android:background="@drawable/tab_shadow"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+        </LinearLayout>
+    </FrameLayout>
+</RelativeLayout>

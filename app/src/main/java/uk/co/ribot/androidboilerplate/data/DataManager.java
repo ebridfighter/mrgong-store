@@ -13,9 +13,11 @@ import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
@@ -75,6 +77,10 @@ public class DataManager {
 
     public UserInfoResponse getUserInfo() {
         return mPreferencesHelper.getUserInfo();
+    }
+
+    public boolean isLogin(){
+        return mPreferencesHelper.isLogin();
     }
 
     public Observable<ProductListResponse> syncProducts() {
@@ -182,4 +188,12 @@ public class DataManager {
                 });
     }
 
+    /**
+     * 获取商品类别
+     * @return
+     */
+    public Observable<CategoryResponse> getCategory(){
+        int userId = Integer.valueOf(getUserInfo().getUid());
+        return mRunwiseService.getCategory(new GetCategoryRequest(userId));
+    }
 }

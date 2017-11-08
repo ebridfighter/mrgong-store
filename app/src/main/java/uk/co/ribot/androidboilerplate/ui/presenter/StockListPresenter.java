@@ -66,13 +66,20 @@ public class StockListPresenter extends BasePresenter<StockListMvpView> {
                             if(isRefresh)getMvpView().showNoStocks();//没有数据
                             else getMvpView().showNoMoreStocks();//没有更多
                         }else if(stockItemList.size()<limit){//没有更多
-                            getMvpView().showStocks(stockItemList);
+                            getMvpView().showStocks(stockItemList,isRefresh);
                             getMvpView().showNoMoreStocks();
                         }else{
-                            getMvpView().showStocks(stockItemList);
+                            getMvpView().showStocks(stockItemList,isRefresh);
                         }
                     }
                 });
+    }
+
+    /**
+     * 取消请求
+     */
+    public void cancel(){
+        if(mGetStockSubscription!=null)mGetStockSubscription.unsubscribe();
     }
 
 }

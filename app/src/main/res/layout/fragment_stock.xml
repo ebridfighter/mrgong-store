@@ -6,16 +6,11 @@
     android:paddingTop="25dp"
     android:background="#FFFFFF"
     >
-    <include
-        android:id="@+id/layout_title"
-        layout="@layout/include_common_title_bar"
-        />
-    <include
-        android:id="@+id/layout_login_tip"
-        layout="@layout/include_login_tip"/>
-    <FrameLayout
-        android:id="@+id/fl_context"
+
+    <fragment
+        android:id="@+id/fragment_stock_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        class="uk.co.ribot.androidboilerplate.ui.fragment.StockListContainerFragment"/>
 
 </LinearLayout>
