@@ -59,6 +59,22 @@ public class BaseFragment extends Fragment implements OnRefreshListener,OnLoadMo
         return TextUtils.isEmpty(textView.getText().toString());
     }
 
+    public void showDialog(String title,String message,RunwiseDialog.DialogListener dialogListener){
+        mDialog.setTitle(title);
+        mDialog.setMessage(message);
+        mDialog.setMessageGravity();
+        mDialog.setRightBtnListener("确认", dialogListener);
+        mDialog.show();
+    }
+
+    public void showDialog(String title,String message,String confirmText,RunwiseDialog.DialogListener dialogListener){
+        mDialog.setTitle(title);
+        mDialog.setMessage(message);
+        mDialog.setMessageGravity();
+        mDialog.setRightBtnListener(confirmText, dialogListener);
+        mDialog.show();
+    }
+
     @Override
     public void onRefresh() {
 

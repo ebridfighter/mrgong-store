@@ -25,6 +25,7 @@ import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.OrderDoAction;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.injection.component.frament.HomePageFragmentComponent;
@@ -43,7 +44,7 @@ import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
  * 首页Fragment
  */
 
-public class HomePageFragment extends BaseFragment implements HomePageMvpView,OrderAdapter.DoActionInterface {
+public class HomePageFragment extends BaseFragment implements HomePageMvpView, OrderAdapter.DoActionInterface {
     @Inject
     HomePagePresenter mHomePagePresenter;
     @Inject
@@ -58,7 +59,8 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
     public static final int REQUEST_FINISH_COUNT = 4;
 
     @Inject
-    public HomePageFragment(){}
+    public HomePageFragment() {
+    }
 
     @Nullable
     @Override
@@ -82,23 +84,25 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
         mViewHolder = new ViewHolder(headerAdvertisementView);
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mOrderAdapter);
         mHeaderAndFooterWrapper.addHeaderView(headerAdvertisementView);
+        mOrderAdapter.setDoActionInterface(this);
 
-        mRvProduct.init(new LinearLayoutManager(getActivity()), this,null);
+        mRvProduct.init(new LinearLayoutManager(getActivity()), this, null);
         mRvProduct.setRefreshEnabled(true);
 
         mRvProduct.setAdapter(mHeaderAndFooterWrapper);
 
         mHomePagePresenter.attachView(this);
-        mHomePagePresenter.syncOrders();
-        mHomePagePresenter.syncReturnOrders();
+//        mHomePagePresenter.syncOrders();
+//        mHomePagePresenter.syncReturnOrders();
         mHomePagePresenter.getHomePageBanner(getString(R.string.tag_meal_side));
         mHomePagePresenter.getDashBoard();
         mHomePagePresenter.pollingOrders();
+        mHomePagePresenter.pollingReturnOrders();
     }
 
-    private void refreshCurrentRequestFinishCount(){
+    private void refreshCurrentRequestFinishCount() {
         mCurrentRequestFinishCount++;
-        if (mCurrentRequestFinishCount == REQUEST_FINISH_COUNT){
+        if (mCurrentRequestFinishCount == REQUEST_FINISH_COUNT) {
             mRvProduct.setRefreshing(false);
             mCurrentRequestFinishCount = 0;
         }
@@ -108,9 +112,10 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser){
-            if (mHomePagePresenter.isViewAttached()){
+        if (isVisibleToUser) {
+            if (mHomePagePresenter.isViewAttached()) {
                 mHomePagePresenter.pollingOrders();
+                mHomePagePresenter.pollingReturnOrders();
             }
         }
     }
@@ -123,7 +128,6 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
     @Override
     public void showOrders(List<OrderListResponse.ListBean> orders) {
         mOrderAdapter.setOrders(orders);
-        mOrderAdapter.notifyDataSetChanged();
         mHeaderAndFooterWrapper.notifyDataSetChanged();
         refreshCurrentRequestFinishCount();
     }
@@ -131,7 +135,6 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
     @Override
     public void showReturnOrders(List<ReturnOrderListResponse.ListBean> orders) {
         mOrderAdapter.setReturnOrders(orders);
-        mOrderAdapter.notifyDataSetChanged();
         mHeaderAndFooterWrapper.notifyDataSetChanged();
         refreshCurrentRequestFinishCount();
     }
@@ -147,11 +150,11 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
         DecimalFormat df = new DecimalFormat("#.##");
         double adventValue = dashBoardResponse.getAdventValue();
         double maturityValue = dashBoardResponse.getMaturityValue();
-        mViewHolder.mTvLastWeekBuy.setText(df.format(dashBoardResponse.getPurchaseAmount()/10000));//万元单位
+        mViewHolder.mTvLastWeekBuy.setText(df.format(dashBoardResponse.getPurchaseAmount() / 10000));//万元单位
         mViewHolder.mTvLastMonthBuy.setText(df.format(adventValue));
         mViewHolder.mTvPayAccount.setText(df.format(maturityValue));
         refreshCurrentRequestFinishCount();
-        
+
     }
 
     @Override
@@ -159,12 +162,26 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
         mViewHolder.mTvLastWeek.setText(R.string.last_week_purchase_amount);
         mViewHolder.mTvLqCount.setText(R.string.advent_food_amount);
         mViewHolder.mTvDqCount.setText(R.string.expire_food_amount);
-        mViewHolder.mTvLastWeekBuy.setText(String.valueOf((int)dashBoardResponse.getTotalNumber()));
+        mViewHolder.mTvLastWeekBuy.setText(String.valueOf((int) dashBoardResponse.getTotalNumber()));
         int adventNum = (int) dashBoardResponse.getAdventNum();
         int maturityNum = (int) dashBoardResponse.getMaturityNum();
         mViewHolder.mTvLastMonthBuy.setText(String.valueOf(adventNum));
         mViewHolder.mTvPayAccount.setText(String.valueOf(maturityNum));
         refreshCurrentRequestFinishCount();
+    }
+
+    @Override
+    public void cancelOrderSuccess() {
+        toast(R.string.toast_cancel_order_success);
+        mOrderAdapter.removeOrder(mCancelOrderId);
+        mHeaderAndFooterWrapper.notifyDataSetChanged();
+    }
+
+    @Override
+    public void finishReturnOrderSuccess(FinishReturnResponse finishReturnResponse) {
+        toast(R.string.toast_finish_return_order_success);
+        mOrderAdapter.removeReturnOrder(finishReturnResponse.getReturnOrder().getReturnOrderID());
+        mHeaderAndFooterWrapper.notifyDataSetChanged();
     }
 
     @Override
@@ -204,6 +221,16 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
     }
 
     @Override
+    public void cancleOrderError() {
+
+    }
+
+    @Override
+    public void finishReturnOrderError() {
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -219,21 +246,20 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
         mHomePagePresenter.getDashBoard();
     }
 
+    int mCancelOrderId;
+
     @Override
-    public void doAction(OrderDoAction action, int postion) {
+    public void doAction(OrderDoAction action, final int position) {
         switch (action) {
             case CANCLE:
-                mDialog.setTitle("提示");
-                mDialog.setMessage("确认取消订单?");
-                mDialog.setMessageGravity();
-                mDialog.setRightBtnListener("确认", new RunwiseDialog.DialogListener() {
+                showDialog(getString(R.string.dialog_title_tip), getString(R.string.dialog_message_cancel_order), new RunwiseDialog.DialogListener() {
                     @Override
                     public void doClickButton(Button btn, RunwiseDialog mDialog) {
-                        //发送取消订单请求
-//                        cancleOrderRequest(position);
+                        mCancelOrderId = mOrderAdapter.getItem(position).getOrderListBean().getOrderID();
+                        mHomePagePresenter.cancelOrder(mCancelOrderId);
+                        mDialog.dismiss();
                     }
                 });
-                mDialog.show();
                 break;
             case UPLOAD:
 //                Intent uIntent = new Intent(mContext, UploadPayedPicActivity.class);
@@ -264,17 +290,8 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
 //                startActivity(tIntent);
                 break;
             case TALLYING:
-                String name = mOrderAdapter.getItem(postion).getOrderListBean().getTallyingUserName();
-                mDialog.setMessageGravity();
-                mDialog.setMessage(name + "正在点货");
-                mDialog.setModel(RunwiseDialog.RIGHT);
-                mDialog.setRightBtnListener("我知道了", new RunwiseDialog.DialogListener() {
-                    @Override
-                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
-                        mDialog.dismiss();
-                    }
-                });
-                mDialog.show();
+                String name = mOrderAdapter.getItem(position).getOrderListBean().getTallyingUserName();
+                showDialog("", name + getString(R.string.dialog_message_tallying), getString(R.string.dialog_btn_i_know), null);
                 break;
             case RATE:
                 //评价
@@ -303,31 +320,15 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView,Or
 //                startActivity(sIntent);
                 break;
             case SELFTALLY:
-                mDialog.setMessageGravity();
-                mDialog.setMessage("您已经点过货了，应由其他人完成收货");
-                mDialog.setRightBtnListener("确认", new RunwiseDialog.DialogListener() {
-                    @Override
-                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
-
-                    }
-                });
-                mDialog.show();
+                showDialog("", getString(R.string.dialog_message_the_goods_have_been_ordered), null);
                 break;
             case FINISH_RETURN:
-//                mSelectBean = (ReturnOrderBean.ListBean) adapter.getList().get(position);
-//                mDialog.setTitle("提示");
-//                mDialog.setMessageGravity();
-//                mDialog.setMessage("确认数量一致?");
-//                mDialog.setRightBtnListener("确认", new RunwiseDialog.DialogListener() {
-//                    @Override
-//                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
-//                        Object request = null;
-//                        sendConnection("/gongfu/v2/return_order/" +
-//                                mSelectBean.getReturnOrderID() +
-//                                "/done", request, FINISHRETURN, false, FinishReturnResponse.class);
-//                    }
-//                });
-//                mDialog.show();
+                showDialog(getString(R.string.dialog_title_tip), "确认数量一致?", new RunwiseDialog.DialogListener() {
+                    @Override
+                    public void doClickButton(Button btn, RunwiseDialog mDialog) {
+                        mHomePagePresenter.finishOrder(mOrderAdapter.getItem(position).getReturnOrderListBean().getReturnOrderID());
+                    }
+                });
                 break;
             default:
                 break;

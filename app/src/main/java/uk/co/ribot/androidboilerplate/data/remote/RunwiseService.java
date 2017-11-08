@@ -11,13 +11,16 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
@@ -90,5 +93,11 @@ public interface RunwiseService {
 
     @POST("/gongfu/v2/order/last_order_amout")
     Observable<LastBuyResponse> getLastOrderAmount(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/order/{orderId}/state")
+    Observable<EmptyResponse> changeOrderState(@Path("orderId") int orderId, @Body ChangeOrderStateRequest changeOrderStateRequest);
+
+    @POST("/gongfu/v2/return_order/{returnOrderId}/done")
+    Observable<FinishReturnResponse> finishReturnOrder(@Path("returnOrderId") int returnOrderId, @Body EmptyRequest emptyRequest);
 
 }

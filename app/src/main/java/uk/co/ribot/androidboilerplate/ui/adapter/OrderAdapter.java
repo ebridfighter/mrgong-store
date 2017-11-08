@@ -60,7 +60,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         void call(String phone);
     }
 
-    private DoActionInterface callback;
+    public void setDoActionInterface(DoActionInterface doActionInterface) {
+        mDoActionInterface = doActionInterface;
+    }
+
+    private DoActionInterface mDoActionInterface;
 
 
     @Inject
@@ -68,7 +72,42 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         mOrderListWraps = new ArrayList<>();
     }
 
+    public void removeReturnOrder(int returnOrderId) {
+        OrderListWrap findOrderListWrap = null;
+        if (mReturnOrders != null) {
+            for (OrderListWrap orderListWrap : mOrderListWraps) {
+                if (orderListWrap.getReturnOrderListBean() != null && orderListWrap.getReturnOrderListBean().getReturnOrderID() == returnOrderId) {
+                    findOrderListWrap = orderListWrap;
+                    break;
+                }
+            }
+            mOrderListWraps.remove(findOrderListWrap);
+        }
+    }
+
+    public void removeOrder(int orderId) {
+        OrderListWrap findOrderListWrap = null;
+        if (mReturnOrders != null) {
+            for (int i = mReturnOrders.size(); i < mOrderListWraps.size(); i++) {
+                OrderListWrap orderListWrap = mOrderListWraps.get(i);
+                if (orderListWrap.getOrderListBean() != null && orderListWrap.getOrderListBean().getOrderID() == orderId) {
+                    findOrderListWrap = orderListWrap;
+                    break;
+                }
+            }
+            mOrderListWraps.remove(findOrderListWrap);
+        }
+    }
+
     public void setOrders(List<OrderListResponse.ListBean> orders) {
+        if (mReturnOrders != null) {
+            mOrderListWraps.clear();
+            for (int i = 0; i < mReturnOrders.size(); i++) {
+                OrderListWrap orderListWrap = new OrderListWrap();
+                orderListWrap.setReturnOrderListBean(mReturnOrders.get(i));
+                mOrderListWraps.add(orderListWrap);
+            }
+        }
         mOrders = orders;
         for (OrderListResponse.ListBean listBean : orders) {
             OrderListWrap orderListWrap = new OrderListWrap();
@@ -78,6 +117,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     public void setReturnOrders(List<ReturnOrderListResponse.ListBean> returnOrders) {
+        if (mReturnOrders != null) {
+            for (int i = 0; i < mReturnOrders.size(); i++) {
+                mOrderListWraps.remove(0);
+            }
+        }
         mReturnOrders = returnOrders;
         for (int i = 0; i < returnOrders.size(); i++) {
             ReturnOrderListResponse.ListBean listBean = returnOrders.get(i);
@@ -92,7 +136,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         return mOrderListWraps.get(position).getOrderListBean() != null ? VIEW_TYPE_ORDER : VIEW_TYPE_RETURN_ORDER;
     }
 
-   public OrderListWrap getItem(int position){
+    public OrderListWrap getItem(int position) {
         return mOrderListWraps.get(position);
     }
 
@@ -120,7 +164,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
         if (getItemViewType(position) == VIEW_TYPE_ORDER) {
             final OrderListResponse.ListBean bean = mOrderListWraps.get(position).getOrderListBean();
-            setUpExpandListener(holder,bean.getOrderID(),bean.getStateTracker());
+            setUpExpandListener(holder, bean.getOrderID(), bean.getStateTracker());
             holder.mBtnDo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,8 +172,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     //根据状态进行不同的逻辑处理
                     String doAction = ((TextView) v).getText().toString();
                     OrderDoAction action = OrderActionUtils.getDoActionByText(doAction, bean);
-                    if (callback != null) {
-                        callback.doAction(action, position);
+                    if (mDoActionInterface != null) {
+                        mDoActionInterface.doAction(action, position);
                     }
                 }
             });
@@ -174,9 +218,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 public void onClick(View v) {
                     if (bean != null && bean.getWaybill() != null && bean.getWaybill().getDeliverUser() != null
                             && bean.getWaybill().getDeliverUser().getMobile() != null) {
-                        callback.call(bean.getWaybill().getDeliverUser().getMobile());
+                        mDoActionInterface.call(bean.getWaybill().getDeliverUser().getMobile());
                     } else {
-                        callback.call(null);
+                        mDoActionInterface.call(null);
                     }
 
                 }
@@ -191,10 +235,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             holder.mTvMoney.setText(NumberUtil.getIOrD(bean.getAmountTotal()));
             StringBuffer drawableSb = new StringBuffer("state_restaurant_");
             drawableSb.append(bean.getState());
-            if (getResIdByDrawableName(holder.mIvOrderState.getContext(),drawableSb.toString()) == 0) {
+            if (getResIdByDrawableName(holder.mIvOrderState.getContext(), drawableSb.toString()) == 0) {
                 holder.mIvOrderState.setImageResource(R.drawable.state_restaurant_draft);
             } else {
-                holder.mIvOrderState.setImageResource(getResIdByDrawableName(holder.mIvOrderState.getContext(),drawableSb.toString()));
+                holder.mIvOrderState.setImageResource(getResIdByDrawableName(holder.mIvOrderState.getContext(), drawableSb.toString()));
             }
             String doString = OrderActionUtils.getDoBtnTextByState(bean);
             if (!TextUtils.isEmpty(doString)) {
@@ -258,18 +302,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 @Override
                 public void onClick(View v) {
                     if (!TextUtils.isEmpty(bean.getDriveMobile())) {
-                        callback.call(bean.getDriveMobile());
+                        mDoActionInterface.call(bean.getDriveMobile());
                     } else {
-                        callback.call(null);
+                        mDoActionInterface.call(null);
                     }
                 }
             });
-            setUpExpandListener(holder,bean.getOrderID(),bean.getStateTracker());
+            setUpExpandListener(holder, bean.getOrderID(), bean.getStateTracker());
             if (mExpandMap.get(Integer.valueOf(bean.getOrderID())) != null && mExpandMap.get(Integer.valueOf(bean.getOrderID())).booleanValue()) {
                 holder.mTimelineLL.setVisibility(View.VISIBLE);
                 //重刷一次，免得重复
                 holder.mIbArrow.setImageResource(R.drawable.login_btn_dropup);
-                setTimeLineContent(holder.mIbArrow.getContext(),bean.getStateTracker(), holder.mRecyclerView);
+                setTimeLineContent(holder.mIbArrow.getContext(), bean.getStateTracker(), holder.mRecyclerView);
             } else {
                 holder.mTimelineLL.setVisibility(View.GONE);
                 holder.mIbArrow.setImageResource(R.drawable.login_btn_dropdown);
@@ -286,8 +330,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     @Override
                     public void onClick(View v) {
                         //根据状态进行不同的逻辑处理
-                        if (callback != null) {
-                            callback.doAction(OrderDoAction.FINISH_RETURN, position);
+                        if (mDoActionInterface != null) {
+                            mDoActionInterface.doAction(OrderDoAction.FINISH_RETURN, position);
                         }
                     }
                 });
@@ -299,7 +343,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     }
 
-    private void setUpExpandListener(final OrderViewHolder orderViewHolder, final int orderId, final List<String> stateTracker){
+    private void setUpExpandListener(final OrderViewHolder orderViewHolder, final int orderId, final List<String> stateTracker) {
         orderViewHolder.mIbArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,7 +357,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 mExpandMap.put(Integer.valueOf(orderId), isExpand);
                 if (isExpand) {
                     //只有点击时，才去放timeline的内容
-                    setTimeLineContent(v.getContext(),stateTracker, orderViewHolder.mRecyclerView);
+                    setTimeLineContent(v.getContext(), stateTracker, orderViewHolder.mRecyclerView);
                     orderViewHolder.mTimelineLL.setVisibility(View.VISIBLE);
                     orderViewHolder.mIbArrow.setImageResource(R.drawable.login_btn_dropup);
                 } else {
@@ -338,22 +382,24 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     SimpleDateFormat sdfSource = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    SimpleDateFormat sdfTarget = new SimpleDateFormat("MM月dd日",Locale.getDefault());
-    private String formatTimeStr(String str){
-        try{
+    SimpleDateFormat sdfTarget = new SimpleDateFormat("MM月dd日", Locale.getDefault());
+
+    private String formatTimeStr(String str) {
+        try {
             return sdfTarget.format(sdfSource.parse(str));
-        }catch (ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
             return str;
         }
     }
-    private int getResIdByDrawableName(Context context,String name) {
+
+    private int getResIdByDrawableName(Context context, String name) {
         ApplicationInfo appInfo = context.getApplicationInfo();
         int resID = context.getResources().getIdentifier(name, "drawable", appInfo.packageName);
         return resID;
     }
 
-    static class OrderViewHolder extends RecyclerView.ViewHolder{
+    static class OrderViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.img)
         ImageView mIvOrderState;
         @BindView(R.id.tv_order_num)

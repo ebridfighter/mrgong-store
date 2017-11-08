@@ -12,11 +12,13 @@ import rx.functions.Func1;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
@@ -162,6 +164,29 @@ public class DataManager {
                 .onErrorReturn(new Func1<Throwable, LastBuyResponse>() {
                     @Override
                     public LastBuyResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+    public Observable<EmptyResponse> changeOrderState(int orderId,String state) {
+        ChangeOrderStateRequest changeOrderStateRequest = new ChangeOrderStateRequest();
+        changeOrderStateRequest.setState(state);
+        return mRunwiseService.changeOrderState(orderId,changeOrderStateRequest)
+                .onErrorReturn(new Func1<Throwable, EmptyResponse>() {
+                    @Override
+                    public EmptyResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+
+    public Observable<FinishReturnResponse> finishReturnOrder(int returnOrderId) {
+        return mRunwiseService.finishReturnOrder(returnOrderId,new EmptyRequest())
+                .onErrorReturn(new Func1<Throwable, FinishReturnResponse>() {
+                    @Override
+                    public FinishReturnResponse call(Throwable throwable) {
                         Log.i("onErrorReturn", throwable.toString());
                         return null;
                     }
