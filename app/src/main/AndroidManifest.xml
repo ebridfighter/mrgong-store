@@ -44,9 +44,10 @@
         </activity>
         <activity
             android:name=".ui.activity.MainActivity"
-            android:windowSoftInputMode="stateUnchanged|adjustPan"></activity>
-        <activity android:name=".ui.activity.ProductListActivity"></activity>
-        <activity android:name=".ui.activity.IntelligentPlaceOrderActivity"></activity>
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity android:name=".ui.activity.ProductListActivity" />
+        <activity android:name=".ui.activity.IntelligentPlaceOrderActivity" />
+        <activity android:name=".ui.activity.OrderDetailActivity"></activity>
     </application>
 
 </manifest>
