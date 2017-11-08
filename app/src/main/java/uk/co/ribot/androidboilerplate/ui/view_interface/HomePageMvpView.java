@@ -13,7 +13,7 @@ import uk.co.ribot.androidboilerplate.ui.base.MvpView;
  */
 
 public interface HomePageMvpView extends MvpView {
-    boolean isVisiable();
+    boolean isFragmentVisible();
 
     void showOrders(List<OrderListResponse.ListBean> orders);
 
@@ -41,7 +41,7 @@ public interface HomePageMvpView extends MvpView {
 
     void showDashBoardError();
 
-    void cancleOrderError();
+    void cancelOrderError();
 
     void finishReturnOrderError();
 }

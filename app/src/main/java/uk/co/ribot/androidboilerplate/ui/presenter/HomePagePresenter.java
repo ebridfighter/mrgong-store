@@ -63,7 +63,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
         }).takeUntil(new Func1<OrderListResponse, Boolean>() {
             @Override
             public Boolean call(OrderListResponse orderListResponse) {
-                return !getMvpView().isVisiable();
+                return !getMvpView().isFragmentVisible();
             }
         }).subscribe(new Subscriber<OrderListResponse>() {
             @Override
@@ -100,7 +100,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
         }).takeUntil(new Func1<ReturnOrderListResponse, Boolean>() {
             @Override
             public Boolean call(ReturnOrderListResponse returnOrderListResponse) {
-                return !getMvpView().isVisiable();
+                return !getMvpView().isFragmentVisible();
             }
         }).subscribe(new Subscriber<ReturnOrderListResponse>() {
             @Override
@@ -258,7 +258,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                     @Override
                     public void onError(Throwable e) {
                         Timber.e(e, "There was an error cancel order.");
-                        getMvpView().cancleOrderError();
+                        getMvpView().cancelOrderError();
                     }
 
                     @Override

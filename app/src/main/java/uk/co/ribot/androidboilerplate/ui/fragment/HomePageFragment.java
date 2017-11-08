@@ -57,6 +57,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
     ViewHolder mViewHolder;
     int mCurrentRequestFinishCount = 0;
     public static final int REQUEST_FINISH_COUNT = 4;
+    private boolean mIsForeground = false;
 
     @Inject
     public HomePageFragment() {
@@ -121,8 +122,20 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
     }
 
     @Override
-    public boolean isVisiable() {
-        return getUserVisibleHint();
+    public boolean isFragmentVisible() {
+        return getUserVisibleHint() && mIsForeground;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mIsForeground = false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mIsForeground = true;
     }
 
     @Override
@@ -221,7 +234,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
     }
 
     @Override
-    public void cancleOrderError() {
+    public void cancelOrderError() {
 
     }
 
