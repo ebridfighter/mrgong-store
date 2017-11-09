@@ -30,53 +30,14 @@
 
          </LinearLayout>
       </android.support.design.widget.CollapsingToolbarLayout>
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="45dp"
-          android:orientation="horizontal">
-
-         <RadioGroup
-             android:id="@+id/rg"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb_des"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:text="课程介绍"
-                android:textColor="#000"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/rb_course"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:button="@null"
-                android:gravity="center"
-                android:text="课程表"
-                android:textColor="#000"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/rb_teacher"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:button="@null"
-                android:gravity="center"
-                android:text="老师简介"
-                android:textColor="#000"
-                android:textSize="14sp" />
-         </RadioGroup>
-
-      </LinearLayout>
+       <android.support.design.widget.TabLayout
+           android:id="@+id/tl_category"
+           style="@style/TabLayout"
+           android:layout_width="match_parent"
+           android:layout_height="40dp"
+           android:layout_alignParentBottom="true"
+           android:background="@color/white"
+           app:tabMode="fixed"/>
 
    </android.support.design.widget.AppBarLayout>
 
@@ -116,7 +77,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="700dp"
                 android:background="@color/black"
-                android:layout_marginTop="70dp"
                 />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
