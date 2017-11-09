@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import rx.Subscriber;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
-import uk.co.ribot.androidboilerplate.data.event.LogOutEvent;
+import uk.co.ribot.androidboilerplate.data.model.event.LogOutEvent;
 import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.ExampleActivityComponent;

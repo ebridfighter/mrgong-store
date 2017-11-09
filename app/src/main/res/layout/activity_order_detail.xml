@@ -4,41 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-   <android.support.design.widget.AppBarLayout
-       android:id="@+id/app_bar"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/abl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-      <android.support.design.widget.CollapsingToolbarLayout
-          android:id="@+id/toolbar_layout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:fitsSystemWindows="true"
-          app:contentScrim="?attr/colorPrimary"
-          android:background="#f7f7f7"
-          app:layout_scrollFlags="scroll|exitUntilCollapsed">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/ctl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f7f7"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-         <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-             <!--订单状态-->
-             <include layout="@layout/orderdetain_state_item"/>
-             <!--订单信息-->
-             <include layout="@layout/orderdetail_info_item"/>
+                <!--订单状态-->
+                <include layout="@layout/item_order_state" />
+                <!--订单信息-->
+                <include layout="@layout/item_order_info" />
+                <!-- 退货单信息 -->
+                <include layout="@layout/item_return_info" />
 
-         </LinearLayout>
-      </android.support.design.widget.CollapsingToolbarLayout>
-       <android.support.design.widget.TabLayout
-           android:id="@+id/tl_category"
-           style="@style/TabLayout"
-           android:layout_width="match_parent"
-           android:layout_height="40dp"
-           android:layout_alignParentBottom="true"
-           android:background="@color/white"/>
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
 
-   </android.support.design.widget.AppBarLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tl_category"
+            style="@style/TabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -53,32 +56,60 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <WebView
-                android:id="@+id/wv_coursedes"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="500dp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_coursedes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="500dp"
-                android:visibility="gone"
-                android:text="这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测试这是测是测试这是测试这是测试这是测试这是测试这是测是测试这是测试这是测试这是测试这是测试这是测是测试这是测试这是测试这是测试这是测试这是测是测试这是测试这是测试这是测试这是测试这是测是测试这是测试这是测试这是测试这是测试这是测是测试这是测试这是测试这是测试这是测试这是测是测试这是测试这是测试这是测试这是测试这是测试这是测试"
-                />
-
-
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:background="#F5F5F5"/>
+                android:background="#F5F5F5" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:paddingRight="15dp">
+
+        <Button
+            android:id="@+id/btn_right"
+            android:layout_width="86dp"
+            android:layout_height="31dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/firstpage_do_circle"
+            android:text=""
+            android:textColor="#333333"
+            android:textSize="14sp"/>
+
+        <Button
+            android:id="@+id/btn_right2"
+            android:layout_width="86dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/btn_right"
+            android:background="@drawable/firstpage_do_circle"
+            android:text="售后订单"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/v_space"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#F0F0F0"
+        android:layout_above="@id/rl_bottom"
+        android:visibility="visible"/>
+    <!--汇总信息-->
+    <include
+        android:id="@+id/include_orderdetail_bottom_item"
+        layout="@layout/orderdetail_bottom_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/v_space"
+        android:visibility="gone"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

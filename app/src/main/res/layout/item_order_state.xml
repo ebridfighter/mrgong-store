@@ -7,7 +7,7 @@
                 android:paddingRight="15dp">
 
     <TextView
-        android:id="@+id/orderStateTv"
+        android:id="@+id/tv_order_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -19,11 +19,11 @@
         />
 
     <TextView
-        android:id="@+id/tipTv"
+        android:id="@+id/tv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/orderStateTv"
-        android:layout_below="@id/orderStateTv"
+        android:layout_alignLeft="@id/tv_order_state"
+        android:layout_below="@id/tv_order_state"
         android:layout_marginTop="7dp"
         android:text=""
         android:textColor="#999999"
@@ -31,7 +31,7 @@
         />
 
     <TextView
-        android:id="@+id/dateTv"
+        android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -42,10 +42,10 @@
         />
 
     <TextView
-        android:id="@+id/gotoStateBtn"
+        android:id="@+id/btn_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/tipTv"
+        android:layout_alignBaseline="@id/tv_tip"
         android:layout_alignParentRight="true"
         android:background="@null"
         android:drawableRight="@drawable/orderdetail_greenarrow"

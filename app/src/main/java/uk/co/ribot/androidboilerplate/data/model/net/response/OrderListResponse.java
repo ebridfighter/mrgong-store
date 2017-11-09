@@ -787,21 +787,47 @@ public class OrderListResponse {
              * productUomQty : 5.0
              */
 
-            private String productUom;
-            private double priceUnit;
-            private double discount;
-            private double returnAmount;
-            private double deliveredQty;
-            private double priceSubtotal;
-            private int productID;
-            private double tallyingAmount;
-            private int saleOrderProductID;
-            private String stockType;
-            private String category;
-            private double settleAmount;
-            private double productUomQty;
-            private List<String> lotIDs;
-            private List<LotListBean> lotList;
+            /**
+             * Copyright 2017 bejson.com
+             */
+package com.besjon.pojo;
+import java.util.Date;
+import java.util.List;
+
+            /**
+             * Auto-generated: 2017-11-09 18:1:46
+             *
+             * @author bejson.com (i@bejson.com)
+             * @website http://www.bejson.com/java2pojo/
+             */
+            public class JsonRootBean {
+
+                private String imageMedium;
+                private String productUom;
+                private double returnAmount;
+                private double productPrice;
+                private double priceSubtotal;
+                private String unit;
+                private int productID;
+                private double tallyingAmount;
+                private int unloadAmount;
+                private int productSettlePrice;
+                private String defaultCode;
+                private double settleAmount;
+                private String category;
+                private boolean isTwoUnit;
+                private String barcode;
+                private double priceUnit;
+                private double discount;
+                private double deliveredQty;
+                private int saleOrderProductID;
+                private String tracking;
+                private String name;
+                private List<String> lotIDs;
+                private String stockType;
+                private String settleUomId;
+                private List<LotListBean> lotList;
+                private double productUomQty;
 
             //自定义字段
             private boolean isChanged;

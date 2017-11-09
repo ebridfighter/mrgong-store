@@ -1,7 +1,9 @@
 package uk.co.ribot.androidboilerplate.ui.adapter.base;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -50,6 +52,10 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView
 
     protected Resources getResource(T holder){
        return holder.itemView.getContext().getResources();
+    }
+
+    protected View getLayout(Context context, int layoutId){
+        return LayoutInflater.from(context).inflate(layoutId,null);
     }
 
 
