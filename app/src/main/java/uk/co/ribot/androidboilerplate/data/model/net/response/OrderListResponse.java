@@ -786,22 +786,6 @@ public class OrderListResponse {
              * lotList : [{"lotPk":"82242","lotID":42,"name":"Z201707051792","qty":5}]
              * productUomQty : 5.0
              */
-
-            /**
-             * Copyright 2017 bejson.com
-             */
-package com.besjon.pojo;
-import java.util.Date;
-import java.util.List;
-
-            /**
-             * Auto-generated: 2017-11-09 18:1:46
-             *
-             * @author bejson.com (i@bejson.com)
-             * @website http://www.bejson.com/java2pojo/
-             */
-            public class JsonRootBean {
-
                 private String imageMedium;
                 private String productUom;
                 private double returnAmount;
