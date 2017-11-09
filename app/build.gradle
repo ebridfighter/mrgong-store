@@ -117,6 +117,7 @@ dependencies {
     }
 
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    compile 'com.android.support:support-v4:24.2.1'
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
 
     // Replace provided dependency below with official AutoValue once this issue is fixed

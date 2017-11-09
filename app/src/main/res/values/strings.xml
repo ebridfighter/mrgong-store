@@ -44,5 +44,8 @@
     <string name="toast_finish_return_order_success">退货成功</string>
     <string name="toast_cancel_order_success">取消订单成功</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

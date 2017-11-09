@@ -36,8 +36,7 @@
            android:layout_width="match_parent"
            android:layout_height="40dp"
            android:layout_alignParentBottom="true"
-           android:background="@color/white"
-           app:tabMode="fixed"/>
+           android:background="@color/white"/>
 
    </android.support.design.widget.AppBarLayout>
 
@@ -72,12 +71,11 @@
                 />
 
 
-            <com.runwise.commomlibrary.swipetoloadlayout.RefreshRecyclerView
-                android:id="@+id/rrv_product"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp"
                 android:layout_width="match_parent"
-                android:layout_height="700dp"
-                android:background="@color/black"
-                />
+                android:layout_height="500dp"
+                android:background="#F5F5F5"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
