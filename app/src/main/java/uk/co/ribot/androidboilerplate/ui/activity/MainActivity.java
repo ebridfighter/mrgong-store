@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        hideTitleBar();
 
         MainActivityComponent activityComponent = configPersistentComponent.mainActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);

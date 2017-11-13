@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.runwise.commomlibrary.view.LoadingDialog;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import rx.Subscriber;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
+import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.event.LogOutEvent;
 import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
@@ -81,9 +83,19 @@ public class BaseActivity extends AppCompatActivity {
         });
         mLoadingDialog = new LoadingDialog(getActivityContext());
     }
-    public void setContentView(int layoutId){
-        super.setContentView(layoutId);
-        mRootView =  ((ViewGroup) getActivityContext().findViewById(android.R.id.content));
+
+    View mTitleBar;
+
+    public void setContentView(int layoutId) {
+        super.setContentView(R.layout.layout_base);
+        LinearLayout parentView = (LinearLayout) findViewById(R.id.ll_root);
+        mTitleBar = findViewById(R.id.include_title_bar);
+        parentView.addView(getLayout(layoutId));
+        mRootView = ((ViewGroup) getActivityContext().findViewById(android.R.id.content));
+    }
+
+    protected void hideTitleBar() {
+        mTitleBar.setVisibility(View.GONE);
     }
 
     public int getStatusBarHeight() {
@@ -95,8 +107,8 @@ public class BaseActivity extends AppCompatActivity {
         return result;
     }
 
-    protected View getLayout(int layoutId){
-       return  getLayoutInflater().inflate(layoutId,null);
+    protected View getLayout(int layoutId) {
+        return getLayoutInflater().inflate(layoutId, null);
     }
 
     @Override

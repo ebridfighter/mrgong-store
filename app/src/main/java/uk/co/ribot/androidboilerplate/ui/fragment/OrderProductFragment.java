@@ -71,16 +71,16 @@ public class OrderProductFragment extends BaseFragment {
                     String deliveryType = mListBean.getDeliveryType();
                     if (deliveryType.equals(OrderListResponse.ListBean.TYPE_STANDARD) || deliveryType.equals(OrderListResponse.ListBean.TYPE_THIRD_PART_DELIVERY)
                             || deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH) || deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_THIRD_PART_DELIVERY)) {
-                        if (!mListBean.getState().equals(OrderState.PEISONG.getName()) && !mListBean.getState().equals(OrderState.DONE.name()) && !mListBean.getState().equals(OrderState.RATED.name())) {
+                        if (!mListBean.getState().equals(OrderState.PEISONG.getName()) && !mListBean.getState().equals(OrderState.DONE.getName()) && !mListBean.getState().equals(OrderState.RATED.getName())) {
                             return;
                         }
                     }
                     if (deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_VENDOR_DELIVERY) || deliveryType.equals(OrderListResponse.ListBean.TYPE_VENDOR_DELIVERY)) {
-                        if ((mListBean.getState().equals(OrderState.DONE.name()) || mListBean.getState().equals(OrderState.RATED.name())) && (products.get(position).getLotList() != null && products.get(position).getLotList().size() == 0)) {
+                        if ((mListBean.getState().equals(OrderState.DONE.getName()) || mListBean.getState().equals(OrderState.RATED.getName())) && (products.get(position).getLotList() != null && products.get(position).getLotList().size() == 0)) {
                            toast(R.string.toast_product_without_batch);
                             return;
                         }
-                        if (mListBean.getState().equals(OrderState.PEISONG.getName()) || mListBean.getState().equals(OrderState.DRAFT.getName()) || mListBean.getState().equals(OrderState.SALE.name())) {
+                        if (mListBean.getState().equals(OrderState.PEISONG.getName()) || mListBean.getState().equals(OrderState.DRAFT.getName()) || mListBean.getState().equals(OrderState.SALE.getName())) {
                             return;
                         }
                     }

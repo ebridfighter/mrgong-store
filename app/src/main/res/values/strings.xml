@@ -52,6 +52,18 @@
     <string name="tag_order_num">订单号：</string>
     <string name="order_confirmed">订单已确认</string>
     <string name="select_product_for_you">正在为您挑拣商品</string>
+    <string name="order_deliveryed">订单已发货</string>
+    <string name="expect_reach_time">预计发达时间：</string>
+    <string name="order_take_over">订单已收货</string>
+    <string name="returned">已退货</string>
+    <string name="order_returned">订单已退货</string>
+    <string name="tag_product_money">商品金额</string>
+    <string name="order_rated">订单已评价</string>
+    <string name="tag_thanks_for_your_rate_life_happy">感谢您的评价，供鲜生祝您生活愉快！</string>
+    <string name="order_cancel">订单已取消</string>
+    <string name="order_success">您的订单已取消成功</string>
+    <string name="first_payment_after_delivery">先付款后收货</string>
+    <string name="single_settlement">单次结算</string>
 
 
 </resources>

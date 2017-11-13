@@ -234,27 +234,27 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
             }
             String state = "";
             String tip = "";
-            if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.name())) {
+            if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.getName())) {
                 state = getString(R.string.order_submited);
                 tip = getString(R.string.tag_order_num) + mOrderDetailResponse.getOrder().getName();
-            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.SALE.name())) {
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.SALE.getName())) {
                 state = getString(R.string.order_confirmed);
                 tip = getString(R.string.select_product_for_you);
                 ViewGroup.LayoutParams lp = mRlBottom.getLayoutParams();
                 lp.height = 0;
                 mRlBottom.setLayoutParams(lp);
-            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.PEISONG.name())) {
-                state = "订单已发货";
-                tip = "预计发达时间：" + mOrderDetailResponse.getOrder().getEstimatedTime();
-            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DONE.name())) {
-                state = "订单已收货";
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.PEISONG.getName())) {
+                state = getString(R.string.order_deliveryed);
+                tip = getString(R.string.expect_reach_time) + mOrderDetailResponse.getOrder().getEstimatedTime();
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DONE.getName())) {
+                state = getString(R.string.order_take_over);
                 String recdiveName = mOrderDetailResponse.getOrder().getReceiveUserName();
 //                tip = "收货人："+ recdiveName;
                 tip = "配送已完成，如有问题请联系客服";
                 //TODO:退货单没有收货人姓名，暂时处理
                 if (TextUtils.isEmpty(recdiveName)) {
-                    tip = "已退货";
-                    state = "订单已退货";
+                    tip = getString(R.string.returned);
+                    state = getString(R.string.order_returned);
                 }
                 if (!TextUtils.isEmpty(mOrderDetailResponse.getOrder().getAppraisalUserName())) {
                     //已评价
@@ -263,35 +263,35 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                     mRlBottom.setLayoutParams(lp);
                 }
                 //预计价钱改为，商品金额
-                mTvMoney.setText("商品金额");
-            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.RATED.name())) {
-                state = "订单已评价";
+                mTvMoney.setText(R.string.tag_product_money);
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.RATED.getName())) {
+                state = getString(R.string.order_rated);
                 ViewGroup.LayoutParams lp = mRlBottom.getLayoutParams();
                 lp.height = 0;
                 mRlBottom.setLayoutParams(lp);
-                tip = "感谢您的评价，供鲜生祝您生活愉快！";
-            } else if ("cancel".equals(mOrderDetailResponse.getOrder().getState())) {
-                state = "订单已取消";
-                tip = "您的订单已取消成功";
+                tip = getString(R.string.tag_thanks_for_your_rate_life_happy);
+            } else if (OrderState.CANCEL.getName().equals(mOrderDetailResponse.getOrder().getState())) {
+                state = getString(R.string.order_cancel);
+                tip = getString(R.string.order_success);
             }
             mTvOrderState.setText(state);
             mTvTip.setText(tip);
             mBtnRight.setText(OrderActionUtils.getDoBtnTextByState(mOrderDetailResponse.getOrder()));
             mTvDate.setText(TimeUtils.getMMdd(mOrderDetailResponse.getOrder().getCreateDate()));
 
-            if (mOrderDetailResponse.getOrder().getOrderSettleName().contains("先付款后收货") && mOrderDetailResponse.getOrder().getOrderSettleName().contains("单次结算")) {
+            if (mOrderDetailResponse.getOrder().getOrderSettleName().contains(getString(R.string.first_payment_after_delivery)) && mOrderDetailResponse.getOrder().getOrderSettleName().contains(getString(R.string.single_settlement))) {
                 setUpPaymentInstrument();
             }
 
             //支付凭证在收货流程后，才显示
-            if ((mOrderDetailResponse.getOrder().getState().equals("rated") || mOrderDetailResponse.getOrder().getState().equals("done"))
-                    && mOrderDetailResponse.getOrder().getOrderSettleName().contains("单次结算")) {
+            if ((mOrderDetailResponse.getOrder().getState().equals(OrderState.RATED.getName()) || mOrderDetailResponse.getOrder().getState().equals(OrderState.DONE.getName()))
+                    && mOrderDetailResponse.getOrder().getOrderSettleName().contains(getString(R.string.single_settlement))) {
                 setUpPaymentInstrument();
             }
             if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.getName())) {
 //                setTitleRightText(true, "修改");
                 mModifyOrder = true;
-            } else if (!mOrderDetailResponse.getOrder().isUnApplyService() && (mOrderDetailResponse.getOrder().getState().equals("rated") || mOrderDetailResponse.getOrder().getState().equals("done"))) {
+            } else if (!mOrderDetailResponse.getOrder().isUnApplyService() && (mOrderDetailResponse.getOrder().getState().equals(OrderState.RATED.getName()) || mOrderDetailResponse.getOrder().getState().equals(OrderState.DONE.getName()))) {
                 //同时，显示右上角，申请售后
 //                setTitleRightText(true, "申请售后");
             } else {
