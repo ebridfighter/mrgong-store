@@ -21,7 +21,7 @@ public class OrderListResponse {
         this.list = list;
     }
 
-    public static class ListBean implements Parcelable {
+    public static class ListBean implements Serializable {
         /**
          * lines : [{"productUom":"条","priceUnit":8,"discount":0,"returnAmount":0,
          * "deliveredQty":5,"priceSubtotal":40,"productID":13,"tallyingAmount":0,
@@ -155,7 +155,7 @@ public class OrderListResponse {
             returnOrders = in.createStringArrayList();
         }
 
-        public static final Creator<ListBean> CREATOR = new Creator<ListBean>() {
+        public static final Parcelable.Creator<ListBean> CREATOR = new Parcelable.Creator<ListBean>() {
             @Override
             public ListBean createFromParcel(Parcel in) {
                 return new ListBean(in);
@@ -438,48 +438,6 @@ public class OrderListResponse {
 
         public void setUnApplyService(boolean unApplyService) {
             this.unApplyService = unApplyService;
-        }
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeDouble(amountTotal);
-            dest.writeString(driver);
-            dest.writeString(endUnloadDatetime);
-            dest.writeString(estimatedDate);
-            dest.writeByte((byte) (isTwoUnit ? 1 : 0));
-            dest.writeInt(hasReturn);
-            dest.writeString(loadingTime);
-            dest.writeString(estimatedTime);
-            dest.writeString(createDate);
-            dest.writeString(startUnloadDatetime);
-            dest.writeString(state);
-            dest.writeString(receiveUserName);
-            dest.writeString(tallyingUserName);
-            dest.writeByte((byte) (isDoubleReceive ? 1 : 0));
-            dest.writeByte((byte) (unApplyService ? 1 : 0));
-            dest.writeDouble(settleAmountTotal);
-            dest.writeParcelable(waybill,flags);
-            dest.writeInt(hasAttachment);
-            dest.writeByte((byte) (isFinishTallying ? 1 : 0));
-            dest.writeString(createUserName);
-            dest.writeString(orderSettleName);
-            dest.writeDouble(publicAmountTotal);
-            dest.writeDouble(deliveredQty);
-            dest.writeString(confirmationDate);
-            dest.writeInt(orderID);
-            dest.writeString(name);
-            dest.writeString(appraisalUserName);
-            dest.writeDouble(amount);
-            dest.writeByte((byte) (isToday ? 1 : 0));
-            dest.writeString(doneDatetime);
-            dest.writeString(deliveryType);
-            dest.writeTypedList(lines);
-            dest.writeStringList(stateTracker);
-            dest.writeStringList(returnOrders);
         }
 
         public static class StoreBean {
@@ -770,6 +728,94 @@ public class OrderListResponse {
         }
 
         public static class LinesBean implements Parcelable,Serializable {
+            public String getImageMedium() {
+                return imageMedium;
+            }
+
+            public void setImageMedium(String imageMedium) {
+                this.imageMedium = imageMedium;
+            }
+
+            public double getProductPrice() {
+                return productPrice;
+            }
+
+            public void setProductPrice(double productPrice) {
+                this.productPrice = productPrice;
+            }
+
+            public String getUnit() {
+                return unit;
+            }
+
+            public void setUnit(String unit) {
+                this.unit = unit;
+            }
+
+            public int getUnloadAmount() {
+                return unloadAmount;
+            }
+
+            public void setUnloadAmount(int unloadAmount) {
+                this.unloadAmount = unloadAmount;
+            }
+
+            public int getProductSettlePrice() {
+                return productSettlePrice;
+            }
+
+            public void setProductSettlePrice(int productSettlePrice) {
+                this.productSettlePrice = productSettlePrice;
+            }
+
+            public String getDefaultCode() {
+                return defaultCode;
+            }
+
+            public void setDefaultCode(String defaultCode) {
+                this.defaultCode = defaultCode;
+            }
+
+            public boolean isTwoUnit() {
+                return isTwoUnit;
+            }
+
+            public void setTwoUnit(boolean twoUnit) {
+                isTwoUnit = twoUnit;
+            }
+
+            public String getBarcode() {
+                return barcode;
+            }
+
+            public void setBarcode(String barcode) {
+                this.barcode = barcode;
+            }
+
+            public String getTracking() {
+                return tracking;
+            }
+
+            public void setTracking(String tracking) {
+                this.tracking = tracking;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getSettleUomId() {
+                return settleUomId;
+            }
+
+            public void setSettleUomId(String settleUomId) {
+                this.settleUomId = settleUomId;
+            }
+
             /**
              * productUom : 条
              * priceUnit : 8.0

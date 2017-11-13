@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingTop="5dp"
+          android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:layout_margin="10dp"
+          android:text="全部"
+          android:gravity="center"
+          android:singleLine="true"
+          android:background="@drawable/selector_base_color_corner"
+          android:textColor="@color/selector_white_black"
+          >
+
+</TextView>

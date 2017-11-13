@@ -2,22 +2,29 @@ package uk.co.ribot.androidboilerplate.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.runwise.commomlibrary.util.DensityUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -29,11 +36,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import github.chenupt.dragtoplayout.DragTopLayout;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.OrderState;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.tools.TimeUtils;
 import uk.co.ribot.androidboilerplate.ui.adapter.FragmentAdapter;
@@ -41,7 +50,9 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.fragment.OrderProductFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.OrderDetailActivityPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.OrderDetailMvpView;
+import uk.co.ribot.androidboilerplate.util.CommonUtils;
 import uk.co.ribot.androidboilerplate.util.OrderActionUtils;
+import uk.co.ribot.androidboilerplate.view.ProductTypePopup;
 
 public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpView {
 
@@ -90,12 +101,8 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
     LinearLayout mLlReturn;
     @BindView(R.id.ll_return_parent)
     LinearLayout mLLReturnParent;
-    @BindView(R.id.ctl)
-    CollapsingToolbarLayout mCtl;
     @BindView(R.id.tl_category)
     TabLayout mTlCategory;
-    @BindView(R.id.abl)
-    AppBarLayout mAbl;
     @BindView(R.id.vp)
     ViewPager mVp;
     @BindView(R.id.btn_right)
@@ -116,6 +123,16 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
     TextView mTvMoneyValue;
     @BindView(R.id.ll_price)
     LinearLayout mLlPrice;
+    @BindView(R.id.top_view)
+    LinearLayout mTopView;
+    @BindView(R.id.iv_open)
+    ImageView mIvOpen;
+    @BindView(R.id.drag_content_view)
+    LinearLayout mDragContentView;
+    @BindView(R.id.drag_layout)
+    DragTopLayout mDragLayout;
+    @BindView(R.id.rl_content)
+    RelativeLayout mRlContent;
 
     private boolean mHasAttachment;        //默认无凭证
     private boolean mModifyOrder;
@@ -144,6 +161,13 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
         }
         mOrderDetailActivityPresenter.getCategorys();
         mOrderDetailActivityPresenter.getOrderDetail(mOrderId);
+        mDragLayout.setOverDrag(false);
+        mTopView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //点击空白不收起draglayout
+            }
+        });
     }
 
     CategoryResponse mCategoryResponse;
@@ -168,6 +192,36 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
         }
     }
 
+    @Override
+    public void showReturnOrder(ReturnOrderDetailResponse returnOrderDetailResponse) {
+        setUpReturnOrderView(returnOrderDetailResponse);
+    }
+
+    private void setUpReturnOrderView(ReturnOrderDetailResponse returnOrderDetailResponse) {
+        TextView tv = new TextView(getActivityContext());
+        tv.setTextSize(14);
+        tv.setTextColor(Color.parseColor("#999999"));
+        tv.setGravity(Gravity.CENTER_VERTICAL);
+        tv.setTag(returnOrderDetailResponse.getReturnOrder().getReturnOrderID());
+        if (!TextUtils.isEmpty(returnOrderDetailResponse.getReturnOrder().getName())) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    CommonUtils.dip2px(getActivityContext(), 40));
+            SpannableString ss = new SpannableString("退货单号：" + returnOrderDetailResponse.getReturnOrder().getName());
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#2F96D8")), 5, 5 + returnOrderDetailResponse.getReturnOrder().getName().length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            tv.setText(ss);
+            mLlReturn.addView(tv, params);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //跳转到退货单详情
+//                    Intent intent = new Intent(mContext, ReturnDetailActivity.class);
+//                    intent.putExtra("rid", returnId);
+//                    startActivity(intent);
+                }
+            });
+        }
+    }
+
     private void updateUI() {
         if (mOrderDetailResponse != null) {
             if (mOrderDetailResponse.getOrder().getHasReturn() != 0) {
@@ -175,26 +229,24 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                 //可能有多个退货单。
                 if (mOrderDetailResponse.getOrder().getReturnOrders().size() > 0) {
                     String returnId = mOrderDetailResponse.getOrder().getReturnOrders().get(0);
-//                    getReturnOrder(returnId);
+                    mOrderDetailActivityPresenter.getReturnOrder(Integer.parseInt(returnId));
                 }
             }
             String state = "";
             String tip = "";
-            if (mOrderDetailResponse.getOrder().getState().equals("draft")) {
-                state = "订单已提交";
-                tip = "订单号：" + mOrderDetailResponse.getOrder().getName();
-            } else if (mOrderDetailResponse.getOrder().getState().equals("sale")) {
-                state = "订单已确认";
-                tip = "正在为您挑拣商品";
+            if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.name())) {
+                state = getString(R.string.order_submited);
+                tip = getString(R.string.tag_order_num) + mOrderDetailResponse.getOrder().getName();
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.SALE.name())) {
+                state = getString(R.string.order_confirmed);
+                tip = getString(R.string.select_product_for_you);
                 ViewGroup.LayoutParams lp = mRlBottom.getLayoutParams();
                 lp.height = 0;
                 mRlBottom.setLayoutParams(lp);
-//                mRlBottom.setVisibility(View.GONE);
-//                setBottom(v_space);
-            } else if (mOrderDetailResponse.getOrder().getState().equals("peisong")) {
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.PEISONG.name())) {
                 state = "订单已发货";
                 tip = "预计发达时间：" + mOrderDetailResponse.getOrder().getEstimatedTime();
-            } else if (mOrderDetailResponse.getOrder().getState().equals("done")) {
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DONE.name())) {
                 state = "订单已收货";
                 String recdiveName = mOrderDetailResponse.getOrder().getReceiveUserName();
 //                tip = "收货人："+ recdiveName;
@@ -206,16 +258,14 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                 }
                 if (!TextUtils.isEmpty(mOrderDetailResponse.getOrder().getAppraisalUserName())) {
                     //已评价
-//                    mRlBottom.setVisibility(View.GONE);
                     ViewGroup.LayoutParams lp = mRlBottom.getLayoutParams();
                     lp.height = 0;
                     mRlBottom.setLayoutParams(lp);
                 }
                 //预计价钱改为，商品金额
                 mTvMoney.setText("商品金额");
-            } else if (mOrderDetailResponse.getOrder().getState().equals("rated")) {
+            } else if (mOrderDetailResponse.getOrder().getState().equals(OrderState.RATED.name())) {
                 state = "订单已评价";
-//                mRlBottom.setVisibility(View.GONE);
                 ViewGroup.LayoutParams lp = mRlBottom.getLayoutParams();
                 lp.height = 0;
                 mRlBottom.setLayoutParams(lp);
@@ -230,13 +280,13 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
             mTvDate.setText(TimeUtils.getMMdd(mOrderDetailResponse.getOrder().getCreateDate()));
 
             if (mOrderDetailResponse.getOrder().getOrderSettleName().contains("先付款后收货") && mOrderDetailResponse.getOrder().getOrderSettleName().contains("单次结算")) {
-                setUpPaymenInstrument();
+                setUpPaymentInstrument();
             }
 
             //支付凭证在收货流程后，才显示
             if ((mOrderDetailResponse.getOrder().getState().equals("rated") || mOrderDetailResponse.getOrder().getState().equals("done"))
                     && mOrderDetailResponse.getOrder().getOrderSettleName().contains("单次结算")) {
-                setUpPaymenInstrument();
+                setUpPaymentInstrument();
             }
             if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.getName())) {
 //                setTitleRightText(true, "修改");
@@ -262,13 +312,16 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                 mTvCountValue.setText((int) mOrderDetailResponse.getOrder().getDeliveredQty() + "件");
             } else {
                 mTvReceive.setVisibility(View.GONE);
-                mTvCount.setText((int) mOrderDetailResponse.getOrder().getAmount() + "件");
+                mTvCountValue.setText((int) mOrderDetailResponse.getOrder().getAmount() + "件");
+            }
+            if (!mOrderDetailActivityPresenter.isCanSeePrice()){
+                mLlPrice.setVisibility(View.GONE);
+            }else{
+                mLlPrice.setVisibility(View.VISIBLE);
             }
             //商品数量/预估金额
             DecimalFormat df = new DecimalFormat("#.##");
             mTvMoneyValue.setText("¥" + df.format(mOrderDetailResponse.getOrder().getAmountTotal()));
-//            countTv.setText((int)mOrderDetailResponse.getOrder().getAmount()+"件");
-            //设置list
             mLineBeans = mOrderDetailResponse.getOrder().getLines();
             setUpDataForViewPage();
         }
@@ -296,7 +349,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
         }
         orderProductFragmentList.add(0, newOrderProductFragment((ArrayList<OrderListResponse.ListBean.LinesBean>) mLineBeans));
 
-        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(),titles,orderProductFragmentList);
+        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), titles, orderProductFragmentList);
         mVp.setAdapter(fragmentAdapter);//给ViewPager设置适配器
         mTlCategory.setupWithViewPager(mVp);//将TabLayout和ViewPager关联起来
         mVp.setOffscreenPageLimit(titles.size());
@@ -315,9 +368,8 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 mVp.setCurrentItem(position);
-////                mProductTypeWindow.dismiss();
-//                mTypeWindow.dismiss();
-//                if(dragLayout.getState()== DragTopLayout.PanelState.EXPANDED)dragLayout.toggleTopView();
+                mTypeWindow.dismiss();
+                if(mDragLayout.getState()== DragTopLayout.PanelState.EXPANDED)mDragLayout.toggleTopView();
             }
 
             @Override
@@ -331,24 +383,26 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
             }
         });
         if (titles.size() <= TAB_EXPAND_COUNT) {
-//            ivOpen.setVisibility(View.GONE);
+            mIvOpen.setVisibility(View.GONE);
             mTlCategory.setTabMode(TabLayout.MODE_FIXED);
         } else {
-//            ivOpen.setVisibility(View.VISIBLE);
+            mIvOpen.setVisibility(View.VISIBLE);
             mTlCategory.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
-//        initPopWindow((ArrayList<String>) titles);
+        initPopWindow((ArrayList<String>) titles);
     }
+
     public OrderProductFragment newOrderProductFragment(ArrayList<OrderListResponse.ListBean.LinesBean> value) {
         OrderProductFragment orderProductFragment = new OrderProductFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(OrderProductFragment.BUNDLE_KEY_LIST, value);
-        bundle.putParcelable(OrderProductFragment.BUNDLE_KEY_ORDER_DATA, mOrderDetailResponse.getOrder());
+        bundle.putBoolean(OrderProductFragment.BUNDLE_KEY_CAN_SEE_PRICE, mOrderDetailActivityPresenter.isCanSeePrice());
+        bundle.putSerializable(OrderProductFragment.BUNDLE_KEY_ORDER_DATA, mOrderDetailResponse.getOrder());
         orderProductFragment.setArguments(bundle);
         return orderProductFragment;
     }
 
-    private void setUpPaymenInstrument() {
+    private void setUpPaymentInstrument() {
         mTvPayState.setVisibility(View.VISIBLE);
         mTvPayStateValue.setVisibility(View.VISIBLE);
         mBtnUpload.setVisibility(View.VISIBLE);
@@ -387,14 +441,75 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
     public void showCategorysError(CategoryResponse categoryResponse) {
 
     }
-
-    @OnClick({R.id.btn_right, R.id.btn_right2})
+    boolean mCanShow = false;
+    @OnClick({R.id.btn_right, R.id.btn_right2,R.id.iv_open})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_right:
                 break;
             case R.id.btn_right2:
                 break;
+            case R.id.iv_open:
+                if (mDragLayout.getState() == DragTopLayout.PanelState.EXPANDED) {
+                    mDragLayout.toggleTopView();
+                    mCanShow = true;
+                } else {
+//                    if (mProductTypeWindow.isShowing()) {
+//                        mProductTypeWindow.dismiss();
+                    if (mTypeWindow.isShowing()) {
+                        mTypeWindow.dismiss();
+                    } else {
+                        showPopWindow();
+                    }
+                }
+                mDragLayout.listener(new DragTopLayout.PanelListener() {
+                    @Override
+                    public void onPanelStateChanged(DragTopLayout.PanelState panelState) {
+                        if (panelState == DragTopLayout.PanelState.COLLAPSED) {
+                            if (mCanShow) {
+                                showPopWindow();
+                                mCanShow = false;
+                            }
+                        } else {
+                            //mProductTypeWindow.dismiss();//
+                            mTypeWindow.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onSliding(float ratio) {
+
+                    }
+
+                    @Override
+                    public void onRefresh() {
+
+                    }
+                });
+
+                break;
         }
+    }
+    private void initPopWindow(ArrayList<String> typeList) {
+        mTypeWindow = new ProductTypePopup(this,
+                DensityUtil.getScreenWidth(getActivityContext()),
+                DensityUtil.getScreenHeight(getActivityContext()) - mTlCategory.getHeight(),
+                typeList,0);
+        mTypeWindow.setViewPager(mVp);
+        mTypeWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                mIvOpen.setImageResource(R.drawable.arrow);
+            }
+        });
+    }
+    private ProductTypePopup mTypeWindow;
+    private void showPopWindow() {
+        int y = /*findViewById(R.id.title_bar).getHeight() +*/ mTlCategory.getHeight() + getStatusBarHeight();
+//        mProductTypeWindow.showAtLocation(getRootView(OrderDetailActivity.this), Gravity.NO_GRAVITY, 0, y);
+//        mProductTypeAdapter.setSelectIndex(viewpager.getCurrentItem());
+        mTypeWindow.setSelect(mVp.getCurrentItem());
+        mTypeWindow.showAtLocation(mRootView, Gravity.NO_GRAVITY, 0, y);
+        mIvOpen.setImageResource(R.drawable.arrow_up);
     }
 }

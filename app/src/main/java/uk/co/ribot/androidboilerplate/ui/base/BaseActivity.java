@@ -3,6 +3,8 @@ package uk.co.ribot.androidboilerplate.ui.base;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.runwise.commomlibrary.view.LoadingDialog;
 
@@ -35,6 +37,7 @@ public class BaseActivity extends AppCompatActivity {
     private ExampleActivityComponent mActivityComponent;
     private long mActivityId;
     protected ConfigPersistentComponent configPersistentComponent;
+    protected View mRootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,23 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
         mLoadingDialog = new LoadingDialog(getActivityContext());
+    }
+    public void setContentView(int layoutId){
+        super.setContentView(layoutId);
+        mRootView =  ((ViewGroup) getActivityContext().findViewById(android.R.id.content));
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    protected View getLayout(int layoutId){
+       return  getLayoutInflater().inflate(layoutId,null);
     }
 
     @Override

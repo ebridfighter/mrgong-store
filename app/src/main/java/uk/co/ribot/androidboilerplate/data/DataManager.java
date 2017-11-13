@@ -82,6 +82,14 @@ public class DataManager {
         return mPreferencesHelper.getUserInfo();
     }
 
+    public boolean canSeePrice(){
+        UserInfoResponse userInfoResponse = loadUser();
+        if (userInfoResponse != null){
+            return userInfoResponse.isCanSeePrice();
+        }
+        return false;
+    }
+
     public Observable<ProductListResponse> syncProducts() {
         return mRunwiseService.getProducts(new EmptyRequest())
                 .concatMap(new Func1<ProductListResponse, Observable<ProductListResponse>>() {

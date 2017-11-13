@@ -1,68 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/abl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/ctl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#f7f7f7"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!--订单状态-->
-                <include layout="@layout/item_order_state" />
-                <!--订单信息-->
-                <include layout="@layout/item_order_info" />
-                <!-- 退货单信息 -->
-                <include layout="@layout/item_return_info" />
-
-            </LinearLayout>
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tl_category"
-            style="@style/TabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="always"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <!--- app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/vp"
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:background="#F5F5F5" />
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
 
     <RelativeLayout
         android:id="@+id/rl_bottom"
@@ -109,7 +51,84 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/v_space"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
+
+    <github.chenupt.dragtoplayout.DragTopLayout
+        android:id="@+id/drag_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/include_orderdetail_bottom_item"
+        android:background="#F0F0F0">
+
+        <LinearLayout
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="#F0F0F0"
+            android:orientation="vertical">
+            <!--订单状态-->
+            <include layout="@layout/item_order_state"/>
+            <!--订单信息-->
+            <include layout="@layout/item_order_info"/>
+            <!-- 退货单信息 -->
+            <include layout="@layout/item_return_info"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/drag_content_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--种类bar-->
+            <LinearLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingLeft="0dp">
 
 
-</android.support.design.widget.CoordinatorLayout>
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/tl_category"
+                        style="@style/TabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@color/white"
+                        app:tabMode="scrollable"/>
+
+                    <ImageView
+                        android:id="@+id/iv_open"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/tab_shadow"
+                        android:padding="15dp"
+                        android:src="@drawable/arrow"/>
+
+                </RelativeLayout>
+
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+    </github.chenupt.dragtoplayout.DragTopLayout>
+
+
+   <!-- <include
+        android:id="@+id/title_bar"
+        layout="@layout/common_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        />-->
+</RelativeLayout>

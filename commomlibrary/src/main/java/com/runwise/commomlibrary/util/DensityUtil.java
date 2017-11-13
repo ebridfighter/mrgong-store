@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.tools;
+package com.runwise.commomlibrary.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,5 +39,13 @@ public class DensityUtil {
         manager.getDefaultDisplay().getMetrics(metrics);
         int w=metrics.widthPixels;
         return w;
+    }
+
+    public static  int getScreenHeight(Activity context){
+        DisplayMetrics metrics=new DisplayMetrics();
+        WindowManager manager= context.getWindowManager();
+        manager.getDefaultDisplay().getMetrics(metrics);
+        int h=metrics.heightPixels;
+        return h;
     }
 }

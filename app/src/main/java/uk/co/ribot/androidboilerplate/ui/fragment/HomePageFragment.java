@@ -219,7 +219,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
 
     @Override
     public void showReturnOrdersEmpty() {
-        toast(R.string.toast_return_order_empty);
+//        toast(R.string.toast_return_order_empty);
         refreshCurrentRequestFinishCount();
     }
 

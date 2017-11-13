@@ -1,6 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -18,7 +19,9 @@ import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.OrderState;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
+import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 import uk.co.ribot.androidboilerplate.tools.UserUtils;
+import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
 
 /**
@@ -63,7 +66,10 @@ public class OrderProductsAdapter extends BaseAdapter<OrderProductsAdapter.ViewH
         super.onBindViewHolder(holder, position);
         final OrderListResponse.ListBean.LinesBean bean = mProducts.get(position);
         int pId = bean.getProductID();
-//            FrecoFactory.getInstance(holder.itemView.getContext()).disPlay(holder.productImage, Constant.BASE_URL+bean.getgetImage().getImageSmall());
+        if (!TextUtils.isEmpty(bean.getImageMedium())) {
+            FrecoFactory.getInstance(holder.itemView.getContext()).disPlay(holder.mSdvProduct, RunwiseService.ENDPOINT + bean.getImageMedium());
+        }
+
         int puq = (int) bean.getProductUomQty();
         int dq = (int) bean.getDeliveredQty();
         if ((OrderState.DONE.getName().equals(mStatus) || OrderState.RATED.getName().equals(mStatus)) && bean.getDeliveredQty() != bean.getProductUomQty()) {
@@ -75,55 +81,23 @@ public class OrderProductsAdapter extends BaseAdapter<OrderProductsAdapter.ViewH
             holder.mTvNowPrice.setText("x" + puq);
         }
 
-//        if (basicBean != null){
-////            holder.mTvName.setText(bean.getName());
-//            StringBuffer sb = new StringBuffer(basicBean.getDefaultCode());
-//            sb.append(" | ").append(bean.getUnit());
-//            if (mCanSeePrice){
-//                if (isTwoUnit){
-//                    sb.append("\n").append(UserUtils.formatPrice(String.valueOf(bean.getSettlePrice()))).append("元/").append(basicBean.getSettleUomId());
-//                }else{
-//                    sb.append("\n").append(UserUtils.formatPrice(String.valueOf(basicBean.getPrice()))).append("元/").append(bean.getProductUom());
-//                }
-//            }
-//            holder.mTvUnit.setText(bean.getProductUom());
-//            holder.mTvContent.setText(sb.toString());
-//            if (isTwoUnit){
-////                holder.mTvWeight.setText(bean.getSettleAmount()+bean.getSettleUomId());
-//                holder.mTvWeight.setVisibility(View.VISIBLE);
-//            }else{
-//                holder.mTvWeight.setVisibility(View.INVISIBLE);
-//            }
-//        }else{
-//            holder.mTvName.setText("");
-//        }
-        //发货状态订单
-//        if("peisong".equals(mStatus)) {
-//        holder.rootView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String deliveryType = mListBean.getDeliveryType();
-//                if (deliveryType.equals(OrderListResponse.ListBean.TYPE_STANDARD)||deliveryType.equals(OrderListResponse.ListBean.TYPE_THIRD_PART_DELIVERY)
-//                        ||deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH)||deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_THIRD_PART_DELIVERY)){
-//                    if(!mStatus.equals("peisong")&&!mStatus.equals("done")&&!mStatus.equals("rated")){
-//                        return;
-//                    }
-//                }
-//                if (deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_VENDOR_DELIVERY)||deliveryType.equals(OrderListResponse.ListBean.TYPE_VENDOR_DELIVERY)){
-//                    if((mStatus.equals("done")||mStatus.equals("rated"))&&(bean.getLotList()!=null&&bean.getLotList().size() == 0)) {
-//                        ToastUtil.show(v.getContext(), "该产品无批次追踪");
-//                        return;
-//                    }
-//                    if (mStatus.equals(ORDER_STATE_PEISONG)||mStatus.equals(ORDER_STATE_DRAFT)||mStatus.equals(ORDER_STATE_SALE)){
-//                        return;
-//                    }
-//                }
-//                Intent intent = new Intent(context, LotListActivity.class);
-//                intent.putExtra("title",basicBean.getName());
-//                intent.putExtra("bean", (Parcelable) bean);
-//                context.startActivity(intent);
-//            }
-//        });
+        StringBuffer sb = new StringBuffer(bean.getDefaultCode());
+        sb.append(" | ").append(bean.getUnit());
+        if (mCanSeePrice) {
+            if (isTwoUnit) {
+                sb.append("\n").append(UserUtils.formatPrice(String.valueOf(bean.getProductSettlePrice()))).append("元/").append(bean.getSettleUomId());
+            } else {
+                sb.append("\n").append(UserUtils.formatPrice(String.valueOf(bean.getProductPrice()))).append("元/").append(bean.getProductUom());
+            }
+        }
+        holder.mTvUnit.setText(bean.getProductUom());
+        holder.mTvContent.setText(sb.toString());
+        if (isTwoUnit) {
+            holder.mTvWeight.setVisibility(View.VISIBLE);
+        } else {
+            holder.mTvWeight.setVisibility(View.INVISIBLE);
+        }
+        holder.mTvName.setText(bean.getName());
     }
 
     @Override

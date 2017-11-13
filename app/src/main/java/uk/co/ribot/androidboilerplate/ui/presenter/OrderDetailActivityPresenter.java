@@ -13,6 +13,7 @@ import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.OrderDetailMvpView;
 import uk.co.ribot.androidboilerplate.util.ObjectTransformUtil;
@@ -28,6 +29,7 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
     private Subscription mCategorySubscription;
     private Subscription mOrderDetailSubscription;
     private Subscription mLoadProductSubscription;
+    private Subscription mReturnOrderDetailSubscription;
 
     @Inject
     public OrderDetailActivityPresenter(DataManager dataManager) {
@@ -37,6 +39,11 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
     @Override
     public void attachView(OrderDetailMvpView mvpView) {
         super.attachView(mvpView);
+    }
+
+
+    public boolean isCanSeePrice(){
+        return mDataManager.canSeePrice();
     }
 
     public void getCategorys() {
@@ -106,6 +113,27 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
         });
     }
 
+    public void getReturnOrder(int returnOrderId){
+        checkViewAttached();
+        RxUtil.unsubscribe(mReturnOrderDetailSubscription);
+        mReturnOrderDetailSubscription = mDataManager.getReturnOrderDetail(returnOrderId).subscribe(new Subscriber<ReturnOrderDetailResponse>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ReturnOrderDetailResponse returnOrderDetailResponse) {
+                getMvpView().showReturnOrder(returnOrderDetailResponse);
+            }
+        });
+    }
+
     public void getCategoryAndOrderDetail(int orderId) {
         Observable.merge(mDataManager.getCategorys(), mDataManager.getOrderDetail(orderId)).subscribe(new Subscriber<Object>() {
             @Override
@@ -124,5 +152,12 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
             }
         });
     }
-
+    @Override
+    public void detachView() {
+        super.detachView();
+        if (mCategorySubscription != null) mCategorySubscription.unsubscribe();
+        if (mOrderDetailSubscription != null) mOrderDetailSubscription.unsubscribe();
+        if (mLoadProductSubscription != null) mLoadProductSubscription.unsubscribe();
+        if (mReturnOrderDetailSubscription != null) mReturnOrderDetailSubscription.unsubscribe();
+    }
 }
