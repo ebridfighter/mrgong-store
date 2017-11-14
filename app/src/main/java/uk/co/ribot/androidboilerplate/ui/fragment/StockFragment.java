@@ -27,4 +27,10 @@ public class StockFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_stock,null);
         return warpTitleView(view);
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setTitle(R.string.title_frament_stock);
+    }
 }

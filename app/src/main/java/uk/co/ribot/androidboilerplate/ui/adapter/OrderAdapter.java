@@ -156,7 +156,7 @@ public class OrderAdapter extends BaseAdapter<OrderAdapter.OrderViewHolder> {
 
     @Override
     public void onBindViewHolder(final OrderViewHolder holder, final int position) {
-        super.onBindViewHolder(holder,position);
+        setOnItemListener(holder.itemView,position);
         if (getItemViewType(position) == VIEW_TYPE_ORDER) {
             OrderListResponse.ListBean order = mOrderListWraps.get(position).getOrderListBean();
             holder.mTvOrderNum.setText(order.getName());

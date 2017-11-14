@@ -61,8 +61,6 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
     @Inject
     OrderDetailActivityPresenter mOrderDetailActivityPresenter;
 
-    List<Fragment> mFragmentList;
-    List<String> mTitleList;
     int mOrderId;
 
     int mFinishFlag = 0;
@@ -150,6 +148,8 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
         ButterKnife.bind(this);
+        setTitle(R.string.title_order_detail);
+        showBackBtn();
 
         configPersistentComponent.orderDetailActivityComponent(new ActivityModule(this)).inject(this);
         mOrderDetailActivityPresenter.attachView(this);
@@ -200,14 +200,14 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
     private void setUpReturnOrderView(ReturnOrderDetailResponse returnOrderDetailResponse) {
         TextView tv = new TextView(getActivityContext());
         tv.setTextSize(14);
-        tv.setTextColor(Color.parseColor("#999999"));
+        tv.setTextColor(Color.parseColor(getString(R.string.textColorThird)));
         tv.setGravity(Gravity.CENTER_VERTICAL);
         tv.setTag(returnOrderDetailResponse.getReturnOrder().getReturnOrderID());
         if (!TextUtils.isEmpty(returnOrderDetailResponse.getReturnOrder().getName())) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     CommonUtils.dip2px(getActivityContext(), 40));
-            SpannableString ss = new SpannableString("退货单号：" + returnOrderDetailResponse.getReturnOrder().getName());
-            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#2F96D8")), 5, 5 + returnOrderDetailResponse.getReturnOrder().getName().length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            SpannableString ss = new SpannableString(getString(R.string.tag_return_order_num) + returnOrderDetailResponse.getReturnOrder().getName());
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor(getString(R.string.color_return_order_num))), 5, 5 + returnOrderDetailResponse.getReturnOrder().getName().length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             tv.setText(ss);
             mLlReturn.addView(tv, params);
             tv.setOnClickListener(new View.OnClickListener() {
@@ -250,7 +250,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                 state = getString(R.string.order_take_over);
                 String recdiveName = mOrderDetailResponse.getOrder().getReceiveUserName();
 //                tip = "收货人："+ recdiveName;
-                tip = "配送已完成，如有问题请联系客服";
+                tip = getString(R.string.tip_order_done_any_question_please_contact_service);
                 //TODO:退货单没有收货人姓名，暂时处理
                 if (TextUtils.isEmpty(recdiveName)) {
                     tip = getString(R.string.returned);
@@ -289,13 +289,13 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                 setUpPaymentInstrument();
             }
             if (mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.getName())) {
-//                setTitleRightText(true, "修改");
+                setTitleRightText(getString(R.string.modify));
                 mModifyOrder = true;
             } else if (!mOrderDetailResponse.getOrder().isUnApplyService() && (mOrderDetailResponse.getOrder().getState().equals(OrderState.RATED.getName()) || mOrderDetailResponse.getOrder().getState().equals(OrderState.DONE.getName()))) {
                 //同时，显示右上角，申请售后
-//                setTitleRightText(true, "申请售后");
+                setTitleRightText(getString(R.string.apply_for_after_sale));
             } else {
-//                setTitleRightText(false, "");
+                hideTitleRightText();
             }
             //订单信息
             mTvOrderNum.setText(mOrderDetailResponse.getOrder().getName());
@@ -309,10 +309,10 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
             //实收判断
             if ((OrderState.DONE.getName().equals(mOrderDetailResponse.getOrder().getState()) || OrderState.RATED.getName().equals(mOrderDetailResponse.getOrder().getState())) && isActualReceive()) {
                 mTvReceive.setVisibility(View.VISIBLE);
-                mTvCountValue.setText((int) mOrderDetailResponse.getOrder().getDeliveredQty() + "件");
+                mTvCountValue.setText((int) mOrderDetailResponse.getOrder().getDeliveredQty() + getString(R.string.piece));
             } else {
                 mTvReceive.setVisibility(View.GONE);
-                mTvCountValue.setText((int) mOrderDetailResponse.getOrder().getAmount() + "件");
+                mTvCountValue.setText((int) mOrderDetailResponse.getOrder().getAmount() + getString(R.string.piece));
             }
             if (!mOrderDetailActivityPresenter.isCanSeePrice()){
                 mLlPrice.setVisibility(View.GONE);
@@ -331,7 +331,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
         List<Fragment> orderProductFragmentList = new ArrayList<>();
         List<String> titles = new ArrayList<>();
         HashMap<String, ArrayList<OrderListResponse.ListBean.LinesBean>> map = new HashMap<>();
-        titles.add("全部");
+        titles.add(getString(R.string.category_all));
         for (String category : mCategoryResponse.getCategoryList()) {
             titles.add(category);
             map.put(category, new ArrayList<OrderListResponse.ListBean.LinesBean>());
@@ -350,16 +350,13 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
         orderProductFragmentList.add(0, newOrderProductFragment((ArrayList<OrderListResponse.ListBean.LinesBean>) mLineBeans));
 
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), titles, orderProductFragmentList);
-        mVp.setAdapter(fragmentAdapter);//给ViewPager设置适配器
-        mTlCategory.setupWithViewPager(mVp);//将TabLayout和ViewPager关联起来
+        mVp.setAdapter(fragmentAdapter);
+        mTlCategory.setupWithViewPager(mVp);
         mVp.setOffscreenPageLimit(titles.size());
         mVp.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onGlobalLayout() {
-//                IntEvent intEvent = new IntEvent();
-//                intEvent.setHeight(mVp.getHeight());
-//                EventBus.getDefault().post(intEvent);
                 mVp.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
@@ -407,16 +404,16 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
         mTvPayStateValue.setVisibility(View.VISIBLE);
         mBtnUpload.setVisibility(View.VISIBLE);
         if (mOrderDetailResponse.getOrder().getHasAttachment() == 0) {
-            mTvPayStateValue.setText("未有支付凭证");
-            if (!mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.getName()) && mOrderDetailResponse.getOrder().getOrderSettleName().contains("先付款后收货") && mOrderDetailResponse.getOrder().getOrderSettleName().contains("单次结算")) {
+            mTvPayStateValue.setText(R.string.no_payment_certificate);
+            if (!mOrderDetailResponse.getOrder().getState().equals(OrderState.DRAFT.getName()) && mOrderDetailResponse.getOrder().getOrderSettleName().contains(getString(R.string.first_payment_after_delivery)) && mOrderDetailResponse.getOrder().getOrderSettleName().contains(getString(R.string.single_settlement))) {
                 mBtnUpload.setVisibility(View.INVISIBLE);
             } else {
-                mBtnUpload.setText("上传凭证");
+                mBtnUpload.setText(R.string.upload_certificate);
             }
             mHasAttachment = false;
         } else {
-            mTvPayStateValue.setText("已上传支付凭证");
-            mBtnUpload.setText("查看凭证");
+            mTvPayStateValue.setText(R.string.already_upload_payment_certificate);
+            mBtnUpload.setText(R.string.check_certificate);
             mBtnUpload.setVisibility(View.VISIBLE);
             mHasAttachment = true;
         }
@@ -454,8 +451,6 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                     mDragLayout.toggleTopView();
                     mCanShow = true;
                 } else {
-//                    if (mProductTypeWindow.isShowing()) {
-//                        mProductTypeWindow.dismiss();
                     if (mTypeWindow.isShowing()) {
                         mTypeWindow.dismiss();
                     } else {
@@ -471,7 +466,6 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
                                 mCanShow = false;
                             }
                         } else {
-                            //mProductTypeWindow.dismiss();//
                             mTypeWindow.dismiss();
                         }
                     }
@@ -505,9 +499,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderDetailMvpV
     }
     private ProductTypePopup mTypeWindow;
     private void showPopWindow() {
-        int y = /*findViewById(R.id.title_bar).getHeight() +*/ mTlCategory.getHeight() + getStatusBarHeight();
-//        mProductTypeWindow.showAtLocation(getRootView(OrderDetailActivity.this), Gravity.NO_GRAVITY, 0, y);
-//        mProductTypeAdapter.setSelectIndex(viewpager.getCurrentItem());
+        int y = getTitleBarHeight() + mTlCategory.getHeight() + getStatusBarHeight();
         mTypeWindow.setSelect(mVp.getCurrentItem());
         mTypeWindow.showAtLocation(mRootView, Gravity.NO_GRAVITY, 0, y);
         mIvOpen.setImageResource(R.drawable.arrow_up);

@@ -173,6 +173,7 @@ dependencies {
     compile 'com.zhy:base-rvadapter:3.0.3'
     compile 'com.youth.banner:banner:1.4.10'  //最新版本
     compile 'com.facebook.fresco:fresco:0.12.0'
+    compile 'me.shaohui:bottomdialog:1.1.9'
     compile project(':commomlibrary')
 }
 

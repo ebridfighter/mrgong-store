@@ -1,6 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.base;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,6 +15,8 @@ import com.runwise.commomlibrary.view.LoadingDialog;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +32,7 @@ import uk.co.ribot.androidboilerplate.injection.component.ExampleActivityCompone
 import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
 import uk.co.ribot.androidboilerplate.util.ActivityUtil;
 import uk.co.ribot.androidboilerplate.util.ToastUtil;
+import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
 
 /**
  * Abstract activity that every other Activity in this application must implement. It handles
@@ -44,6 +48,8 @@ public class BaseActivity extends AppCompatActivity {
     private long mActivityId;
     protected ConfigPersistentComponent configPersistentComponent;
     protected View mRootView;
+    @Inject
+    protected RunwiseDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +95,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     ViewHolder mViewHolder;
+
     public void setContentView(int layoutId) {
         LinearLayout parentView = (LinearLayout) getLayout(R.layout.layout_base);
         setContentView(parentView);
@@ -98,8 +105,41 @@ public class BaseActivity extends AppCompatActivity {
         mRootView = getActivityContext().findViewById(android.R.id.content);
     }
 
+   protected int getTitleBarHeight(){
+        return mViewHolder.mFlTitle.getHeight();
+    }
+
+    protected void setTitleRightText(String text){
+        mViewHolder.mTvTitleRight.setText(text);
+    }
+
+    protected void hideTitleRightText(){
+        mViewHolder.mTvTitleRight.setVisibility(View.GONE);
+    }
+
     protected void hideTitleBar() {
         mViewHolder.mFlTitle.setVisibility(View.GONE);
+    }
+
+    public void showBackBtn() {
+        mViewHolder.mIvTitileLeft.setImageResource(R.drawable.back_btn);
+        mViewHolder.mIvTitileLeft.setVisibility(View.VISIBLE);
+        mViewHolder.mIvTitileLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+    public void setTitle(int textId) {
+        mViewHolder.mTvTitle.setVisibility(View.VISIBLE);
+        mViewHolder.mTvTitle.setText(textId);
+    }
+
+    public void setTitle(String text) {
+        mViewHolder.mTvTitle.setVisibility(View.VISIBLE);
+        mViewHolder.mTvTitle.setText(text);
     }
 
     public int getStatusBarHeight() {
@@ -113,6 +153,12 @@ public class BaseActivity extends AppCompatActivity {
 
     protected View getLayout(int layoutId) {
         return getLayoutInflater().inflate(layoutId, null);
+    }
+
+    protected int getResIdByDrawableName(String name) {
+        ApplicationInfo appInfo = getApplicationInfo();
+        int resID = getResources().getIdentifier(name, "drawable", appInfo.packageName);
+        return resID;
     }
 
     @Override
@@ -151,6 +197,22 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void dismissLoadingDialog() {
         mLoadingDialog.dismiss();
+    }
+
+    public void showDialog(String title, String message, RunwiseDialog.DialogListener dialogListener) {
+        mDialog.setTitle(title);
+        mDialog.setMessage(message);
+        mDialog.setMessageGravity();
+        mDialog.setRightBtnListener("确认", dialogListener);
+        mDialog.show();
+    }
+
+    public void showDialog(String title, String message, String confirmText, RunwiseDialog.DialogListener dialogListener) {
+        mDialog.setTitle(title);
+        mDialog.setMessage(message);
+        mDialog.setMessageGravity();
+        mDialog.setRightBtnListener(confirmText, dialogListener);
+        mDialog.show();
     }
 
     static class ViewHolder {

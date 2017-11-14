@@ -16,7 +16,9 @@ import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
@@ -24,9 +26,11 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.IntelligentProductDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
@@ -120,5 +124,11 @@ public interface RunwiseService {
 
     @POST("/api/product/category")
     Observable<CategoryResponse> getCategorys(@Body CategoryRequest categoryRequest);
+
+    @POST("/gongfu/v2/shop/preset/product/list")
+    Observable<IntelligentProductDataResponse> getIntelligentProducts(@Body GetIntelligentProductsRequest getIntelligentProductsRequest);
+
+    @POST("/gongfu/v2/order/create")
+    Observable<OrderCommitResponse> commitOrder(@Body CommitOrderRequest commitOrderRequest);
 
 }

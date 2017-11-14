@@ -63,7 +63,7 @@ public class OrderProductsAdapter extends BaseAdapter<OrderProductsAdapter.ViewH
 
     @Override
     public void onBindViewHolder(OrderProductsAdapter.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
+        setOnItemListener(holder.itemView,position);
         final OrderListResponse.ListBean.LinesBean bean = mProducts.get(position);
         int pId = bean.getProductID();
         if (!TextUtils.isEmpty(bean.getImageMedium())) {

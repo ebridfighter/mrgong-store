@@ -53,6 +53,21 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
         return mRootView;
     }
 
+    public void showBackBtn(){
+        mViewHolder.mIvTitileLeft.setImageResource(R.drawable.back_btn);
+        mViewHolder.mIvTitileLeft.setVisibility(View.VISIBLE);
+        mViewHolder.mIvTitileLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+    }
+
+    protected  void setTitle(int textId){
+        mViewHolder.mTvTitle.setVisibility(View.VISIBLE);
+        mViewHolder.mTvTitle.setText(textId);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

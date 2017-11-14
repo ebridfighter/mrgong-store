@@ -11,22 +11,13 @@ import android.view.ViewGroup;
  * Created by mike on 2017/11/8.
  */
 
-public class BaseAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> {
+public abstract class BaseAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> {
 
     @Override
-    public T onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
-    }
+    public abstract T onCreateViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(T holder, int position) {
-        setOnItemListener(holder.itemView,position);
-    }
-
-    @Override
-    public int getItemCount() {
-        return 0;
-    }
+    public abstract void onBindViewHolder(T holder, int position);
 
     public interface OnItemClickListener {
         void onItemClick(View view , int position);
