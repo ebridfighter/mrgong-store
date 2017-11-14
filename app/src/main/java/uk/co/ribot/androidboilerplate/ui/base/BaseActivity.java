@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.runwise.commomlibrary.view.LoadingDialog;
 
@@ -13,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Subscriber;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
@@ -35,7 +40,6 @@ public class BaseActivity extends AppCompatActivity {
     private static final String KEY_ACTIVITY_ID = "KEY_ACTIVITY_ID";
     private static final AtomicLong NEXT_ID = new AtomicLong(0);
     private static final Map<Long, ConfigPersistentComponent> sComponentsMap = new HashMap<>();
-
     private ExampleActivityComponent mActivityComponent;
     private long mActivityId;
     protected ConfigPersistentComponent configPersistentComponent;
@@ -84,18 +88,18 @@ public class BaseActivity extends AppCompatActivity {
         mLoadingDialog = new LoadingDialog(getActivityContext());
     }
 
-    View mTitleBar;
-
+    ViewHolder mViewHolder;
     public void setContentView(int layoutId) {
-        super.setContentView(R.layout.layout_base);
-        LinearLayout parentView = (LinearLayout) findViewById(R.id.ll_root);
-        mTitleBar = findViewById(R.id.include_title_bar);
+        LinearLayout parentView = (LinearLayout) getLayout(R.layout.layout_base);
+        setContentView(parentView);
+
+        mViewHolder = new ViewHolder(parentView);
         parentView.addView(getLayout(layoutId));
-        mRootView = ((ViewGroup) getActivityContext().findViewById(android.R.id.content));
+        mRootView = getActivityContext().findViewById(android.R.id.content);
     }
 
     protected void hideTitleBar() {
-        mTitleBar.setVisibility(View.GONE);
+        mViewHolder.mFlTitle.setVisibility(View.GONE);
     }
 
     public int getStatusBarHeight() {
@@ -149,5 +153,51 @@ public class BaseActivity extends AppCompatActivity {
         mLoadingDialog.dismiss();
     }
 
+    static class ViewHolder {
+        @BindView(R.id.iv_titile_left)
+        ImageView mIvTitileLeft;
+        @BindView(R.id.tv_titile_left)
+        TextView mTvTitileLeft;
+        @BindView(R.id.ll_left)
+        LinearLayout mLlLeft;
+        @BindView(R.id.iv_title_right2)
+        ImageView mIvTitleRight2;
+        @BindView(R.id.iv_title_right)
+        ImageView mIvTitleRight;
+        @BindView(R.id.tv_title_right)
+        TextView mTvTitleRight;
+        @BindView(R.id.ll_right)
+        LinearLayout mLlRight;
+        @BindView(R.id.tv_title)
+        TextView mTvTitle;
+        @BindView(R.id.iv_title)
+        ImageView mIvTitle;
+        @BindView(R.id.ll_mid)
+        LinearLayout mLlMid;
+        @BindView(R.id.fl_title)
+        FrameLayout mFlTitle;
+        @BindView(R.id.ll_root)
+        LinearLayout mLlRoot;
 
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        @OnClick({R.id.iv_titile_left, R.id.iv_title_right2, R.id.iv_title_right, R.id.iv_title})
+        public void onViewClicked(View view) {
+            switch (view.getId()) {
+                case R.id.iv_titile_left:
+                    break;
+                case R.id.iv_title_right2:
+                    break;
+                case R.id.iv_title_right:
+                    break;
+                case R.id.iv_title:
+                    break;
+            }
+        }
+    }
+
+
+//
 }

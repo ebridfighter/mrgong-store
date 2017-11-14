@@ -7,6 +7,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +18,9 @@ import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.frament.DaggerFragmentBaseComponent;
@@ -25,18 +31,26 @@ import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
  * Created by mike on 2017/10/31.
  */
 
-public class BaseFragment extends Fragment implements OnRefreshListener,OnLoadMoreListener {
+public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
 
     protected FragmentBaseComponent mFragmentBaseComponent;
     @Inject
     protected RunwiseDialog mDialog;
 
+    ViewGroup mRootView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.navigation_bar,container);
-        return rootView;
+        return null;
+    }
+    ViewHolder mViewHolder;
+    protected View warpTitleView(View contentView) {
+        mRootView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.layout_base, null);
+        mViewHolder = new ViewHolder(mRootView);
+        mRootView.addView(contentView);
+        return mRootView;
     }
 
     @Override
@@ -47,19 +61,19 @@ public class BaseFragment extends Fragment implements OnRefreshListener,OnLoadMo
                 .build();
     }
 
-    protected View getLayout(int layoutId){
-       return LayoutInflater.from(getActivity()).inflate(layoutId,null);
+    protected View getLayout(int layoutId) {
+        return LayoutInflater.from(getActivity()).inflate(layoutId, null);
     }
 
-    protected void toast(int textId){
+    protected void toast(int textId) {
         Toast.makeText(getActivity(), getString(textId), Toast.LENGTH_SHORT).show();
     }
 
-    protected boolean isTextViewEmpty(TextView textView){
+    protected boolean isTextViewEmpty(TextView textView) {
         return TextUtils.isEmpty(textView.getText().toString());
     }
 
-    public void showDialog(String title,String message,RunwiseDialog.DialogListener dialogListener){
+    public void showDialog(String title, String message, RunwiseDialog.DialogListener dialogListener) {
         mDialog.setTitle(title);
         mDialog.setMessage(message);
         mDialog.setMessageGravity();
@@ -67,7 +81,7 @@ public class BaseFragment extends Fragment implements OnRefreshListener,OnLoadMo
         mDialog.show();
     }
 
-    public void showDialog(String title,String message,String confirmText,RunwiseDialog.DialogListener dialogListener){
+    public void showDialog(String title, String message, String confirmText, RunwiseDialog.DialogListener dialogListener) {
         mDialog.setTitle(title);
         mDialog.setMessage(message);
         mDialog.setMessageGravity();
@@ -84,4 +98,55 @@ public class BaseFragment extends Fragment implements OnRefreshListener,OnLoadMo
     public void onLoadMore() {
 
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    static class ViewHolder {
+        @BindView(R.id.iv_titile_left)
+        ImageView mIvTitileLeft;
+        @BindView(R.id.tv_titile_left)
+        TextView mTvTitileLeft;
+        @BindView(R.id.ll_left)
+        LinearLayout mLlLeft;
+        @BindView(R.id.iv_title_right2)
+        ImageView mIvTitleRight2;
+        @BindView(R.id.iv_title_right)
+        ImageView mIvTitleRight;
+        @BindView(R.id.tv_title_right)
+        TextView mTvTitleRight;
+        @BindView(R.id.ll_right)
+        LinearLayout mLlRight;
+        @BindView(R.id.tv_title)
+        TextView mTvTitle;
+        @BindView(R.id.iv_title)
+        ImageView mIvTitle;
+        @BindView(R.id.ll_mid)
+        LinearLayout mLlMid;
+        @BindView(R.id.fl_title)
+        FrameLayout mFlTitle;
+        @BindView(R.id.ll_root)
+        LinearLayout mLlRoot;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        @OnClick({R.id.iv_titile_left, R.id.iv_title_right2, R.id.iv_title_right, R.id.iv_title})
+        public void onViewClicked(View view) {
+            switch (view.getId()) {
+                case R.id.iv_titile_left:
+                    break;
+                case R.id.iv_title_right2:
+                    break;
+                case R.id.iv_title_right:
+                    break;
+                case R.id.iv_title:
+                    break;
+            }
+        }
+    }
+
 }

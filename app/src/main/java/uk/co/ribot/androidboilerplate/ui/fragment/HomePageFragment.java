@@ -75,6 +75,8 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
         return view;
     }
 
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
