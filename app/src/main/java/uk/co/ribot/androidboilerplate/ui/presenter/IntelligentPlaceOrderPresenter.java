@@ -6,6 +6,8 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.IntelligentProductDataResponse;
@@ -43,7 +45,8 @@ public class IntelligentPlaceOrderPresenter extends BasePresenter<IntelligentPla
     public void getUserInfo() {
         checkViewAttached();
         RxUtil.unsubscribe(mGetUserInfoSubscription);
-        mGetUserInfoSubscription = mDataManager.getUserInfo().subscribe(new Subscriber<UserInfoResponse>() {
+        mGetUserInfoSubscription = mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<UserInfoResponse>() {
             @Override
             public void onCompleted() {
 
@@ -64,7 +67,8 @@ public class IntelligentPlaceOrderPresenter extends BasePresenter<IntelligentPla
     public void getIntelligentProducts(double estimatedTurnover, double safetyFactor) {
         checkViewAttached();
         RxUtil.unsubscribe(mGetIntelligentProductsSubscription);
-        mGetIntelligentProductsSubscription = mDataManager.getIntelligentProducts(estimatedTurnover, safetyFactor).subscribe(new Subscriber<IntelligentProductDataResponse>() {
+        mGetIntelligentProductsSubscription = mDataManager.getIntelligentProducts(estimatedTurnover, safetyFactor).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<IntelligentProductDataResponse>() {
             @Override
             public void onCompleted() {
 
@@ -86,7 +90,8 @@ public class IntelligentPlaceOrderPresenter extends BasePresenter<IntelligentPla
         checkViewAttached();
         RxUtil.unsubscribe(mCommitOrderSubscription);
         mCommitOrderSubscription = mDataManager.commitOrder(estimated_time, order_type_id, products)
-                .subscribe(new Subscriber<OrderCommitResponse>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<OrderCommitResponse>() {
                     @Override
                     public void onCompleted() {
 

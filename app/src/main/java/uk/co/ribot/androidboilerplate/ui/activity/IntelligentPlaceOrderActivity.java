@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -157,6 +158,7 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
         setTitleRightText("编辑");
         mRvProduct.setVisibility(View.INVISIBLE);
         mIntelligentPlaceOrderAdapter.setCallback(this);
+        mRvProduct.setLayoutManager(new LinearLayoutManager(getActivityContext()));
         mRvProduct.setAdapter(mIntelligentPlaceOrderAdapter);
         initLoadingImgs();
         handler.postDelayed(runnable, 0);
