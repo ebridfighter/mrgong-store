@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.tools.DensityUtil;
+import com.runwise.commomlibrary.util.DensityUtil;
 
 
 public class SideBar extends View {

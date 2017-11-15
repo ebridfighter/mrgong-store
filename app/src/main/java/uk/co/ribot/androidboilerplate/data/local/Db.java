@@ -5,8 +5,8 @@ import android.database.Cursor;
 
 import java.util.Date;
 
-import uk.co.ribot.androidboilerplate.data.model.Name;
-import uk.co.ribot.androidboilerplate.data.model.Profile;
+import uk.co.ribot.androidboilerplate.data.model.database.Name;
+import uk.co.ribot.androidboilerplate.data.model.database.Profile;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 
 public class Db {

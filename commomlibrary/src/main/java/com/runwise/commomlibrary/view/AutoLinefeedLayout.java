@@ -1,11 +1,11 @@
-package uk.co.ribot.androidboilerplate.view;
+package com.runwise.commomlibrary.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import uk.co.ribot.androidboilerplate.tools.DensityUtil;
+import com.runwise.commomlibrary.util.DensityUtil;
 
 
 /**

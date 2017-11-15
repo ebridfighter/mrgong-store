@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.data.model;
+package uk.co.ribot.androidboilerplate.data.model.database;
 
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -19,11 +19,11 @@ public abstract class Profile implements Parcelable {
     @Nullable public abstract String avatar();
 
     public static Builder builder() {
-        return new AutoValue_Profile.Builder();
+        return new $$AutoValue_Profile.Builder();
     }
 
     public static TypeAdapter<Profile> typeAdapter(Gson gson) {
-        return new AutoValue_Profile.GsonTypeAdapter(gson);
+        return new $AutoValue_Profile.GsonTypeAdapter(gson);
     }
 
     @AutoValue.Builder

@@ -234,7 +234,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
 
                     @Override
                     public void onNext(DashBoardResponse dashBoardResponse) {
-                        UserInfoResponse userInfoResponse = mDataManager.getUserInfo();
+                        UserInfoResponse userInfoResponse = mDataManager.loadUser();
                         if (userInfoResponse != null && userInfoResponse.isCanSeePrice()){
                             getMvpView().showDashBoard(dashBoardResponse);
                         }else{

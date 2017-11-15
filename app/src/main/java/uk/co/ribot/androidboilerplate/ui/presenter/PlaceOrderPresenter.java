@@ -33,7 +33,7 @@ public class PlaceOrderPresenter extends BasePresenter<PlaceOrderMvpView> {
     }
 
     public boolean canSeePrice(){
-        UserInfoResponse userInfoResponse = mDataManager.getUserInfo();
+        UserInfoResponse userInfoResponse = mDataManager.loadUser();
         if (userInfoResponse != null){
             return userInfoResponse.isCanSeePrice();
         }

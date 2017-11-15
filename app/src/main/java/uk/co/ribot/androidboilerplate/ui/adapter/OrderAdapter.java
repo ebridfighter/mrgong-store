@@ -34,6 +34,7 @@ import uk.co.ribot.androidboilerplate.data.model.business.OrderState;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.tools.TimeUtils;
+import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
 import uk.co.ribot.androidboilerplate.util.OrderActionUtils;
 
 import static uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse.ListBean.TYPE_THIRD_PART_DELIVERY;
@@ -43,7 +44,7 @@ import static uk.co.ribot.androidboilerplate.data.model.net.response.OrderListRe
  * Created by mike on 2017/11/1.
  */
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
+public class OrderAdapter extends BaseAdapter<OrderAdapter.OrderViewHolder> {
 
     private List<OrderListWrap> mOrderListWraps;
     private List<OrderListResponse.ListBean> mOrders;
@@ -155,6 +156,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     @Override
     public void onBindViewHolder(final OrderViewHolder holder, final int position) {
+        setOnItemListener(holder.itemView,position);
         if (getItemViewType(position) == VIEW_TYPE_ORDER) {
             OrderListResponse.ListBean order = mOrderListWraps.get(position).getOrderListBean();
             holder.mTvOrderNum.setText(order.getName());
@@ -338,9 +340,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             } else {
                 holder.mBtnDo.setVisibility(View.INVISIBLE);
             }
-
         }
-
     }
 
     private void setUpExpandListener(final OrderViewHolder orderViewHolder, final int orderId, final List<String> stateTracker) {

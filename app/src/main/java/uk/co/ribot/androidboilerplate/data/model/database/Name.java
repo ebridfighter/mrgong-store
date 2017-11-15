@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.data.model;
+package uk.co.ribot.androidboilerplate.data.model.database;
 
 import android.os.Parcelable;
 

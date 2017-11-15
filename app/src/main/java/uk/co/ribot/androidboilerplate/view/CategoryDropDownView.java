@@ -15,10 +15,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.runwise.commomlibrary.util.DensityUtil;
+
 import java.util.List;
 
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.tools.DensityUtil;
 
 /**
  * 对下拉类别View的封装

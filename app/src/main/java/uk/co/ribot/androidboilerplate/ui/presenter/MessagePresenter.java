@@ -57,7 +57,7 @@ public class MessagePresenter extends BasePresenter<MessageMvpView> {
     }
 
     public boolean isCanSeePrice(){
-        UserInfoResponse userInfoResponse = mDataManager.getUserInfo();
+        UserInfoResponse userInfoResponse = mDataManager.loadUser();
         if (userInfoResponse != null){
             return userInfoResponse.isCanSeePrice();
         }

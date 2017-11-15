@@ -46,7 +46,10 @@
         </activity>
         <activity android:name=".ui.activity.IntelligentPlaceOrderActivity"></activity>
         <activity android:name=".ui.activity.OrderDetailActivity"></activity>
-        <activity android:name=".ui.activity.MainActivity"></activity>
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity android:name=".ui.activity.OrderCommitSuccessActivity"></activity>
     </application>
 
 </manifest>

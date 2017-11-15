@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.data.model;
+package uk.co.ribot.androidboilerplate.data.model.database;
 
 import android.os.Parcelable;
 
@@ -32,10 +32,10 @@ public abstract class ProductProfile implements Parcelable{
     public abstract String tracking();
 
     public static Builder builder() {
-        return new AutoValue_ProductProfile.Builder();
+        return new $$AutoValue_ProductProfile.Builder();
     }
     public static TypeAdapter<ProductProfile> typeAdapter(Gson gson) {
-        return new AutoValue_ProductProfile.GsonTypeAdapter(gson);
+        return new $AutoValue_ProductProfile.GsonTypeAdapter(gson);
     }
 
     @AutoValue.Builder

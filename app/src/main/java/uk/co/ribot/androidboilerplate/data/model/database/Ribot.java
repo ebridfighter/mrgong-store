@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.data.model;
+package uk.co.ribot.androidboilerplate.data.model.database;
 
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+
 
 @AutoValue
 public abstract class Ribot implements Comparable<Ribot>, Parcelable {
