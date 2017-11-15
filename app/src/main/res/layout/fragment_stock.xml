@@ -7,6 +7,10 @@
     android:background="#FFFFFF"
     >
 
+    <!--<FrameLayout-->
+        <!--android:id="@+id/fl_stock_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"></FrameLayout>-->
     <fragment
         android:id="@+id/fragment_stock_container"
         android:layout_width="match_parent"

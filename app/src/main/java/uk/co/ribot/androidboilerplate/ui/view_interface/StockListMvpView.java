@@ -2,7 +2,7 @@ package uk.co.ribot.androidboilerplate.ui.view_interface;
 
 import java.util.List;
 
-import uk.co.ribot.androidboilerplate.data.model.StockItem;
+import uk.co.ribot.androidboilerplate.data.model.business.StockItem;
 import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 
 /**

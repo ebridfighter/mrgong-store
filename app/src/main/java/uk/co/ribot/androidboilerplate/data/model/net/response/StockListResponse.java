@@ -2,7 +2,7 @@ package uk.co.ribot.androidboilerplate.data.model.net.response;
 
 import java.util.List;
 
-import uk.co.ribot.androidboilerplate.data.model.StockItem;
+import uk.co.ribot.androidboilerplate.data.model.business.StockItem;
 
 /**
  * 库存列表接口返回

@@ -35,7 +35,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.MainActivity">
+        <activity android:name=".ui.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,6 +46,7 @@
         </activity>
         <activity android:name=".ui.activity.IntelligentPlaceOrderActivity"></activity>
         <activity android:name=".ui.activity.OrderDetailActivity"></activity>
+        <activity android:name=".ui.activity.MainActivity"></activity>
     </application>
 
 </manifest>

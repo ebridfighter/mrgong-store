@@ -7,12 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +18,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
-import uk.co.ribot.androidboilerplate.tools.DensityUtil;
 import uk.co.ribot.androidboilerplate.ui.activity.StockSearchActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.StockListContainerPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.StockListContainerMvpView;
-import uk.co.ribot.androidboilerplate.view.ProductTypePopup;
+import uk.co.ribot.androidboilerplate.view.CategoryDropDownView;
 import uk.co.ribot.androidboilerplate.view.SystemUpgradeLayout;
 
 import static uk.co.ribot.androidboilerplate.ui.fragment.AbstractStockListFragment.ARG_CATEGORY;
@@ -46,25 +41,22 @@ import static uk.co.ribot.androidboilerplate.ui.fragment.StockListFragment.ARG_C
  */
 
 public class StockListContainerFragment extends BaseFragment implements StockListContainerMvpView {
-    private static final int TAB_EXPAND_COUNT = 4;
     private View mRootView;
-    @BindView(R.id.indicator)
-    TabLayout smartTabLayout;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-    @BindView(R.id.iv_open)
-    ImageView ivOpen;
+    @BindView(R.id.vp_stocks)
+    ViewPager mVpStocks;
     @BindView(R.id.layout_system_upgrade_notice)
     SystemUpgradeLayout mLayoutUpgradeNotice;
+    @BindView(R.id.test)
+    CategoryDropDownView mTabsCatogory;
     @Inject
     StockListContainerPresenter mStockListContainerPresenter;
     AbstractStockListFragment mCurrentFragment;//当前显示的类别fragment
 
     private TabPageIndicatorAdapter adapter;
-    private ProductTypePopup mTypeWindow;//商品类型弹出框
 
     private String mKeyword = "";
     private Unbinder unbinder;
+
 
     @Nullable
     @Override
@@ -91,18 +83,6 @@ public class StockListContainerFragment extends BaseFragment implements StockLis
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_open})
-    public void openTypeWindow(View view) {
-        if (mTypeWindow == null){
-            return;
-        }
-        if (!mTypeWindow.isShowing()){
-            showPopWindow();
-        }else{
-            mTypeWindow.dismiss();
-        }
-    }
-
     @Override
     public void showCategories(List<String> categoryList) {
         List<AbstractStockListFragment> repertoryEntityFragmentList = new ArrayList<>();
@@ -119,74 +99,26 @@ public class StockListContainerFragment extends BaseFragment implements StockLis
         }
 
         initUI(titles,repertoryEntityFragmentList);
-        initTypeWindow((ArrayList<String>) titles);
-    }
-
-    private void initTypeWindow(ArrayList<String> typeList) {
-        final int[] location = new int[2];
-        smartTabLayout.getLocationOnScreen(location);
-        int y = (int) (location[1] + smartTabLayout.getHeight());
-        mTypeWindow = new ProductTypePopup(getActivity(),
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                DensityUtil.getScreenH(getActivity()) - y,
-                typeList,0);
-        mTypeWindow.setViewPager(viewPager);
-        mTypeWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                ivOpen.setImageResource(R.drawable.arrow);
-            }
-        });
-    }
-
-    private void showPopWindow(){
-        final int[] location = new int[2];
-        smartTabLayout.getLocationOnScreen(location);
-        int y = (int) (location[1] + smartTabLayout.getHeight());
-//        mProductTypeWindow.showAtLocation(mainView, Gravity.NO_GRAVITY, 0, y);
-//        mProductTypeAdapter.setSelectIndex(viewPager.getCurrentItem());
-        mTypeWindow.showAtLocation(mRootView, Gravity.NO_GRAVITY,0,y);
-        mTypeWindow.setSelect(viewPager.getCurrentItem());
-        ivOpen.setImageResource(R.drawable.arrow_up);
     }
 
     private void initUI(List<String> titles, List<AbstractStockListFragment> repertoryEntityFragmentList){
-        adapter = new TabPageIndicatorAdapter(this.getActivity().getSupportFragmentManager(),titles,repertoryEntityFragmentList);
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(repertoryEntityFragmentList.size());
-        smartTabLayout.removeAllTabs();
-        smartTabLayout.setupWithViewPager(viewPager);
-        smartTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        adapter = new TabPageIndicatorAdapter(this.getChildFragmentManager(),titles,repertoryEntityFragmentList);
+        mVpStocks.setAdapter(adapter);
+        mVpStocks.setOffscreenPageLimit(adapter.getCount());
+        mTabsCatogory.setup(getActivity(),mVpStocks,titles);
+        mTabsCatogory.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
-                viewPager.setCurrentItem(position);
-                mTypeWindow.dismiss();
-
                 //刷新当前fragment
                 AbstractStockListFragment fragment = adapter.getFragmentList().get(position);
                 fragment.refresh(mKeyword);
             }
-
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
+            public void onTabUnselected(TabLayout.Tab tab) {}
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
-
-        if(titles.size()<=TAB_EXPAND_COUNT){
-            ivOpen.setVisibility(View.GONE);
-            smartTabLayout.setTabMode(TabLayout.MODE_FIXED);
-            ((ViewGroup.MarginLayoutParams)smartTabLayout.getLayoutParams()).setMargins(0,0,0,0);
-        }else{
-            ivOpen.setVisibility(View.VISIBLE);
-            smartTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        }
     }
 
 

@@ -1,5 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.presenter;
 
+import android.util.Log;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -33,7 +35,7 @@ public class StockListContainerPresenter extends BasePresenter<StockListContaine
     @Override
     public void attachView(StockListContainerMvpView mvpView) {
         super.attachView(mvpView);
-        if(mDataManager.isLogin() && false){//已登录，查类别
+        if(mDataManager.isLogin()){//已登录，查类别
             mDataManager.getCategory()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -45,7 +47,7 @@ public class StockListContainerPresenter extends BasePresenter<StockListContaine
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
-
+                            Log.d("haha",throwable.getMessage());
                         }
                     });
         }else{

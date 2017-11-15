@@ -1,6 +1,10 @@
 package uk.co.ribot.androidboilerplate.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by Dong on 2017/11/8.
@@ -12,8 +16,8 @@ public class StockListFragment extends AbstractStockListFragment {
     private boolean isFirstLoaded = false;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if(getArguments().getBoolean(ARG_CURRENT,false)){
             isFirstLoaded = true;
             refresh(true);
