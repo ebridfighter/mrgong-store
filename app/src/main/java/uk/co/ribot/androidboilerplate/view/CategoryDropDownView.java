@@ -14,13 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import java.util.List;
 
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.tools.DensityUtil;
-import uk.co.ribot.androidboilerplate.ui.fragment.AbstractStockListFragment;
 
 /**
  * 对下拉类别View的封装
@@ -56,7 +54,7 @@ public class CategoryDropDownView extends FrameLayout {
 
     protected void init(){
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        inflater.inflate(R.layout.view_tabs,this);
+        inflater.inflate(R.layout.view_category_tabs,this);
         mTabLayout = (TabLayout)findViewById(R.id.tl_tabs);
         mIvOpen = (ImageView)findViewById(R.id.iv_open_dropdown_tab);
     }
