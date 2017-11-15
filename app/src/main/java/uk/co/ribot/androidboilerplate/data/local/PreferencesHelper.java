@@ -18,7 +18,7 @@ public class PreferencesHelper {
     public static final String PREF_KEY_DATABASE = "pref_key_database";
     public static final String PREF_KEY_COOKIES = "pref_key_cookies";
     public static final String PREF_KEY_USER_INFO = "pref_key_user_info";
-    public static final String DEFAULT_DATABASE_NAME = "LBZTest1031";
+    public static final String DEFAULT_DATABASE_NAME = "MFtest1025";
 
 
     private static SharedPreferences mPref = null;

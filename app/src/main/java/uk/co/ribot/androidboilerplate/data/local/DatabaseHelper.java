@@ -16,9 +16,11 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+
+import static uk.co.ribot.androidboilerplate.data.local.Db.ProductProfileTable.COLUMN_PRODUCTID;
 
 @Singleton
 public class DatabaseHelper {
@@ -109,6 +111,25 @@ public class DatabaseHelper {
                     @Override
                     public ProductListResponse.Product call(Cursor cursor) {
                         return Db.ProductProfileTable.parseCursor(cursor);
+                    }
+                });
+    }
+
+    public Observable<ProductListResponse.Product> getProduct(int productId) {
+        return mDb.createQuery(Db.ProductProfileTable.TABLE_NAME,
+                "SELECT * FROM " + Db.ProductProfileTable.TABLE_NAME,COLUMN_PRODUCTID+"=?",String.valueOf(productId))
+                .mapToList(new Func1<Cursor, ProductListResponse.Product>() {
+                    @Override
+                    public ProductListResponse.Product call(Cursor cursor) {
+                        return Db.ProductProfileTable.parseCursor(cursor);
+                    }
+                }).map(new Func1<List<ProductListResponse.Product>, ProductListResponse.Product>() {
+                    @Override
+                    public ProductListResponse.Product call(List<ProductListResponse.Product> products) {
+                        if (products.size() > 0){
+                            return products.get(0);
+                        }
+                        return null;
                     }
                 });
     }

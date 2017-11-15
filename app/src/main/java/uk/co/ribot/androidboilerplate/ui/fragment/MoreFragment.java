@@ -15,7 +15,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.event.LogOutEvent;
+import uk.co.ribot.androidboilerplate.data.model.event.LogOutEvent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.activity.ProductListActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
@@ -33,6 +33,9 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
     Unbinder unbinder;
     @Inject
     MorePresenter mMorePresenter;
+
+    @Inject
+    public MoreFragment(){}
 
     @Nullable
     @Override

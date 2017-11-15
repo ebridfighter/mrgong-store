@@ -41,6 +41,8 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
         ButterKnife.bind(this);
+        showBackBtn();
+        setTitle(R.string.title_activity_product_list);
 
         ProductListActivityComponent activityComponent = configPersistentComponent.productListActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);

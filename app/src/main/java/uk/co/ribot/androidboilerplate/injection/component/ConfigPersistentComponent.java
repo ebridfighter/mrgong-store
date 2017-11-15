@@ -20,4 +20,7 @@ public interface ConfigPersistentComponent {
     LoginActivityComponent loginActivityComponent(ActivityModule activityModule);
     MainActivityComponent mainActivityComponent(ActivityModule activityModule);
     ProductListActivityComponent productListActivityComponent(ActivityModule activityModule);
+    IntelligentPlaceOrderActivityComponent intelligentPlaceOrderActivityComponent(ActivityModule activityModule);
+    OrderDetailActivityComponent orderDetailActivityComponent(ActivityModule activityModule);
+    OrderCommitSuccessActivityComponent orderCommitSuccessActivityComponent(ActivityModule activityModule);
 }

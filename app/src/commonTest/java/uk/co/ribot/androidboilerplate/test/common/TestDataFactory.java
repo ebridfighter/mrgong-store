@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import uk.co.ribot.androidboilerplate.data.model.Name;
-import uk.co.ribot.androidboilerplate.data.model.Profile;
-import uk.co.ribot.androidboilerplate.data.model.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.database.Name;
+import uk.co.ribot.androidboilerplate.data.model.database.Profile;
+import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 
 /**
  * Factory class that makes instances of data models with random field values.

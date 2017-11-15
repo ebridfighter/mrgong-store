@@ -2,9 +2,11 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -13,6 +15,8 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
@@ -28,9 +32,13 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
 public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     private final DataManager mDataManager;
     private Subscription mOrderSubscription;
+    private Subscription mOrderPollingSubscription;
+    private Subscription mReturnOrderPollingSubscription;
     private Subscription mReturnOrderSubscription;
     private Subscription mHomePageBannerSubscription;
     private Subscription mDashBoardSubscription;
+    private Subscription mCancelOrderSubscription;
+    private Subscription mFinishReturnOrderSubscription;
 
     @Inject
     public HomePagePresenter(DataManager dataManager) {
@@ -41,6 +49,81 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     public void attachView(HomePageMvpView mvpView) {
         super.attachView(mvpView);
     }
+
+    public void pollingOrders(){
+        checkViewAttached();
+        RxUtil.unsubscribe(mOrderPollingSubscription);
+        mOrderPollingSubscription =  Observable.interval(0,5, TimeUnit.SECONDS).flatMap(new Func1<Long, Observable<OrderListResponse>>() {
+            @Override
+            public Observable<OrderListResponse> call(Long aLong) {
+                return mDataManager.syncOrders()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io());
+            }
+        }).takeUntil(new Func1<OrderListResponse, Boolean>() {
+            @Override
+            public Boolean call(OrderListResponse orderListResponse) {
+                return !getMvpView().isFragmentVisible();
+            }
+        }).subscribe(new Subscriber<OrderListResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "There was an error loading the orders.");
+                getMvpView().showOrdersError();
+            }
+
+            @Override
+            public void onNext(OrderListResponse orderListResponse) {
+                if (orderListResponse.getList().isEmpty()) {
+                    getMvpView().showOrdersEmpty();
+                } else {
+                    getMvpView().showOrders(orderListResponse.getList());
+                }
+            }
+        });
+    }
+
+    public void pollingReturnOrders(){
+        checkViewAttached();
+        RxUtil.unsubscribe(mReturnOrderPollingSubscription);
+        mReturnOrderPollingSubscription =  Observable.interval(0,5, TimeUnit.SECONDS).flatMap(new Func1<Long, Observable<ReturnOrderListResponse>>() {
+            @Override
+            public Observable<ReturnOrderListResponse> call(Long aLong) {
+                return mDataManager.syncReturnOrders()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io());
+            }
+        }).takeUntil(new Func1<ReturnOrderListResponse, Boolean>() {
+            @Override
+            public Boolean call(ReturnOrderListResponse returnOrderListResponse) {
+                return !getMvpView().isFragmentVisible();
+            }
+        }).subscribe(new Subscriber<ReturnOrderListResponse>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "There was an error loading the ReturnOrders.");
+                getMvpView().showReturnOrdersError();
+            }
+
+            @Override
+            public void onNext(ReturnOrderListResponse returnOrderListResponse) {
+                if (returnOrderListResponse.getList().isEmpty()) {
+                    getMvpView().showReturnOrdersEmpty();
+                } else {
+                    getMvpView().showReturnOrders(returnOrderListResponse.getList());
+                }
+            }
+        });
+    }
+
 
     public void syncOrders() {
         checkViewAttached();
@@ -151,12 +234,60 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
 
                     @Override
                     public void onNext(DashBoardResponse dashBoardResponse) {
-                        UserInfoResponse userInfoResponse = mDataManager.getUserInfo();
+                        UserInfoResponse userInfoResponse = mDataManager.loadUser();
                         if (userInfoResponse != null && userInfoResponse.isCanSeePrice()){
                             getMvpView().showDashBoard(dashBoardResponse);
                         }else{
                             getMvpView().showDashBoardWithoutPrice(dashBoardResponse);
                         }
+                    }
+                });
+    }
+
+    public void cancelOrder(int orderId){
+        checkViewAttached();
+        RxUtil.unsubscribe(mCancelOrderSubscription);
+        mCancelOrderSubscription = mDataManager.changeOrderState(orderId,"cancel")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<EmptyResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "There was an error cancel order.");
+                        getMvpView().cancelOrderError();
+                    }
+
+                    @Override
+                    public void onNext(EmptyResponse emptyResponse) {
+                        getMvpView().cancelOrderSuccess();
+                    }
+                });
+    }
+
+    public void finishOrder(int returnOrderId){
+        checkViewAttached();
+        RxUtil.unsubscribe(mFinishReturnOrderSubscription);
+        mFinishReturnOrderSubscription = mDataManager.finishReturnOrder(returnOrderId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<FinishReturnResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "There was an error cancel order.");
+                        getMvpView().finishReturnOrderError();
+                    }
+
+                    @Override
+                    public void onNext(FinishReturnResponse finishReturnResponse) {
+                        getMvpView().finishReturnOrderSuccess(finishReturnResponse);
                     }
                 });
     }
@@ -168,5 +299,9 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
         if (mReturnOrderSubscription != null) mReturnOrderSubscription.unsubscribe();
         if (mHomePageBannerSubscription != null) mHomePageBannerSubscription.unsubscribe();
         if (mDashBoardSubscription != null) mDashBoardSubscription.unsubscribe();
+        if (mCancelOrderSubscription != null) mCancelOrderSubscription.unsubscribe();
+        if (mFinishReturnOrderSubscription != null) mFinishReturnOrderSubscription.unsubscribe();
+        if (mOrderPollingSubscription != null) mOrderPollingSubscription.unsubscribe();
+        if (mReturnOrderPollingSubscription != null) mReturnOrderPollingSubscription.unsubscribe();
     }
 }

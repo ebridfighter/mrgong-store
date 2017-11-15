@@ -27,6 +27,67 @@
     <string name="toast_get_dashboard_error">获取仪表板数据出错!</string>
     <string name="toast_refreshing">正在刷新</string>
     <string name="toast_logout_fail">登出失败</string>
+    <string name="last_week_purchase_amount">上周采购量(件)</string>
+    <string name="advent_food_amount">临期食材(件)</string>
+    <string name="expire_food_amount">到期食材(件)</string>
+    <string name="toast_estimated_turnover_empty">你还没填写预估营业额!</string>
+    <string name="toast_safety_factor_empty">你还没选择安全系数!</string>
+    <string name="color_titile_safe_dialog">#F3F9EF</string>
+    <string name="color_cancle_text_safe_dialog">#2E2E2E</string>
+    <string name="color_submit_text_safe_dialog">#2E2E2E</string>
+    <string name="dialog_title_safe_factor">选择安全系数</string>
+    <string name="dialog_title_tip">提示</string>
+    <string name="dialog_message_cancel_order">确认取消订单?</string>
+    <string name="dialog_message_tallying">正在点货</string>
+    <string name="dialog_btn_i_know">我知道了</string>
+    <string name="dialog_message_the_goods_have_been_ordered">您已经点过货了，应由其他人完成收货</string>
+    <string name="toast_finish_return_order_success">退货成功</string>
+    <string name="toast_cancel_order_success">取消订单成功</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_exist_order">没有对应订单</string>
+    <string name="toast_product_without_batch">该产品无批次追踪</string>
+    <string name="order_submited">订单已提交</string>
+    <string name="tag_order_num">订单号：</string>
+    <string name="order_confirmed">订单已确认</string>
+    <string name="select_product_for_you">正在为您挑拣商品</string>
+    <string name="order_deliveryed">订单已发货</string>
+    <string name="expect_reach_time">预计发达时间：</string>
+    <string name="order_take_over">订单已收货</string>
+    <string name="returned">已退货</string>
+    <string name="order_returned">订单已退货</string>
+    <string name="tag_product_money">商品金额</string>
+    <string name="order_rated">订单已评价</string>
+    <string name="tag_thanks_for_your_rate_life_happy">感谢您的评价，供鲜生祝您生活愉快！</string>
+    <string name="order_cancel">订单已取消</string>
+    <string name="order_success">您的订单已取消成功</string>
+    <string name="first_payment_after_delivery">先付款后收货</string>
+    <string name="single_settlement">单次结算</string>
+    <string name="title_frament_stock">库存</string>
+    <string name="title_activity_product_list">价目表</string>
+    <string name="title_order_detail">订单详情</string>
+    <string name="tag_return_order_num">退货单号：</string>
+    <string name="color_return_order_num">#2F96D8</string>
+    <string name="tip_order_done_any_question_please_contact_service">配送已完成，如有问题请联系客服</string>
+    <string name="no_payment_certificate">未有支付凭证</string>
+    <string name="upload_certificate">上传凭证</string>
+    <string name="already_upload_payment_certificate">已上传支付凭证</string>
+    <string name="check_certificate">查看凭证</string>
+    <string name="category_all">全部</string>
+    <string name="piece">件</string>
+    <string name="textColorThird">#999999</string>
+    <string name="modify">修改</string>
+    <string name="apply_for_after_sale">申请售后</string>
+    <string name="one_click_place_order">一键下单</string>
+    <string name="titile_intelligent_place_order">智能下单</string>
+    <string name="titile_eidt">编辑</string>
+    <string name="title_edit">编辑</string>
+    <string name="titile_finish">完成</string>
+    <string name="color_btn_delete_ok">#FF3B30</string>
+    <string name="color_btn_delete_no_ok">#E3E3E3</string>
+    <string name="title_modify_order_success">修改成功</string>
+    <string name="title_place_order_success">下单成功</string>
 
 
 </resources>

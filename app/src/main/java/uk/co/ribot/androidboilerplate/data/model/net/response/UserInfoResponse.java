@@ -31,6 +31,7 @@ public class UserInfoResponse implements Serializable {
      * customerServicePhone : false
      * clerk : true
      * isZicai
+     * reserveGoodsAdvanceDate
      */
 
     private String username;
@@ -52,14 +53,41 @@ public class UserInfoResponse implements Serializable {
     private double cateringQualityScore;
     private String position;
     private String login;
-//    private boolean customerServicePhone;
+    //    private boolean customerServicePhone;
     private boolean clerk;
     private boolean canSeePrice;
     private String companyHotLine;
     private String isAgreeItem;
     private boolean hasNewInvoice;
-    private String company;
+    private boolean noAfterSaleApply;
 
+    public String getIsShopTransfer() {
+        return isShopTransfer;
+    }
+
+    public void setIsShopTransfer(String isShopTransfer) {
+        this.isShopTransfer = isShopTransfer;
+    }
+
+    private String isShopTransfer;
+    private String company;
+    private int reserveGoodsAdvanceDate;
+
+    public boolean isNoAfterSaleApply() {
+        return noAfterSaleApply;
+    }
+
+    public void setNoAfterSaleApply(boolean noAfterSaleApply) {
+        this.noAfterSaleApply = noAfterSaleApply;
+    }
+
+    public int getReserveGoodsAdvanceDate() {
+        return reserveGoodsAdvanceDate;
+    }
+
+    public void setReserveGoodsAdvanceDate(int reserveGoodsAdvanceDate) {
+        this.reserveGoodsAdvanceDate = reserveGoodsAdvanceDate;
+    }
 
     public String getIsZicai() {
         return isZicai;
@@ -278,4 +306,5 @@ public class UserInfoResponse implements Serializable {
     public void setIsAgreeItem(String isAgreeItem) {
         this.isAgreeItem = isAgreeItem;
     }
+
 }
