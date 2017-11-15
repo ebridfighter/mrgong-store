@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -207,10 +208,25 @@ public class BaseActivity extends AppCompatActivity {
         mDialog.show();
     }
 
-    public void showDialog(String title, String message, String confirmText, RunwiseDialog.DialogListener dialogListener) {
+    public void showDialog(String title, String message, String confirmText, String cancelText,RunwiseDialog.DialogListener dialogListener) {
         mDialog.setTitle(title);
         mDialog.setMessage(message);
         mDialog.setMessageGravity();
+        if (TextUtils.isEmpty(cancelText)){
+            mDialog.setModel(RunwiseDialog.RIGHT);
+        }
+        mDialog.setRightBtnListener(confirmText, dialogListener);
+        mDialog.show();
+    }
+    public void showNoCancelDialog(String title, String message, String confirmText,String cancelText,RunwiseDialog.DialogListener dialogListener) {
+        mDialog.setTitle(title);
+        mDialog.setMessage(message);
+        mDialog.setMessageGravity();
+        if (TextUtils.isEmpty(cancelText)){
+            mDialog.setModel(RunwiseDialog.RIGHT);
+        }
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
         mDialog.setRightBtnListener(confirmText, dialogListener);
         mDialog.show();
     }

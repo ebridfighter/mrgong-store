@@ -76,7 +76,7 @@ public class IntelligentPlaceOrderPresenter extends BasePresenter<IntelligentPla
 
             @Override
             public void onError(Throwable e) {
-
+                getMvpView().showIntelligentProductsError();
             }
 
             @Override
@@ -99,7 +99,7 @@ public class IntelligentPlaceOrderPresenter extends BasePresenter<IntelligentPla
 
                     @Override
                     public void onError(Throwable e) {
-
+                        getMvpView().commitOrderError();
                     }
 
                     @Override

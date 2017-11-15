@@ -81,6 +81,11 @@
     <string name="apply_for_after_sale">申请售后</string>
     <string name="one_click_place_order">一键下单</string>
     <string name="titile_intelligent_place_order">智能下单</string>
+    <string name="titile_eidt">编辑</string>
+    <string name="title_edit">编辑</string>
+    <string name="titile_finish">完成</string>
+    <string name="color_btn_delete_ok">#FF3B30</string>
+    <string name="color_btn_delete_no_ok">#E3E3E3</string>
 
 
 </resources>

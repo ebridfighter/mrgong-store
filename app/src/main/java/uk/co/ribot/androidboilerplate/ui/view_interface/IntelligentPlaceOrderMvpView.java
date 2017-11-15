@@ -13,5 +13,7 @@ public interface IntelligentPlaceOrderMvpView extends MvpView {
 
     void getUserInfoSuccess(UserInfoResponse userInfoResponse);
     void showIntelligentProducts(IntelligentProductDataResponse intelligentProductDataResponse);
+    void showIntelligentProductsError();
     void commitOrderSuccess(OrderCommitResponse orderCommitResponse);
+    void commitOrderError();
 }

@@ -43,6 +43,7 @@ import uk.co.ribot.androidboilerplate.ui.adapter.IntelligentPlaceOrderAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.presenter.IntelligentPlaceOrderPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.IntelligentPlaceOrderMvpView;
+import uk.co.ribot.androidboilerplate.util.ActivityUtil;
 import uk.co.ribot.androidboilerplate.util.CommonUtils;
 import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
 
@@ -155,7 +156,7 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
         mIntelligentPlaceOrderPresenter.attachView(this);
         setTitle(getString(R.string.titile_intelligent_place_order));
         showBackBtn();
-        setTitleRightText("编辑");
+        setTitleRightText(getString(R.string.title_edit));
         mRvProduct.setVisibility(View.INVISIBLE);
         mIntelligentPlaceOrderAdapter.setCallback(this);
         mRvProduct.setLayoutManager(new LinearLayoutManager(getActivityContext()));
@@ -217,7 +218,7 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
         InputMethodManager imm = (InputMethodManager) getSystemService(getActivityContext().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mLlAll.getWindowToken(), 0); //强制隐藏键盘
         if (!editMode) {
-            this.setTitleRightText("完成");
+            this.setTitleRightText(getString(R.string.titile_finish));
 //            setTitleLeftIcon(true, R.drawable.nav_add);
             mRlSelectBar.setVisibility(View.VISIBLE);
             ViewPropertyAnimator.animate(mRlBottom).setDuration(500).translationY(CommonUtils.dip2px(getActivityContext(), 55));
@@ -225,7 +226,7 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
             editMode = true;
         } else {
             mIntelligentPlaceOrderAdapter.clearSelect();
-            setTitleRightText("编辑");
+            setTitleRightText(getString(R.string.title_edit));
             ViewPropertyAnimator.animate(mRlBottom).setDuration(500).translationY(-CommonUtils.dip2px(getActivityContext(), 55));
             ViewPropertyAnimator.animate(mRlSelectBar).setDuration(500).translationY(CommonUtils.dip2px(getActivityContext(), 55));
             showBackBtn();
@@ -243,11 +244,11 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
         if (isOk) {
             mBtnDelete.setEnabled(true);
             mBtnDelete.setBackgroundResource(R.drawable.product_delete_ok);
-            mBtnDelete.setTextColor(Color.parseColor("#FF3B30"));
+            mBtnDelete.setTextColor(Color.parseColor(getString(R.string.color_btn_delete_ok)));
         } else {
             mBtnDelete.setEnabled(false);
             mBtnDelete.setBackgroundResource(R.drawable.product_delete_circle);
-            mBtnDelete.setTextColor(Color.parseColor("#E3E3E3"));
+            mBtnDelete.setTextColor(Color.parseColor(getString(R.string.color_btn_delete_no_ok)));
         }
 
     }
@@ -381,6 +382,7 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_place_order:
+                showLoadingDialog();
                 //下单按钮
                 List<DefaultProductResponse> list = mIntelligentPlaceOrderAdapter.getList();
                 List<CommitOrderRequest.ProductsBean> cList = new ArrayList<>();
@@ -498,6 +500,17 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
     }
 
     @Override
+    public void showIntelligentProductsError() {
+        //停止动画
+        handler.removeCallbacks(runnable);
+        mIvLoading.setVisibility(View.INVISIBLE);
+        mTvLoading.setVisibility(View.INVISIBLE);
+        mRvProduct.setVisibility(View.VISIBLE);
+        mRlNoPurchase.setVisibility(View.VISIBLE);
+        setTitleRightText(getString(R.string.titile_eidt));
+    }
+
+    @Override
     public void commitOrderSuccess(OrderCommitResponse orderCommitResponse) {
         onSuccessCallBack();
         finish();
@@ -509,5 +522,16 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
 //        Intent intent = new Intent(OneKeyOrderActivity.this,OrderCommitSuccessActivity.class);
 //        intent.putParcelableArrayListExtra(OrderCommitSuccessActivity.INTENT_KEY_ORDERS,orderCommitResponse.getOrders());
 //        startActivity(intent);
+    }
+
+    @Override
+    public void commitOrderError() {
+        dismissLoadingDialog();
+        showNoCancelDialog("提示","网络连接失败，请查看首页订单列表，检查下单是否成功","我知道啦","",new RunwiseDialog.DialogListener() {
+            @Override
+            public void doClickButton(Button btn, RunwiseDialog dialog) {
+                ActivityUtil.getInstance().returnHomePage(MainActivity.class);
+            }
+        });
     }
 }
