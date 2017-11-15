@@ -1,5 +1,8 @@
 package uk.co.ribot.androidboilerplate.ui.view_interface;
 
+import java.util.List;
+
+import uk.co.ribot.androidboilerplate.data.model.business.StockItem;
 import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 
 /**
@@ -9,15 +12,21 @@ import uk.co.ribot.androidboilerplate.ui.base.MvpView;
  */
 
 public interface StockListMvpView extends MvpView {
-    /**
-     * 显示刷新的库存
-     */
-    void showRefreshStocks();
 
     /**
-     * 显示加载更多的库存
+     * 显示库存
      */
-    void showMoreStocks();
+    void showStocks(List<StockItem> stockItemList, boolean isRefresh);
 
-    void showError();
+    /**
+     * 没有数据
+     */
+    void showNoStocks();
+
+    /**
+     * 下拉没有更多了
+     */
+    void showNoMoreStocks();
+
+    void showError(String msg);
 }

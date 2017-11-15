@@ -16,10 +16,13 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
-import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
@@ -86,6 +89,10 @@ public class DataManager {
 
     public UserInfoResponse loadUser() {
         return mPreferencesHelper.getUserInfo();
+    }
+
+    public boolean isLogin() {
+        return mPreferencesHelper.isLogin();
     }
 
     public boolean canSeePrice(){
@@ -203,7 +210,6 @@ public class DataManager {
                 });
     }
 
-
     public Observable<LastBuyResponse> getLastOrderAmount() {
         return mRunwiseService.getLastOrderAmount(new EmptyRequest())
                 .onErrorReturn(new Func1<Throwable, LastBuyResponse>() {
@@ -237,6 +243,15 @@ public class DataManager {
                         return null;
                     }
                 });
+    }
+
+    /**
+     * 获取商品类别
+     * @return
+     */
+    public Observable<CategoryResponse> getCategory(){
+        int userId = Integer.valueOf(PreferencesHelper.getUserInfo().getUid());
+        return mRunwiseService.getCategory(new GetCategoryRequest(userId));
     }
 
     public Observable<OrderDetailResponse> getOrderDetail(int orderId) {

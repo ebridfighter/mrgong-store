@@ -41,6 +41,14 @@ public class DensityUtil {
         return w;
     }
 
+    public static  int getScreenH(Activity context) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager manager = context.getWindowManager();
+        manager.getDefaultDisplay().getMetrics(metrics);
+        int w = metrics.heightPixels;
+        return w;
+    }
+
     public static  int getScreenHeight(Activity context){
         DisplayMetrics metrics=new DisplayMetrics();
         WindowManager manager= context.getWindowManager();

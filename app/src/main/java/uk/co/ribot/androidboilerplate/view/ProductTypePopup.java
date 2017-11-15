@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import java.util.List;
 
 import uk.co.ribot.androidboilerplate.R;
