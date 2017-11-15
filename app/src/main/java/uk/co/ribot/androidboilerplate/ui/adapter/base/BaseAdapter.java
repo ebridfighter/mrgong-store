@@ -20,7 +20,11 @@ public abstract class BaseAdapter<T extends RecyclerView.ViewHolder> extends Rec
     public abstract void onBindViewHolder(T holder, int position);
 
     public interface OnItemClickListener {
-        void onItemClick(View view , int position);
+        void onItemClick(View view, int position);
+    }
+
+    public interface OnChildItemClickListener {
+        void onItemClick(View childView, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -29,26 +33,43 @@ public abstract class BaseAdapter<T extends RecyclerView.ViewHolder> extends Rec
 
     protected OnItemClickListener mOnItemClickListener = null;
 
-    protected void setOnItemListener(View itemView, final int position){
+    public void setOnChildItemClickListener(OnChildItemClickListener onChildItemClickListener) {
+        mOnChildItemClickListener = onChildItemClickListener;
+    }
+
+    protected OnChildItemClickListener mOnChildItemClickListener = null;
+
+    protected void setOnItemListener(View itemView, final int position) {
         itemView.setTag(position);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mOnItemClickListener!=null){
+                if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
                 }
             }
         });
     }
 
-    protected Resources getResource(T holder){
-       return holder.itemView.getContext().getResources();
+    protected void setOnChildItemListener(View childView, int position) {
+        childView.setTag(position);
+        childView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnChildItemClickListener != null) {
+                    mOnChildItemClickListener.onItemClick(view, (Integer) view.getTag());
+                }
+            }
+        });
     }
 
-    protected View getLayout(Context context, int layoutId){
-        return LayoutInflater.from(context).inflate(layoutId,null);
+    protected Resources getResource(T holder) {
+        return holder.itemView.getContext().getResources();
     }
 
+    protected View getLayout(Context context, int layoutId) {
+        return LayoutInflater.from(context).inflate(layoutId, null);
+    }
 
 
 }

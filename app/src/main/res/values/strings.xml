@@ -86,6 +86,8 @@
     <string name="titile_finish">完成</string>
     <string name="color_btn_delete_ok">#FF3B30</string>
     <string name="color_btn_delete_no_ok">#E3E3E3</string>
+    <string name="title_modify_order_success">修改成功</string>
+    <string name="title_place_order_success">下单成功</string>
 
 
 </resources>

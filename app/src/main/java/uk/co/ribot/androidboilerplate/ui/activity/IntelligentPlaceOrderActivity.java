@@ -515,19 +515,14 @@ public class IntelligentPlaceOrderActivity extends BaseActivity implements Intel
         onSuccessCallBack();
         finish();
         mBtnPlaceOrder.setBackgroundColor(Color.parseColor("#9ACC35"));
-//        dateTv.setEnabled(true);
-//        EventBus.getDefault().post(new OrderSuccessEvent());
-//
-//        final OrderCommitResponse orderCommitResponse = (OrderCommitResponse) result.getResult().getData();
-//        Intent intent = new Intent(OneKeyOrderActivity.this,OrderCommitSuccessActivity.class);
-//        intent.putParcelableArrayListExtra(OrderCommitSuccessActivity.INTENT_KEY_ORDERS,orderCommitResponse.getOrders());
-//        startActivity(intent);
+        mTvDate.setEnabled(true);
+        startActivity(OrderCommitSuccessActivity.getStartIntent(this, -1, orderCommitResponse.getOrders()));
     }
 
     @Override
     public void commitOrderError() {
         dismissLoadingDialog();
-        showNoCancelDialog("提示","网络连接失败，请查看首页订单列表，检查下单是否成功","我知道啦","",new RunwiseDialog.DialogListener() {
+        showNoCancelDialog("提示", "网络连接失败，请查看首页订单列表，检查下单是否成功", "我知道啦", "", new RunwiseDialog.DialogListener() {
             @Override
             public void doClickButton(Button btn, RunwiseDialog dialog) {
                 ActivityUtil.getInstance().returnHomePage(MainActivity.class);
