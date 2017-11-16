@@ -3,6 +3,8 @@ package uk.co.ribot.androidboilerplate.data.model.net.response;
 import java.util.List;
 
 /**
+ * 商品类别
+ *
  * Created by mike on 2017/9/7.
  */
 

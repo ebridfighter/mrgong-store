@@ -18,6 +18,10 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
@@ -34,6 +38,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitRespons
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
@@ -46,7 +51,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RunwiseService {
 
     boolean test = true;
-    String ENDPOINT = test ? "http://develop.runwise.cn" : "https://api.ribot.io";
+    public String ENDPOINT = test ? "http://develop.runwise.cn" : "https://api.ribot.io";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
@@ -86,6 +91,9 @@ public interface RunwiseService {
     @POST("/gongfu/v2/product/list")
     Observable<ProductListResponse> getProducts(@Body EmptyRequest emptyRequest);
 
+    @POST("/api/v2/stock/list")
+    Observable<StockListResponse> getStockList(@Body StockListRequest request);
+
     @POST("/gongfu/v2/order/undone_orders")
     Observable<OrderListResponse> getOrders(@Body EmptyRequest emptyRequest);
 
@@ -106,6 +114,9 @@ public interface RunwiseService {
 
     @POST("/gongfu/v2/order/last_order_amout")
     Observable<LastBuyResponse> getLastOrderAmount(@Body EmptyRequest emptyRequest);
+
+    @POST("/api/product/category")
+    Observable<CategoryResponse> getCategory(@Body GetCategoryRequest request);
 
     @POST("/gongfu/order/{orderId}/state")
     Observable<EmptyResponse> changeOrderState(@Path("orderId") int orderId, @Body ChangeOrderStateRequest changeOrderStateRequest);
