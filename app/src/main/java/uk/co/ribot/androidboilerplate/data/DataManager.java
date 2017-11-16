@@ -70,7 +70,7 @@ public class DataManager {
         return mDatabaseHelper.getRibots().distinct();
     }
 
-    public Observable<List<ProductListResponse.Product>> loadProducts() {
+    public Observable<List<ProductListResponse.Product>> getProducts() {
         return mDatabaseHelper.getProducts().distinct();
     }
 
@@ -84,6 +84,10 @@ public class DataManager {
 
     public UserInfoResponse loadUser() {
         return mPreferencesHelper.getUserInfo();
+    }
+
+    public boolean isLogin() {
+        return mPreferencesHelper.isLogin();
     }
 
     public boolean canSeePrice(){
@@ -108,6 +112,18 @@ public class DataManager {
                         return null;
                     }
                 });
+    }
+
+    /**
+     * 获取库存信息
+     *
+     * @param pageIndex 分页页号
+     * @param pageLimit 每页多少条
+     * @param stockType 类型category
+     * @param searchKeyword 搜索的关键字
+     */
+    public Observable<StockListResponse> getStockList(int pageIndex, int pageLimit, String stockType, String searchKeyword){
+        return mRunwiseService.getStockList(new StockListRequest(pageLimit,pageIndex,searchKeyword,stockType));
     }
 
     public Observable<OrderListResponse> syncOrders() {
@@ -306,7 +322,4 @@ public class DataManager {
                 });
     }
 
-    public boolean isLogin() {
-        return mPreferencesHelper.isLogin();
-    }
 }

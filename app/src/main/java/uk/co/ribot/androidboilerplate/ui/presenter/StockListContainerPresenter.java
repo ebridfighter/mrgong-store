@@ -4,13 +4,18 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+import rx.Scheduler;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
+import uk.co.ribot.androidboilerplate.ui.view_interface.ProductListMvpView;
 import uk.co.ribot.androidboilerplate.ui.view_interface.StockListContainerMvpView;
 
 /**
@@ -31,7 +36,7 @@ public class StockListContainerPresenter extends BasePresenter<StockListContaine
     public void attachView(StockListContainerMvpView mvpView) {
         super.attachView(mvpView);
         if(mDataManager.isLogin()){//已登录，查类别
-            mDataManager.getCategorys()
+            mDataManager.getCategory()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<CategoryResponse>() {
