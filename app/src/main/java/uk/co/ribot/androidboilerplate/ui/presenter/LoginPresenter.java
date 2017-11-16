@@ -37,7 +37,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
     }
 
     public boolean isLogin(){
-        return mDataManager.getPreferencesHelper().isLogin();
+        return mDataManager.isLogin();
     }
 
     public void login(String account, String password) {

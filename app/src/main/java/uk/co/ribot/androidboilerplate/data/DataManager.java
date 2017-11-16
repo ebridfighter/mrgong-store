@@ -306,4 +306,7 @@ public class DataManager {
                 });
     }
 
+    public boolean isLogin() {
+        return mPreferencesHelper.isLogin();
+    }
 }
