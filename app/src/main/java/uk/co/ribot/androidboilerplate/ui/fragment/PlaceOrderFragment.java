@@ -28,6 +28,7 @@ import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.activity.IntelligentPlaceOrderActivity;
+import uk.co.ribot.androidboilerplate.ui.activity.SelfHelpPlaceOrderActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.PlaceOrderPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.PlaceOrderMvpView;
@@ -121,6 +122,7 @@ public class PlaceOrderFragment extends BaseFragment implements PlaceOrderMvpVie
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_self_help:
+                startActivity(SelfHelpPlaceOrderActivity.getStartIntent(getActivity()));
                 break;
             case R.id.tv_day_week:
                 break;

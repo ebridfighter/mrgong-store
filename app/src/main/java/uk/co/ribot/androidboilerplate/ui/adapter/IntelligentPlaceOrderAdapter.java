@@ -107,6 +107,7 @@ public class IntelligentPlaceOrderAdapter extends BaseAdapter<IntelligentPlaceOr
             }
         }
         callback.countChanged();
+        notifyDataSetChanged();
     }
 
 

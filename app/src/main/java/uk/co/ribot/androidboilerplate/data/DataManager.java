@@ -70,7 +70,7 @@ public class DataManager {
         return mDatabaseHelper.getRibots().distinct();
     }
 
-    public Observable<List<ProductListResponse.Product>> getProducts() {
+    public Observable<List<ProductListResponse.Product>> loadProducts() {
         return mDatabaseHelper.getProducts().distinct();
     }
 

@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.frament.DaggerFragmentBaseComponent;
@@ -112,6 +113,10 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
     @Override
     public void onLoadMore() {
 
+    }
+
+    protected Observable<Object> getBusObservable(){
+        return BoilerplateApplication.get(getActivity()).getComponent().eventBus().observable();
     }
 
     @Override

@@ -32,6 +32,7 @@ import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistent
 import uk.co.ribot.androidboilerplate.injection.component.ExampleActivityComponent;
 import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
 import uk.co.ribot.androidboilerplate.util.ActivityUtil;
+import uk.co.ribot.androidboilerplate.util.RxEventBus;
 import uk.co.ribot.androidboilerplate.util.ToastUtil;
 import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
 
@@ -133,6 +134,12 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
+    public void showLeftBtn(int drawableId, View.OnClickListener onClickListener){
+        mViewHolder.mIvTitileLeft.setImageResource(drawableId);
+        mViewHolder.mIvTitileLeft.setVisibility(View.VISIBLE);
+        mViewHolder.mIvTitileLeft.setOnClickListener(onClickListener);
+    }
+
     public void setTitle(int textId) {
         mViewHolder.mTvTitle.setVisibility(View.VISIBLE);
         mViewHolder.mTvTitle.setText(textId);
@@ -193,6 +200,12 @@ public class BaseActivity extends AppCompatActivity {
     LoadingDialog mLoadingDialog;
 
     protected void showLoadingDialog() {
+        mLoadingDialog.setMsg("");
+        mLoadingDialog.show();
+    }
+
+    protected void showLoadingDialog(String text) {
+        mLoadingDialog.setMsg(text);
         mLoadingDialog.show();
     }
 
@@ -229,6 +242,10 @@ public class BaseActivity extends AppCompatActivity {
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.setRightBtnListener(confirmText, dialogListener);
         mDialog.show();
+    }
+
+    protected RxEventBus getRxBus(){
+       return BoilerplateApplication.get(getActivityContext()).getComponent().eventBus();
     }
 
     static class ViewHolder {

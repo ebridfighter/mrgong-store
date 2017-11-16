@@ -48,7 +48,9 @@
         <activity android:name=".ui.activity.ProductListActivity" />
         <activity android:name=".ui.activity.IntelligentPlaceOrderActivity" />
         <activity android:name=".ui.activity.OrderDetailActivity" />
-        <activity android:name=".ui.activity.OrderCommitSuccessActivity"></activity>
+        <activity android:name=".ui.activity.OrderCommitSuccessActivity" />
+        <activity android:name=".ui.activity.SelfHelpPlaceOrderActivity" />
+        <activity android:name=".ui.activity.PlaceOrderProductListActivity"></activity>
     </application>
 
 </manifest>
