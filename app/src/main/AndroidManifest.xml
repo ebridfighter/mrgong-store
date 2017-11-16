@@ -42,13 +42,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.ProductListActivity">
+        </activity>
+        <activity android:name=".ui.activity.IntelligentPlaceOrderActivity"></activity>
+        <activity android:name=".ui.activity.OrderDetailActivity"></activity>
         <activity
             android:name=".ui.activity.MainActivity"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
-        <activity android:name=".ui.activity.OrderCommitSuccessActivity"></activity>
-        <activity android:name=".ui.activity.ProductListActivity" />
-        <activity android:name=".ui.activity.IntelligentPlaceOrderActivity" />
-        <activity android:name=".ui.activity.OrderDetailActivity" />
+        <activity android:name=".ui.activity.OrderCommitSuccessActivity" />
         <activity android:name=".ui.activity.SelfHelpPlaceOrderActivity" />
         <activity android:name=".ui.activity.PlaceOrderProductListActivity"></activity>
     </application>

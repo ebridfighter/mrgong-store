@@ -19,6 +19,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
@@ -34,6 +35,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 
@@ -70,7 +72,7 @@ public class DataManager {
         return mDatabaseHelper.getRibots().distinct();
     }
 
-    public Observable<List<ProductListResponse.Product>> getProducts() {
+    public Observable<List<ProductListResponse.Product>> loadProducts() {
         return mDatabaseHelper.getProducts().distinct();
     }
 
