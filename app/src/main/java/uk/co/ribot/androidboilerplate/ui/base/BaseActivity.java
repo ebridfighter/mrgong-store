@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -103,19 +104,25 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(parentView);
 
         mViewHolder = new ViewHolder(parentView);
-        parentView.addView(getLayout(layoutId));
+        View contentView = getLayout(layoutId);
+        parentView.addView(contentView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRootView = getActivityContext().findViewById(android.R.id.content);
     }
 
-   protected int getTitleBarHeight(){
+    protected int getTitleBarHeight() {
         return mViewHolder.mFlTitle.getHeight();
     }
 
-    protected void setTitleRightText(String text){
+    protected void setTitleRightText(String text, View.OnClickListener onClickListener) {
+        mViewHolder.mTvTitleRight.setText(text);
+        mViewHolder.mTvTitleRight.setOnClickListener(onClickListener);
+    }
+
+    protected void setTitleRightText(String text) {
         mViewHolder.mTvTitleRight.setText(text);
     }
 
-    protected void hideTitleRightText(){
+    protected void hideTitleRightText() {
         mViewHolder.mTvTitleRight.setVisibility(View.GONE);
     }
 
@@ -134,7 +141,7 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
-    public void showLeftBtn(int drawableId, View.OnClickListener onClickListener){
+    public void showLeftBtn(int drawableId, View.OnClickListener onClickListener) {
         mViewHolder.mIvTitileLeft.setImageResource(drawableId);
         mViewHolder.mIvTitileLeft.setVisibility(View.VISIBLE);
         mViewHolder.mIvTitileLeft.setOnClickListener(onClickListener);
@@ -221,21 +228,22 @@ public class BaseActivity extends AppCompatActivity {
         mDialog.show();
     }
 
-    public void showDialog(String title, String message, String confirmText, String cancelText,RunwiseDialog.DialogListener dialogListener) {
+    public void showDialog(String title, String message, String confirmText, String cancelText, RunwiseDialog.DialogListener dialogListener) {
         mDialog.setTitle(title);
         mDialog.setMessage(message);
         mDialog.setMessageGravity();
-        if (TextUtils.isEmpty(cancelText)){
+        if (TextUtils.isEmpty(cancelText)) {
             mDialog.setModel(RunwiseDialog.RIGHT);
         }
         mDialog.setRightBtnListener(confirmText, dialogListener);
         mDialog.show();
     }
-    public void showNoCancelDialog(String title, String message, String confirmText,String cancelText,RunwiseDialog.DialogListener dialogListener) {
+
+    public void showNoCancelDialog(String title, String message, String confirmText, String cancelText, RunwiseDialog.DialogListener dialogListener) {
         mDialog.setTitle(title);
         mDialog.setMessage(message);
         mDialog.setMessageGravity();
-        if (TextUtils.isEmpty(cancelText)){
+        if (TextUtils.isEmpty(cancelText)) {
             mDialog.setModel(RunwiseDialog.RIGHT);
         }
         mDialog.setCancelable(false);
@@ -244,8 +252,8 @@ public class BaseActivity extends AppCompatActivity {
         mDialog.show();
     }
 
-    protected RxEventBus getRxBus(){
-       return BoilerplateApplication.get(getActivityContext()).getComponent().eventBus();
+    protected RxEventBus getRxBus() {
+        return BoilerplateApplication.get(getActivityContext()).getComponent().eventBus();
     }
 
     static class ViewHolder {

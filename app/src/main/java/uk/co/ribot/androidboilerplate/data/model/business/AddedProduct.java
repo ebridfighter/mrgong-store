@@ -1,15 +1,26 @@
 package uk.co.ribot.androidboilerplate.data.model.business;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
+
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 
 /**
  * Created by libin on 2017/7/10.
  */
 
-public class AddedProduct implements Parcelable {
+public class AddedProduct implements Serializable {
     private String productId;       //当前购物车里面产品id
     private int count;              //当前购物车里面件数
+
+    public ProductListResponse.Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductListResponse.Product product) {
+        this.product = product;
+    }
+
+    ProductListResponse.Product product;
 
     public String getProductId() {
         return productId;
@@ -34,33 +45,8 @@ public class AddedProduct implements Parcelable {
 
     public AddedProduct(){}
 
-    protected AddedProduct(Parcel in) {
-        productId = in.readString();
-        count = in.readInt();
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(productId);
-        dest.writeInt(count);
-    }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<AddedProduct> CREATOR = new Creator<AddedProduct>() {
-        @Override
-        public AddedProduct createFromParcel(Parcel in) {
-            return new AddedProduct(in);
-        }
-
-        @Override
-        public AddedProduct[] newArray(int size) {
-            return new AddedProduct[size];
-        }
-    };
 
     @Override
     public boolean equals(Object o) {

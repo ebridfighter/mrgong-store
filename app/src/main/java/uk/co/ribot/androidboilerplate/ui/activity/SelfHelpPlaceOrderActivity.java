@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcel;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -35,13 +34,12 @@ import me.shaohui.bottomdialog.BottomDialog;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.AddedProduct;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
-import uk.co.ribot.androidboilerplate.data.model.net.response.DefaultProductResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.tools.TimeUtils;
-import uk.co.ribot.androidboilerplate.ui.adapter.IntelligentPlaceOrderAdapter;
+import uk.co.ribot.androidboilerplate.ui.adapter.SelfHelpPlaceOrderAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.presenter.SelfHelpPlaceOrderPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.SelfHelpPlaceOrderMvpView;
@@ -50,12 +48,12 @@ import uk.co.ribot.androidboilerplate.util.CommonUtils;
 import uk.co.ribot.androidboilerplate.util.ToastUtil;
 import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
 
-public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelpPlaceOrderMvpView, IntelligentPlaceOrderAdapter.OneKeyInterface {
+public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelpPlaceOrderMvpView, SelfHelpPlaceOrderAdapter.OneKeyInterface {
 
     @Inject
     SelfHelpPlaceOrderPresenter mSelfHelpPlaceOrderPresenter;
     @Inject
-    IntelligentPlaceOrderAdapter mPlaceOrderAdapter;
+    SelfHelpPlaceOrderAdapter mSelfHelpPlaceOrderAdapter;
     @BindView(R.id.rv_product)
     RecyclerView mRvProduct;
     @BindView(R.id.iv_loading)
@@ -159,14 +157,15 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
         selectedDate = mReserveGoodsAdvanceDate;
         selectedDateIndex = 1;
         mRlSelfHelp.setVisibility(View.VISIBLE);
-        mIvLoading.setVisibility(View.INVISIBLE);
-        mTvLoading.setVisibility(View.INVISIBLE);
+        mIvLoading.setVisibility(View.GONE);
+        mTvLoading.setVisibility(View.GONE);
         setTitle("自助下单");
         showBackBtn();
         mRvProduct.setLayoutManager(new LinearLayoutManager(getActivityContext()));
-        mRvProduct.setVisibility(View.INVISIBLE);
-        mPlaceOrderAdapter.setCallback(this);
-        mRvProduct.setAdapter(mPlaceOrderAdapter);
+        mRvProduct.setVisibility(View.GONE);
+        mSelfHelpPlaceOrderAdapter.setCallback(this);
+        mSelfHelpPlaceOrderAdapter.setCanSeePrice(mSelfHelpPlaceOrderPresenter.loadUser().isCanSeePrice());
+        mRvProduct.setAdapter(mSelfHelpPlaceOrderAdapter);
         handler.postDelayed(runnable, 0);
         mTvDate.setText(cachedDWStr);
         setTitleEditShow();
@@ -178,11 +177,11 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                 if (mCbAll.isChecked()) {
                     mCbAll.setChecked(false);
                     setDeleteBtnOk(false);
-                    mPlaceOrderAdapter.setAllSelect(false);
+                    mSelfHelpPlaceOrderAdapter.setAllSelect(false);
                 } else {
                     mCbAll.setChecked(true);
                     setDeleteBtnOk(true);
-                    mPlaceOrderAdapter.setAllSelect(true);
+                    mSelfHelpPlaceOrderAdapter.setAllSelect(true);
                 }
                 isInitiative = true;
             }
@@ -194,11 +193,11 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                     if (isChecked) {
                         //adapter里面所有的选中
                         setDeleteBtnOk(true);
-                        mPlaceOrderAdapter.setAllSelect(true);
+                        mSelfHelpPlaceOrderAdapter.setAllSelect(true);
                     } else {
                         //清掉adapter里面所有选中的状态
                         setDeleteBtnOk(false);
-                        mPlaceOrderAdapter.setAllSelect(false);
+                        mSelfHelpPlaceOrderAdapter.setAllSelect(false);
                     }
                 }
             }
@@ -224,12 +223,12 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                 break;
             case R.id.btn_place_order:
                 //下单按钮
-                List<DefaultProductResponse> list = mPlaceOrderAdapter.getList();
+                List<AddedProduct> list = mSelfHelpPlaceOrderAdapter.getList();
                 List<CommitOrderRequest.ProductsBean> cList = new ArrayList<>();
-                for (DefaultProductResponse bean : list) {
+                for (AddedProduct bean : list) {
                     CommitOrderRequest.ProductsBean pBean = new CommitOrderRequest.ProductsBean();
-                    pBean.setProduct_id(bean.getProductID());
-                    int qty = mPlaceOrderAdapter.getCountMap().get(Integer.valueOf(bean.getProductID()));
+                    pBean.setProduct_id(bean.getProduct().getProductID());
+                    int qty = mSelfHelpPlaceOrderAdapter.getCountMap().get(Integer.valueOf(bean.getProduct().getProductID()));
                     if (qty == 0) {
                         continue;
                     }
@@ -250,12 +249,12 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                 showDialog("提示", "确认删除选中商品?", new RunwiseDialog.DialogListener() {
                     @Override
                     public void doClickButton(Button btn, RunwiseDialog dialog) {
-                        mPlaceOrderAdapter.deleteSelectItems();
+                        mSelfHelpPlaceOrderAdapter.deleteSelectItems();
                         //更新个数
                         countChanged();
-                        if (mPlaceOrderAdapter.getItemCount() == 0) {
+                        if (mSelfHelpPlaceOrderAdapter.getItemCount() == 0) {
                             switchEditMode();
-                            mRlBottom.setVisibility(View.INVISIBLE);
+                            mRlBottom.setVisibility(View.GONE);
                             setTitleRightText("");
                             showBackBtn();
 
@@ -274,19 +273,13 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                 //到添加页面
                 Intent intent = new Intent(getActivityContext(), PlaceOrderProductListActivity.class);
                 Bundle bundle = new Bundle();
-                int size = mPlaceOrderAdapter.getList().size();
+                int size = mSelfHelpPlaceOrderAdapter.getList().size();
                 ArrayList<AddedProduct> addedList = new ArrayList<>();
                 for (int i = 0; i < size; i++) {
-                    DefaultProductResponse bean = (DefaultProductResponse) mPlaceOrderAdapter.getList().get(i);
-                    Parcel parcel = Parcel.obtain();
-                    AddedProduct ap = AddedProduct.CREATOR.createFromParcel(parcel);
-                    ap.setProductId(String.valueOf(bean.getProductID()));
-                    int count = mPlaceOrderAdapter.getCountMap().get(bean.getProductID());
-                    ap.setCount(count);
-                    parcel.recycle();
-                    addedList.add(ap);
+                    AddedProduct bean = mSelfHelpPlaceOrderAdapter.getList().get(i);
+                    addedList.add(bean);
                 }
-                bundle.putParcelableArrayList("ap", addedList);
+                bundle.putSerializable("ap", addedList);
                 intent.putExtra("apbundle", bundle);
                 startActivityForResult(intent, ADD_PRODUCT);
                 break;
@@ -296,7 +289,9 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     //切换编辑模式
     private void switchEditMode() {
         if (!editMode) {
-            setTitleRightText("完成");
+            setTitleRightText("完成",view -> {
+                switchEditMode();
+            });
             showLeftBtn(R.drawable.nav_add, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -304,19 +299,13 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                         //到添加页面
                         Intent intent = new Intent(getActivityContext(), PlaceOrderProductListActivity.class);
                         Bundle bundle = new Bundle();
-                        int size = mPlaceOrderAdapter.getList().size();
+                        int size = mSelfHelpPlaceOrderAdapter.getList().size();
                         ArrayList<AddedProduct> addedList = new ArrayList<>();
                         for (int i = 0; i < size; i++) {
-                            DefaultProductResponse bean = (DefaultProductResponse) mPlaceOrderAdapter.getList().get(i);
-                            Parcel parcel = Parcel.obtain();
-                            AddedProduct ap = AddedProduct.CREATOR.createFromParcel(parcel);
-                            ap.setProductId(String.valueOf(bean.getProductID()));
-                            int count = mPlaceOrderAdapter.getCountMap().get(bean.getProductID());
-                            ap.setCount(count);
-                            parcel.recycle();
-                            addedList.add(ap);
+                            AddedProduct bean = mSelfHelpPlaceOrderAdapter.getList().get(i);
+                            addedList.add(bean);
                         }
-                        bundle.putParcelableArrayList("ap", addedList);
+                        bundle.putSerializable("ap", addedList);
                         intent.putExtra("apbundle", bundle);
                         startActivityForResult(intent, ADD_PRODUCT);
                     } else {
@@ -330,21 +319,23 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
             editMode = true;
         } else {
             //完成模式，清空上次选择的
-            mPlaceOrderAdapter.clearSelect();
+            mSelfHelpPlaceOrderAdapter.clearSelect();
             InputMethodManager imm = (InputMethodManager) getSystemService(getActivityContext().INPUT_METHOD_SERVICE);
             if (imm != null) {
                 imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
             }
-            setTitleRightText("编辑");
+            setTitleRightText("编辑", view -> {
+                switchEditMode();
+            });
             ViewPropertyAnimator.animate(mRlBottom).setDuration(500).translationY(-CommonUtils.dip2px(getActivityContext(), 55));
             ViewPropertyAnimator.animate(mRlSelectBar).setDuration(500).translationY(CommonUtils.dip2px(getActivityContext(), 55));
             showBackBtn();
             editMode = false;
         }
-        mPlaceOrderAdapter.setEditMode(editMode);
-        mPlaceOrderAdapter.notifyDataSetChanged();
-        if (mPlaceOrderAdapter != null && mPlaceOrderAdapter.getItemCount() == 0) {
-            mRlBottom.setVisibility(View.INVISIBLE);
+        mSelfHelpPlaceOrderAdapter.setEditMode(editMode);
+        mSelfHelpPlaceOrderAdapter.notifyDataSetChanged();
+        if (mSelfHelpPlaceOrderAdapter != null && mSelfHelpPlaceOrderAdapter.getItemCount() == 0) {
+            mRlBottom.setVisibility(View.GONE);
             setTitleRightText("");
             mRlSelfHelp.setVisibility(View.VISIBLE);
         }
@@ -364,7 +355,7 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     }
 
     private void back() {
-        if (mPlaceOrderAdapter.getItemCount() > 0) {
+        if (mSelfHelpPlaceOrderAdapter.getItemCount() > 0) {
             showDialog("提示", "确认取消下单？", new RunwiseDialog.DialogListener() {
                 @Override
                 public void doClickButton(Button btn, RunwiseDialog dialog) {
@@ -485,17 +476,23 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     int mReserveGoodsAdvanceDate;
 
     private void setTitleEditShow() {
-        if (mPlaceOrderAdapter.getItemCount() == 0) {
-            setTitleRightText("编辑");
+        if (mSelfHelpPlaceOrderAdapter.getItemCount() == 0) {
+            setTitleRightText("编辑",view -> {
+                switchEditMode();
+            });
             mRlSelfHelp.setVisibility(View.VISIBLE);
-            mRvProduct.setVisibility(View.INVISIBLE);
+            mRvProduct.setVisibility(View.GONE);
         } else {
             if (editMode) {
-                setTitleRightText("完成");
+                setTitleRightText("完成",view -> {
+                    switchEditMode();
+                });
             } else {
-                setTitleRightText("编辑");
+                setTitleRightText("编辑",view -> {
+                    switchEditMode();
+                });
             }
-            mRlSelfHelp.setVisibility(View.INVISIBLE);
+            mRlSelfHelp.setVisibility(View.GONE);
             mRvProduct.setVisibility(View.VISIBLE);
         }
     }
@@ -503,8 +500,8 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     private void onSuccessCallBack() {
         //停止动画
         handler.removeCallbacks(runnable);
-        mIvLoading.setVisibility(View.INVISIBLE);
-        mTvLoading.setVisibility(View.INVISIBLE);
+        mIvLoading.setVisibility(View.GONE);
+        mTvLoading.setVisibility(View.GONE);
         mRlBottom.setVisibility(View.VISIBLE);
         ViewPropertyAnimator.animate(mRlBottom).translationY(-CommonUtils.dip2px(getActivityContext(), 55));
         mRvProduct.setVisibility(View.VISIBLE);
@@ -515,9 +512,17 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     public void countChanged() {
         totalNum = 0;
         totalMoney = 0;
-        List<DefaultProductResponse> list = mPlaceOrderAdapter.getList();
-            for (DefaultProductResponse bean : list) {
-                mSelfHelpPlaceOrderPresenter.loadProduct(bean.getProductID());
+        List<AddedProduct> list = mSelfHelpPlaceOrderAdapter.getList();
+            for (AddedProduct addedProduct : list) {
+                double price = addedProduct.getProduct().getPrice();
+                int count = mSelfHelpPlaceOrderAdapter.getCountMap().get(addedProduct.getProduct().getProductID());
+                addedProduct.setCount(count);
+                totalNum += count;
+                totalMoney += count * price;
+                DecimalFormat df = new DecimalFormat("#.00");
+                String formatMoney = df.format(totalMoney);
+                mTvMoney.setText(formatMoney + "元");
+                mTvCount.setText(totalNum + "件");
             }
         setTitleEditShow();
 
@@ -526,19 +531,12 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     @Override
     public void showProductSuccess(ProductListResponse.Product product) {
 
-        double price = product.getPrice();
-        int count = mPlaceOrderAdapter.getCountMap().get(product.getProductID());
-        totalNum += count;
-        totalMoney += count * price;
-        DecimalFormat df = new DecimalFormat("#.00");
-        String formatMoney = df.format(totalMoney);
-        mTvMoney.setText(formatMoney + "元");
-        mTvCount.setText(totalNum + "件");
+
     }
 
 
     @Override
-    public void selectClicked(IntelligentPlaceOrderAdapter.SELECTTYPE type) {
+    public void selectClicked(SelfHelpPlaceOrderAdapter.SELECTTYPE type) {
         switch (type) {
             case ALL_SELECT:
                 mCbAll.setChecked(true);
@@ -560,18 +558,16 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
-            ArrayList<AddedProduct> backList = bundle.getParcelableArrayList("backap");
-            List<DefaultProductResponse> newList = new ArrayList<>();
+            ArrayList<AddedProduct> backList = (ArrayList<AddedProduct>) bundle.getSerializable("backap");
+            List<AddedProduct> newList = new ArrayList<>();
             if (backList != null) {
+                newList.addAll(backList);
                 for (AddedProduct pro : backList) {
                     Integer proId = Integer.valueOf(pro.getProductId());
                     Integer count = pro.getCount();
-                    DefaultProductResponse bean = new DefaultProductResponse();
-                    bean.setProductID(proId);
-                    newList.add(bean);
-                    mPlaceOrderAdapter.getCountMap().put(proId, count);
+                    mSelfHelpPlaceOrderAdapter.getCountMap().put(proId, count);
                 }
-                mPlaceOrderAdapter.setData(newList);
+                mSelfHelpPlaceOrderAdapter.setData(newList);
             }
             if (backList != null && backList.size() > 0) {
                 ToastUtil.show(getActivityContext(), "添加成功");
@@ -582,7 +578,7 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                 mRlSelectBar.setVisibility(View.GONE);
             } else {
                 mRlSelfHelp.setVisibility(View.VISIBLE);
-                mRlBottom.setVisibility(View.INVISIBLE);
+                mRlBottom.setVisibility(View.GONE);
                 mRlSelectBar.setVisibility(View.GONE);
             }
             setTitleEditShow();
@@ -601,10 +597,10 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     @Override
     public void commitOrderSuccess(OrderCommitResponse orderCommitResponse) {
         onSuccessCallBack();
-        finish();
         mBtnPlaceOrder.setBackgroundColor(Color.parseColor("#9ACC35"));
         mTvDate.setEnabled(true);
         startActivity(OrderCommitSuccessActivity.getStartIntent(this, -1, orderCommitResponse.getOrders()));
+        finish();
     }
 
     @Override

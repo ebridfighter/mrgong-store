@@ -2,7 +2,6 @@ package uk.co.ribot.androidboilerplate.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -76,9 +75,6 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
     public final int SYNC_COUNT = 2;
     public int mCurrentSyncCount = 0;
 
-    public ArrayList<ProductListResponse.Product> getDataList() {
-        return dataList;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +91,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
         Intent fromIntent = getIntent();
         Bundle bundle = fromIntent.getBundleExtra("apbundle");
         if (bundle != null) {
-            addedPros = bundle.getParcelableArrayList("ap");
+            addedPros = (ArrayList<AddedProduct>) bundle.getSerializable("ap");
         }
 
         mVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -142,21 +138,18 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
                 Bundle bundle = new Bundle();
                 //当前选中的商品信息
                 ArrayList<AddedProduct> addedList = new ArrayList<>();
-                HashMap<String, Integer> countMap = ProductListFragment.getCountMap();
+                HashMap<String, AddedProduct> countMap = ProductListFragment.getCountMap();
                 Iterator iter = countMap.entrySet().iterator();
                 while (iter.hasNext()) {
-                    Map.Entry<String, Integer> entry = (Map.Entry) iter.next();
+                    Map.Entry<String, AddedProduct> entry = (Map.Entry) iter.next();
                     String key = entry.getKey();
-                    Integer count = entry.getValue();
-                    Parcel parcel = Parcel.obtain();
-                    AddedProduct pro = AddedProduct.CREATOR.createFromParcel(parcel);
-                    if (count != 0) {
-                        pro.setCount(count);
-                        pro.setProductId(key);
+                    AddedProduct pro = entry.getValue();
+                    if (pro.getCount() != 0) {
+                        pro.setProductId(String.valueOf(pro.getProduct().getProductID()));
                         addedList.add(pro);
                     }
                 }
-                bundle.putParcelableArrayList(INTENT_KEY_BACKAP, addedList);
+                bundle.putSerializable(INTENT_KEY_BACKAP, addedList);
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -200,7 +193,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
             ArrayList<ProductListResponse.Product> value = map.get(category);
             repertoryEntityFragmentList.add(newProductListFragment(value));
         }
-        repertoryEntityFragmentList.add(0, newProductListFragment((ArrayList<ProductListResponse.Product>) dataList));
+        repertoryEntityFragmentList.add(0, newProductListFragment(dataList));
         initUI(titles, repertoryEntityFragmentList);
         initPopWindow((ArrayList<String>) titles);
     }
@@ -209,7 +202,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
         ProductListFragment productListFragment = new ProductListFragment();
         Bundle bundle = new Bundle();
         if (addedPros != null && addedPros.size() > 0) {
-            bundle.putParcelableArrayList("ap", addedPros);
+            bundle.putSerializable("ap", addedPros);
         }
         bundle.putSerializable(OrderProductFragment.BUNDLE_KEY_LIST, value);
         productListFragment.setArguments(bundle);

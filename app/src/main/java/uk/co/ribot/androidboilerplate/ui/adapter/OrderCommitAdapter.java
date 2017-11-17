@@ -95,11 +95,12 @@ public class OrderCommitAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             setOnChildItemListener(headerViewHolder.mBtnUpload,position);
 
         } else {
+            int realPosition = position-1;
             ViewHolder viewHolder = (ViewHolder) holder;
-            OrderListResponse.ListBean order = mListOrders.get(position);
+            OrderListResponse.ListBean order = mListOrders.get(realPosition);
             viewHolder.mTvOrderName.setText(order.getName());
             viewHolder.mTvOrderState.setText(order.getState());
-            if (position == mListOrders.size() - 1) {
+            if (realPosition == mListOrders.size() - 1) {
                 viewHolder.mRlRoot.setBackgroundResource(R.drawable.background_order_bottom);
             } else {
                 viewHolder.mRlRoot.setBackgroundResource(R.drawable.background_order_mid);
@@ -116,10 +117,12 @@ public class OrderCommitAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             viewHolder.mTvOrderTitle.setText(etSb.toString());
             viewHolder.mTvOrderState.setText(OrderState.getValueByName(order.getState()));
             StringBuilder sb = new StringBuilder();
-            if (mCanSeePrice)
+            if (mCanSeePrice){
                 sb.append("￥").append(NumberUtil.getIOrD(order.getAmountTotal())).append("，");
+            }
             sb.append((int) order.getAmount()).append("件商品");
             viewHolder.mTvOrderDesc.setText(sb.toString());
+            setOnChildItemListener(viewHolder.mTvOrderAction,realPosition);
         }
     }
     SimpleDateFormat sdfSource = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -134,7 +137,7 @@ public class OrderCommitAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     }
     @Override
     public int getItemCount() {
-        return mListOrders.size();
+        return mListOrders.size()+1;
     }
 
     @Override

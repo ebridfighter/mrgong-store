@@ -45,14 +45,14 @@ public class ProductListFragment extends BaseFragment {
     ProductListPresenter mProductListPresenter;
     private ArrayList<AddedProduct> addedPros;
     //选中数量map
-    private static HashMap<String, Integer> countMap = new HashMap<>();
+    private static HashMap<String, AddedProduct> countMap = new HashMap<>();
     //缓存全部商品列表
     private ArrayList<ProductListResponse.Product> arrayList;
 
     public static final String BUNDLE_KEY_LIST = "bundle_key_list";
 
 
-    public static HashMap<String, Integer> getCountMap() {
+    public static HashMap<String, AddedProduct> getCountMap() {
         return countMap;
     }
 
@@ -75,7 +75,7 @@ public class ProductListFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mFragmentBaseComponent.productListFragmentComponent(new ActivityModule(getActivity())).inject(this);
-        addedPros = getArguments().getParcelableArrayList("ap");
+        addedPros = (ArrayList<AddedProduct>) getArguments().getSerializable("ap");
         mRvProduct.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvProduct.setAdapter(mPlaceOrderProductAdapter);
         canSeePrice = mProductListPresenter.loadUser().isCanSeePrice();
@@ -116,10 +116,12 @@ public class ProductListFragment extends BaseFragment {
         }
         //先统计一次id,个数
         for (ProductListResponse.Product bean : arrayList) {
-            countMap.put(String.valueOf(bean.getProductID()), Integer.valueOf(0));
             //同时根据上个页面传值更新一次
             int count = existInLastPager(bean);
-            countMap.put(String.valueOf(bean.getProductID()), count);
+            AddedProduct addedProduct = new AddedProduct();
+            addedProduct.setProduct(bean);
+            addedProduct.setCount(count);
+            countMap.put(String.valueOf(bean.getProductID()), addedProduct);
         }
 
         mPlaceOrderProductAdapter.setProducts(arrayList);

@@ -68,7 +68,15 @@ public abstract class BaseAdapter<T extends RecyclerView.ViewHolder> extends Rec
     }
 
     protected View getLayout(Context context, int layoutId) {
-        return LayoutInflater.from(context).inflate(layoutId, null);
+        View view = LayoutInflater.from(context).inflate(layoutId, null);
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        if (layoutParams != null){
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            view.setLayoutParams(layoutParams);
+        }else{
+            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+        return view;
     }
 
 

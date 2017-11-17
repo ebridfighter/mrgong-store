@@ -440,7 +440,7 @@ public class OrderListResponse {
             this.unApplyService = unApplyService;
         }
 
-        public static class StoreBean {
+        public static class StoreBean implements Serializable{
             /**
              * mobile : 13829781371
              * partner : 陆鸣
@@ -496,7 +496,7 @@ public class OrderListResponse {
             }
         }
 
-        public static class WaybillBean implements Parcelable{
+        public static class WaybillBean implements Parcelable,Serializable{
             /**
              * deliverUser : {"mobile":"15778177356","userID":30,"name":"李明","avatarUrl":"/gongfu/user/avatar/30/6691999026166866162.png"}
              * waybillID : 188

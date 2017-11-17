@@ -113,7 +113,6 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-55dp"
         android:background="#FFFFFF"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"

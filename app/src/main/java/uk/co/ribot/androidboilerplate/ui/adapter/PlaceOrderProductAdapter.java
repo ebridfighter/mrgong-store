@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,11 +28,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.business.AddedProduct;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
-import uk.co.ribot.androidboilerplate.util.ToastUtil;
 
 /**
  * Created by mike on 2017/11/16.
@@ -43,7 +42,7 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
     private boolean mCanSeePrice;
     private Activity mActivity;
     List<ProductListResponse.Product> mProducts = new ArrayList<>();
-    private HashMap<String, Integer> mCountMap;
+    private HashMap<String, AddedProduct> mCountMap;
 
     public void setProducts(List<ProductListResponse.Product> products) {
         mProducts = products;
@@ -54,7 +53,7 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
         this.mCanSeePrice = canSeePrice;
     }
 
-    public void setCountMap(HashMap<String, Integer> countMap) {
+    public void setCountMap(HashMap<String, AddedProduct> countMap) {
         mCountMap = countMap;
     }
 
@@ -92,14 +91,16 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
                     holder.mNwet.setText(mmStrPrevious);
                     return;
                 }
-
                 int position = (int) holder.mNwet.getTag();
                 ProductListResponse.Product listBean = mProducts.get(position);
                 int changedNum = 0;
                 if (!TextUtils.isEmpty(s)) {
                     changedNum = Integer.valueOf(s.toString());
                 }
-                mCountMap.put(String.valueOf(listBean.getProductID()), changedNum);
+                AddedProduct addedProduct = new AddedProduct();
+                addedProduct.setCount(changedNum);
+                addedProduct.setProduct(listBean);
+                mCountMap.put(String.valueOf(listBean.getProductID()), addedProduct);
             }
 
             @Override
@@ -109,7 +110,7 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
         });
 
         //先根据集合里面对应个数初始化一次
-        if (mCountMap.get(String.valueOf(bean.getProductID())) > 0) {
+        if (mCountMap.get(String.valueOf(bean.getProductID())).getCount() > 0) {
             holder.mLlEdit.setVisibility(View.VISIBLE);
             holder.mIbAdd.setVisibility(View.INVISIBLE);
             holder.mTvUnit1.setVisibility(View.INVISIBLE);
@@ -119,7 +120,7 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
             holder.mTvUnit1.setVisibility(View.VISIBLE);
         }
         final NoWatchEditText mNwet = holder.mNwet;
-        mNwet.setText(mCountMap.get(String.valueOf(bean.getProductID())) + "");
+        mNwet.setText(mCountMap.get(String.valueOf(bean.getProductID())).getCount() + "");
         final LinearLayout ll = holder.mLlEdit;
         final ImageButton mIbAdd = holder.mIbAdd;
         final TextView unit1 = holder.mTvUnit1;
@@ -130,9 +131,11 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
                 view.setVisibility(View.INVISIBLE);
                 unit1.setVisibility(View.INVISIBLE);
                 ll.setVisibility(View.VISIBLE);
-                int currentNum = mCountMap.get(String.valueOf(bean.getProductID()));
+               AddedProduct addedProduct = mCountMap.get(String.valueOf(bean.getProductID()));
+                int currentNum = addedProduct.getCount();
                 mNwet.setText(++currentNum + "");
-                mCountMap.put(String.valueOf(bean.getProductID()), currentNum);
+                addedProduct.setCount(currentNum);
+                mCountMap.put(String.valueOf(bean.getProductID()), addedProduct);
             }
         });
         holder.mIbMinus.setOnClickListener(new View.OnClickListener() {
@@ -140,10 +143,12 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
             @Override
             public void onClick(View v) {
                 clearFocus(mActivity);//点击加减的时候，去掉所有edittext的focus，关闭软键盘
-                int currentNum = mCountMap.get(String.valueOf(bean.getProductID()));
+                AddedProduct addedProduct = mCountMap.get(String.valueOf(bean.getProductID()));
+                int currentNum = addedProduct.getCount();
                 if (currentNum > 0) {
                     mNwet.setText(--currentNum + "");
-                    mCountMap.put(String.valueOf(bean.getProductID()), currentNum);
+                    addedProduct.setCount(currentNum);
+                    mCountMap.put(String.valueOf(bean.getProductID()), addedProduct);
                     if (currentNum == 0) {
                         mIbAdd.setVisibility(View.VISIBLE);
                         unit1.setVisibility(View.VISIBLE);
@@ -158,9 +163,11 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
             @Override
             public void onClick(View v) {
                 clearFocus(mActivity);//点击加减的时候，去掉所有edittext的focus，关闭软键盘
-                int currentNum = mCountMap.get(String.valueOf(bean.getProductID()));
+                AddedProduct addedProduct = mCountMap.get(String.valueOf(bean.getProductID()));
+                int currentNum = addedProduct.getCount();
                 mNwet.setText(++currentNum + "");
-                mCountMap.put(String.valueOf(bean.getProductID()), currentNum);
+                addedProduct.setCount(currentNum);
+                mCountMap.put(String.valueOf(bean.getProductID()), addedProduct);
             }
         });
 
@@ -246,26 +253,6 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
         }
     }
 
-    /**
-     * 检查edittext中的数字格式是否合法
-     * 去掉开头的0
-     * 为0或空则设为1
-     *
-     * @param beanId
-     * @param editText
-     */
-    private void checkText(String beanId, EditText editText) {
-        String tmpStr = editText.getText().toString();
-        if (TextUtils.isEmpty(tmpStr) || Integer.valueOf(tmpStr) == 0) {
-            ToastUtil.show(editText.getContext(), "数量超出范围");
-            editText.setText("1");
-            mCountMap.put(beanId, 1);
-            return;
-        }
-        if (tmpStr.startsWith("0")) {
-            editText.setText(String.valueOf(Integer.valueOf(tmpStr)));
-        }
-    }
 
     private void clearFocus(Activity activity) {
         View v = activity.getCurrentFocus();

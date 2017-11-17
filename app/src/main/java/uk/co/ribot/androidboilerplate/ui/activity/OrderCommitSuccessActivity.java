@@ -50,6 +50,7 @@ public class OrderCommitSuccessActivity extends BaseActivity implements MvpView 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_commit_success);
         ButterKnife.bind(this);
+        showBackBtn();
         configPersistentComponent.orderCommitSuccessActivityComponent(new ActivityModule(this)).inject(this);
         mType = getIntent().getIntExtra(INTENT_KEY_TYPE, -1);
         mListOrders = (List<OrderListResponse.ListBean>) getIntent().getSerializableExtra(INTENT_KEY_ORDERS);
@@ -75,6 +76,9 @@ public class OrderCommitSuccessActivity extends BaseActivity implements MvpView 
 //                uIntent.putExtra("ordername", bean.getName());
 //                uIntent.putExtra("hasattachment", type == 0);
 //                startActivityForResult(uIntent, REQ_ACT_UPLOAD);
+                if (childView.getId() == R.id.tv_order_action){
+                    startActivity(OrderDetailActivity.getStartIntent(getActivityContext(), mListOrders.get(position).getOrderID()));
+                }
             }
         });
         mRvOrderCommitSucess.setLayoutManager(new LinearLayoutManager(this));
