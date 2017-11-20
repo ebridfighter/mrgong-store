@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.animation.OvershootInterpolator;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.SyncService;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
@@ -47,8 +49,11 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
         ProductListActivityComponent activityComponent = configPersistentComponent.productListActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
 
-        mRvProduct.setAdapter(mProductsAdapter);
+        mRvProduct.setItemAnimator(new SlideInLeftAnimator(new OvershootInterpolator(1f)));
+        mRvProduct.getItemAnimator().setAddDuration(500);
+        mRvProduct.getItemAnimator().setRemoveDuration(500);
         mRvProduct.setLayoutManager(new LinearLayoutManager(this));
+        mRvProduct.setAdapter(mProductsAdapter);
 
         mProductListPresenter.attachView(this);
         mProductListPresenter.loadProducts();
@@ -74,6 +79,5 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 }

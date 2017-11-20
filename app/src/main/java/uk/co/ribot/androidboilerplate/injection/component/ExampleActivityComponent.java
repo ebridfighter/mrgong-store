@@ -11,7 +11,6 @@ import uk.co.ribot.androidboilerplate.ui.activity.ExampleActivity;
 @PerActivity
 @Subcomponent(modules = ActivityModule.class)
 public interface ExampleActivityComponent {
-
     void inject(ExampleActivity exampleActivity);
 
 }

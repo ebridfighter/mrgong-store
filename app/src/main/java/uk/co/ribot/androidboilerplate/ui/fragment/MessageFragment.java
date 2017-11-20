@@ -48,7 +48,7 @@ public class MessageFragment extends BaseFragment implements MessageMvpView {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_message, null);
         unbinder = ButterKnife.bind(this, view);
-        return view;
+        return warpTitleView(view);
     }
 
     @Override
@@ -57,6 +57,8 @@ public class MessageFragment extends BaseFragment implements MessageMvpView {
         MessageFragmentComponent messageFragmentComponent = mFragmentBaseComponent.
                 messageFragmentComponent(new ActivityModule(getActivity()));
         messageFragmentComponent.inject(this);
+        setTitle(R.string.fragment_message);
+
         rvMessage.setAdapter(mMessageAdapter);
         rvMessage.setLayoutManager(new LinearLayoutManager(getActivity()));
 

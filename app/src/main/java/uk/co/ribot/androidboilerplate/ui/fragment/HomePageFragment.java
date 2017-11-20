@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.OrderDoAction;
 import uk.co.ribot.androidboilerplate.data.model.business.OrderListWrap;
@@ -35,7 +36,6 @@ import uk.co.ribot.androidboilerplate.tools.FrescoImageLoader;
 import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 import uk.co.ribot.androidboilerplate.ui.activity.OrderDetailActivity;
 import uk.co.ribot.androidboilerplate.ui.adapter.OrderAdapter;
-import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.HomePagePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.HomePageMvpView;
@@ -91,21 +91,19 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mOrderAdapter);
         mHeaderAndFooterWrapper.addHeaderView(headerAdvertisementView);
         mOrderAdapter.setDoActionInterface(this);
-        mOrderAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                OrderListWrap orderListWrap = mOrderAdapter.getItem(position);
-                if (orderListWrap.getOrderListBean()!= null){
-                    startActivity(OrderDetailActivity.getStartIntent(getActivity(),orderListWrap.getOrderListBean().getOrderID()));
-                }else{
-                    startActivity(OrderDetailActivity.getStartIntent(getActivity(),orderListWrap.getReturnOrderListBean().getReturnOrderID()));
-                }
+        mOrderAdapter.setOnItemClickListener((view, position) -> {
+            OrderListWrap orderListWrap = mOrderAdapter.getItem(position);
+            if (orderListWrap.getOrderListBean()!= null){
+                startActivity(OrderDetailActivity.getStartIntent(getActivity(),orderListWrap.getOrderListBean().getOrderID()));
+            }else{
+                startActivity(OrderDetailActivity.getStartIntent(getActivity(),orderListWrap.getReturnOrderListBean().getReturnOrderID()));
             }
         });
 
         mRvProduct.init(new LinearLayoutManager(getActivity()), this, null);
         mRvProduct.setRefreshEnabled(true);
         mRvProduct.setAdapter(mHeaderAndFooterWrapper);
+        mRvProduct.getRecyclerView().setItemAnimator(new SlideInLeftAnimator());
 
 
         mHomePagePresenter.attachView(this);

@@ -20,6 +20,11 @@ public class RefreshRecyclerView extends FrameLayout {
     private RelativeLayout emptyView,errorView;
     private SwipeToLoadLayout swipeToLoadLayout;
     private SwipeLoadMoreFooterLayout swipeLoadMoreFooterLayout;
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
     private RecyclerView recyclerView;
     private boolean move;
     private int mIndex;

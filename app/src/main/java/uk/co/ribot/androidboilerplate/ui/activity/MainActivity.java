@@ -19,7 +19,7 @@ import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.SyncService;
 import uk.co.ribot.androidboilerplate.injection.component.MainActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
-import uk.co.ribot.androidboilerplate.ui.adapter.FragmentAdapter;
+import uk.co.ribot.androidboilerplate.ui.adapter.MainFragmentAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.fragment.HomePageFragment;
 import uk.co.ribot.androidboilerplate.ui.fragment.MessageFragment;
@@ -65,13 +65,19 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         ButterKnife.bind(this);
         hideTitleBar();
 
+        mTl.addTab(mTl.newTab().setText("Tab 1").setIcon(R.drawable.aboult_icon));
+        mTl.addTab(mTl.newTab().setText("Tab 2").setIcon(R.drawable.aboult_icon));
+        mTl.addTab(mTl.newTab().setText("Tab 3").setIcon(R.drawable.aboult_icon));
+        mTl.addTab(mTl.newTab().setText("Tab 4").setIcon(R.drawable.aboult_icon));
+        mTl.addTab(mTl.newTab().setText("Tab 5").setIcon(R.drawable.aboult_icon));
+
         MainActivityComponent activityComponent = configPersistentComponent.mainActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mMainPresenter.attachView(this);
         startService(SyncService.getStartIntent(this));
 
         setUpFragmentList();
-        FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), mTitleList, mFragmentList);
+        MainFragmentAdapter fragmentAdapter = new MainFragmentAdapter(getActivityContext(),getSupportFragmentManager(), mTitleList,mFragmentList);
         mVp.setAdapter(fragmentAdapter);
         mVp.setOffscreenPageLimit(mFragmentList.size());
         mTl.setupWithViewPager(mVp);

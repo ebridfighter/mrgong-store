@@ -88,16 +88,21 @@ public class OrderAdapter extends BaseAdapter<OrderAdapter.OrderViewHolder> {
 
     public void removeOrder(int orderId) {
         OrderListWrap findOrderListWrap = null;
+        int startIndex = 0;
         if (mReturnOrders != null) {
-            for (int i = mReturnOrders.size(); i < mOrderListWraps.size(); i++) {
-                OrderListWrap orderListWrap = mOrderListWraps.get(i);
-                if (orderListWrap.getOrderListBean() != null && orderListWrap.getOrderListBean().getOrderID() == orderId) {
-                    findOrderListWrap = orderListWrap;
-                    break;
-                }
-            }
-            mOrderListWraps.remove(findOrderListWrap);
+            startIndex = mReturnOrders.size();
         }
+        int deleteIndex = -1;
+        for (int i = startIndex; i < mOrderListWraps.size(); i++) {
+            OrderListWrap orderListWrap = mOrderListWraps.get(i);
+            if (orderListWrap.getOrderListBean() != null && orderListWrap.getOrderListBean().getOrderID() == orderId) {
+                findOrderListWrap = orderListWrap;
+                deleteIndex = i;
+                break;
+            }
+        }
+        notifyItemRemoved(deleteIndex);
+        mOrderListWraps.remove(findOrderListWrap);
     }
 
     public void setOrders(List<OrderListResponse.ListBean> orders) {
@@ -156,7 +161,7 @@ public class OrderAdapter extends BaseAdapter<OrderAdapter.OrderViewHolder> {
 
     @Override
     public void onBindViewHolder(final OrderViewHolder holder, final int position) {
-        setOnItemListener(holder.itemView,position);
+        setOnItemListener(holder.itemView, position);
         if (getItemViewType(position) == VIEW_TYPE_ORDER) {
             OrderListResponse.ListBean order = mOrderListWraps.get(position).getOrderListBean();
             holder.mTvOrderNum.setText(order.getName());

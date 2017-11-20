@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -162,7 +161,7 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
         setTitle("自助下单");
         showBackBtn();
         mRvProduct.setLayoutManager(new LinearLayoutManager(getActivityContext()));
-        mRvProduct.setVisibility(View.GONE);
+        mRvProduct.setVisibility(View.INVISIBLE);
         mSelfHelpPlaceOrderAdapter.setCallback(this);
         mSelfHelpPlaceOrderAdapter.setCanSeePrice(mSelfHelpPlaceOrderPresenter.loadUser().isCanSeePrice());
         mRvProduct.setAdapter(mSelfHelpPlaceOrderAdapter);
@@ -170,35 +169,29 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
         mTvDate.setText(cachedDWStr);
         setTitleEditShow();
         //xml中设置allCb不可点击，点整个layout设置状态
-        mLlAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isInitiative = false;//使onCheckChangedListener不会被调用
-                if (mCbAll.isChecked()) {
-                    mCbAll.setChecked(false);
-                    setDeleteBtnOk(false);
-                    mSelfHelpPlaceOrderAdapter.setAllSelect(false);
-                } else {
-                    mCbAll.setChecked(true);
+        mLlAll.setOnClickListener(v -> {
+            isInitiative = false;//使onCheckChangedListener不会被调用
+            if (mCbAll.isChecked()) {
+                mCbAll.setChecked(false);
+                setDeleteBtnOk(false);
+                mSelfHelpPlaceOrderAdapter.setAllSelect(false);
+            } else {
+                mCbAll.setChecked(true);
+                setDeleteBtnOk(true);
+                mSelfHelpPlaceOrderAdapter.setAllSelect(true);
+            }
+            isInitiative = true;
+        });
+        mCbAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isInitiative) {
+                if (isChecked) {
+                    //adapter里面所有的选中
                     setDeleteBtnOk(true);
                     mSelfHelpPlaceOrderAdapter.setAllSelect(true);
-                }
-                isInitiative = true;
-            }
-        });
-        mCbAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isInitiative) {
-                    if (isChecked) {
-                        //adapter里面所有的选中
-                        setDeleteBtnOk(true);
-                        mSelfHelpPlaceOrderAdapter.setAllSelect(true);
-                    } else {
-                        //清掉adapter里面所有选中的状态
-                        setDeleteBtnOk(false);
-                        mSelfHelpPlaceOrderAdapter.setAllSelect(false);
-                    }
+                } else {
+                    //清掉adapter里面所有选中的状态
+                    setDeleteBtnOk(false);
+                    mSelfHelpPlaceOrderAdapter.setAllSelect(false);
                 }
             }
         });
@@ -292,30 +285,27 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
             setTitleRightText("完成",view -> {
                 switchEditMode();
             });
-            showLeftBtn(R.drawable.nav_add, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (editMode) {
-                        //到添加页面
-                        Intent intent = new Intent(getActivityContext(), PlaceOrderProductListActivity.class);
-                        Bundle bundle = new Bundle();
-                        int size = mSelfHelpPlaceOrderAdapter.getList().size();
-                        ArrayList<AddedProduct> addedList = new ArrayList<>();
-                        for (int i = 0; i < size; i++) {
-                            AddedProduct bean = mSelfHelpPlaceOrderAdapter.getList().get(i);
-                            addedList.add(bean);
-                        }
-                        bundle.putSerializable("ap", addedList);
-                        intent.putExtra("apbundle", bundle);
-                        startActivityForResult(intent, ADD_PRODUCT);
-                    } else {
-                        back();
+            showLeftBtn(R.drawable.nav_add, view -> {
+                if (editMode) {
+                    //到添加页面
+                    Intent intent = new Intent(getActivityContext(), PlaceOrderProductListActivity.class);
+                    Bundle bundle = new Bundle();
+                    int size = mSelfHelpPlaceOrderAdapter.getList().size();
+                    ArrayList<AddedProduct> addedList = new ArrayList<>();
+                    for (int i = 0; i < size; i++) {
+                        AddedProduct bean = mSelfHelpPlaceOrderAdapter.getList().get(i);
+                        addedList.add(bean);
                     }
+                    bundle.putSerializable("ap", addedList);
+                    intent.putExtra("apbundle", bundle);
+                    startActivityForResult(intent, ADD_PRODUCT);
+                } else {
+                    back();
                 }
             });
             mRlSelectBar.setVisibility(View.VISIBLE);
             ViewPropertyAnimator.animate(mRlBottom).setDuration(500).translationY(CommonUtils.dip2px(getActivityContext(), 55));
-            ViewPropertyAnimator.animate(mRlBottom).setDuration(500).translationY(-CommonUtils.dip2px(getActivityContext(), 55));
+            ViewPropertyAnimator.animate(mRlSelectBar).setDuration(500).translationY(-CommonUtils.dip2px(getActivityContext(), 55));
             editMode = true;
         } else {
             //完成模式，清空上次选择的
@@ -477,11 +467,8 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
 
     private void setTitleEditShow() {
         if (mSelfHelpPlaceOrderAdapter.getItemCount() == 0) {
-            setTitleRightText("编辑",view -> {
-                switchEditMode();
-            });
             mRlSelfHelp.setVisibility(View.VISIBLE);
-            mRvProduct.setVisibility(View.GONE);
+            mRvProduct.setVisibility(View.INVISIBLE);
         } else {
             if (editMode) {
                 setTitleRightText("完成",view -> {
@@ -492,7 +479,7 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
                     switchEditMode();
                 });
             }
-            mRlSelfHelp.setVisibility(View.GONE);
+            mRlSelfHelp.setVisibility(View.INVISIBLE);
             mRvProduct.setVisibility(View.VISIBLE);
         }
     }
