@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +56,8 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     List<Fragment> mFragmentList;
     List<String> mTitleList;
 
+    public static final int FRAGMENT_COUNT = 5;
+
     public static Intent getStartIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         return intent;
@@ -64,23 +69,19 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         hideTitleBar();
-
-        mTl.addTab(mTl.newTab().setText("Tab 1").setIcon(R.drawable.aboult_icon));
-        mTl.addTab(mTl.newTab().setText("Tab 2").setIcon(R.drawable.aboult_icon));
-        mTl.addTab(mTl.newTab().setText("Tab 3").setIcon(R.drawable.aboult_icon));
-        mTl.addTab(mTl.newTab().setText("Tab 4").setIcon(R.drawable.aboult_icon));
-        mTl.addTab(mTl.newTab().setText("Tab 5").setIcon(R.drawable.aboult_icon));
-
         MainActivityComponent activityComponent = configPersistentComponent.mainActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mMainPresenter.attachView(this);
         startService(SyncService.getStartIntent(this));
 
         setUpFragmentList();
-        MainFragmentAdapter fragmentAdapter = new MainFragmentAdapter(getActivityContext(),getSupportFragmentManager(), mTitleList,mFragmentList);
+        MainFragmentAdapter fragmentAdapter = new MainFragmentAdapter(getActivityContext(), getSupportFragmentManager(), mFragmentList);
         mVp.setAdapter(fragmentAdapter);
         mVp.setOffscreenPageLimit(mFragmentList.size());
         mTl.setupWithViewPager(mVp);
+        for (int i = 0; i < FRAGMENT_COUNT; i++) {
+            mTl.getTabAt(i).setCustomView(newTabView(i));
+        }
         mVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -89,10 +90,10 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
             @Override
             public void onPageSelected(int position) {
-                for (int i = 0;i<mFragmentList.size();i++){
-                    if (i != position){
+                for (int i = 0; i < mFragmentList.size(); i++) {
+                    if (i != position) {
                         mFragmentList.get(i).setUserVisibleHint(false);
-                    }else{
+                    } else {
                         mFragmentList.get(i).setUserVisibleHint(true);
                     }
                 }
@@ -103,6 +104,35 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
             }
         });
+    }
+
+    public View newTabView(int position) {
+        View tabView = getLayout(R.layout.item_main_tab);
+        ImageView imageView = (ImageView) tabView.findViewById(R.id.iv_tab);
+        TextView textView = (TextView) tabView.findViewById(R.id.tv_tab);
+        switch (position) {
+            case 0:
+                imageView.setImageResource(R.drawable.tab_1_selector);
+                textView.setText(R.string.fragment_home_page);
+                break;
+            case 1:
+                imageView.setImageResource(R.drawable.tab_2_selector);
+                textView.setText(R.string.fragment_palce_order);
+                break;
+            case 2:
+                imageView.setImageResource(R.drawable.tab_3_selector);
+                textView.setText(R.string.fragment_stock);
+                break;
+            case 3:
+                imageView.setImageResource(R.drawable.tab_4_selector);
+                textView.setText(R.string.fragment_message);
+                break;
+            case 4:
+                imageView.setImageResource(R.drawable.tab_5_selector);
+                textView.setText(R.string.fragment_more);
+                break;
+        }
+        return tabView;
     }
 
     private void setUpFragmentList() {

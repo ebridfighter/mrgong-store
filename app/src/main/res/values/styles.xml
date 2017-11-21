@@ -23,6 +23,7 @@
         <item name="android:minHeight">14dp</item>
         <item name="android:maxHeight">14dp</item>
     </style>
+
     <style name="RatingBarStyle2" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/evaluate_rate_bar</item>
         <item name="android:minHeight">24dp</item>
@@ -38,10 +39,12 @@
     <style name="Theme.Welcome" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowBackground">@drawable/splash_layers</item>
     </style>
+
     <style name="ImageTranslucentTheme" parent="android:Theme.Light">
         <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
     </style>
-    <style name="ButtonStyle" >
+
+    <style name="ButtonStyle">
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:paddingLeft">10dp</item>
@@ -66,12 +69,14 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
     </style>
+
     <style name="CustomProgressDialog" parent="@style/CustomDialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <style name="DialogNoBg" parent="@style/CustomDialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
@@ -79,6 +84,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
     <style name="MyPopwindow_anim_style" mce_bogus="1" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/show_popwindow</item>
         <item name="android:windowExitAnimation">@anim/hide_popwindow</item>
@@ -93,8 +99,11 @@
     </style>
 
     <style name="MediaController_SeekBar" parent="android:Widget.SeekBar">
-        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>
-        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_dark
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/scrubber_progress_horizontal_holo_dark
+        </item>
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
         <item name="android:thumb">@drawable/scrubber_control_selector_holo</item>
@@ -129,9 +138,19 @@
         <item name="@android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
         <item name="@android:activityCloseExitAnimation">@anim/activity_close_exit</item>
     </style>
+
     <style name="TabLayout">
         <!-- 改变指示器下标的颜色-->
         <item name="tabIndicatorColor">@color/tab_text_on_color</item>
+        <!-- 改变选中字体的颜色-->
+        <item name="tabSelectedTextColor">@color/tab_text_on_color</item>
+        <!-- 改变未选中字体的颜色-->
+        <item name="tabTextColor">@color/black</item>
+    </style>
+
+    <style name="mainTabLayout">
+        <!-- 改变指示器下标的颜色-->
+        <item name="tabIndicatorColor">@color/transparent</item>
         <!-- 改变选中字体的颜色-->
         <item name="tabSelectedTextColor">@color/tab_text_on_color</item>
         <!-- 改变未选中字体的颜色-->
