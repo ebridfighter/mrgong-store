@@ -23,7 +23,7 @@ public class ReturnOrderListActivity extends BaseActivity implements ReturnOrder
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_order_list);
-        ReturnOrderListActivityComponent activityComponent = configPersistentComponent.ReturnOrderListActivityComponent(new ActivityModule(this));
+        ReturnOrderListActivityComponent activityComponent = configPersistentComponent.returnOrderListActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mReturnOrderListPresenter.attachView(this);
     }
