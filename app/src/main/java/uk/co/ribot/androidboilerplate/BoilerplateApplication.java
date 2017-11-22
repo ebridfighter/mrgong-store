@@ -3,6 +3,7 @@ package uk.co.ribot.androidboilerplate;
 import android.app.Application;
 import android.content.Context;
 
+import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.injection.component.ApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerApplicationComponent;
@@ -20,6 +21,7 @@ public class BoilerplateApplication extends Application  {
             Timber.plant(new Timber.DebugTree());
 //            Fabric.with(this, new Crashlytics());
         }
+        BGASwipeBackHelper.init(this, null);
     }
 
     public static BoilerplateApplication get(Context context) {
