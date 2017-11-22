@@ -35,6 +35,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
@@ -92,9 +93,9 @@ public class DataManager {
         return mPreferencesHelper.isLogin();
     }
 
-    public boolean canSeePrice(){
+    public boolean canSeePrice() {
         UserInfoResponse userInfoResponse = loadUser();
-        if (userInfoResponse != null){
+        if (userInfoResponse != null) {
             return userInfoResponse.isCanSeePrice();
         }
         return false;
@@ -119,13 +120,13 @@ public class DataManager {
     /**
      * 获取库存信息
      *
-     * @param pageIndex 分页页号
-     * @param pageLimit 每页多少条
-     * @param stockType 类型category
+     * @param pageIndex     分页页号
+     * @param pageLimit     每页多少条
+     * @param stockType     类型category
      * @param searchKeyword 搜索的关键字
      */
-    public Observable<StockListResponse> getStockList(int pageIndex, int pageLimit, String stockType, String searchKeyword){
-        return mRunwiseService.getStockList(new StockListRequest(pageLimit,pageIndex,searchKeyword,stockType));
+    public Observable<StockListResponse> getStockList(int pageIndex, int pageLimit, String stockType, String searchKeyword) {
+        return mRunwiseService.getStockList(new StockListRequest(pageLimit, pageIndex, searchKeyword, stockType));
     }
 
     public Observable<OrderListResponse> syncOrders() {
@@ -286,14 +287,16 @@ public class DataManager {
                         Log.i("onErrorReturn", throwable.toString());
                         return null;
                     }
+                }).doOnNext(userInfoResponse -> {
+                    saveUser(userInfoResponse);
                 });
     }
 
-    public  Observable<ProductListResponse.Product> loadProduct(int productId){
+    public Observable<ProductListResponse.Product> loadProduct(int productId) {
         return mDatabaseHelper.getProduct(productId);
     }
 
-    public Observable<IntelligentProductDataResponse> getIntelligentProducts(double estimatedTurnover,double safetyFactor) {
+    public Observable<IntelligentProductDataResponse> getIntelligentProducts(double estimatedTurnover, double safetyFactor) {
         GetIntelligentProductsRequest getIntelligentProductsRequest = new GetIntelligentProductsRequest();
         getIntelligentProductsRequest.setPredict_sale_amount(estimatedTurnover);
         getIntelligentProductsRequest.setYongliang_factor(safetyFactor);
@@ -308,7 +311,7 @@ public class DataManager {
                 });
     }
 
-    public Observable<OrderCommitResponse> commitOrder(String estimated_time, String order_type_id,List<CommitOrderRequest.ProductsBean> products) {
+    public Observable<OrderCommitResponse> commitOrder(String estimated_time, String order_type_id, List<CommitOrderRequest.ProductsBean> products) {
         CommitOrderRequest commitOrderRequest = new CommitOrderRequest();
         commitOrderRequest.setEstimated_time(estimated_time);
         commitOrderRequest.setOrder_type_id(order_type_id);
@@ -318,6 +321,17 @@ public class DataManager {
                 .onErrorReturn(new Func1<Throwable, OrderCommitResponse>() {
                     @Override
                     public OrderCommitResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
+
+    public Observable<ShopInfoResponse> getShopInfo() {
+        return mRunwiseService.getShopInfo(new EmptyRequest())
+                .onErrorReturn(new Func1<Throwable, ShopInfoResponse>() {
+                    @Override
+                    public ShopInfoResponse call(Throwable throwable) {
                         Log.i("onErrorReturn", throwable.toString());
                         return null;
                     }

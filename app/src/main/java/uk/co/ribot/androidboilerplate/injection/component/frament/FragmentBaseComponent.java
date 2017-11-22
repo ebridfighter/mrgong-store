@@ -20,4 +20,5 @@ public interface FragmentBaseComponent {
     StockListFragmentComponent stockListFragmentComponent(ActivityModule activityModule);
     OrderProductFragmentComponent orderProductFragmentComponent(ActivityModule activityModule);
     ProductListFragmentComponent productListFragmentComponent(ActivityModule activityModule);
+    OrderListFragmentComponent orderListFragmentComponent(ActivityModule activityModule);
 }

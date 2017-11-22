@@ -88,6 +88,9 @@
     <string name="color_btn_delete_no_ok">#E3E3E3</string>
     <string name="title_modify_order_success">修改成功</string>
     <string name="title_place_order_success">下单成功</string>
+    <string name="toast_no_procument_permission">没有自采权限</string>
+    <string name="toast_no_transfer_permission">没有门店调拨权限</string>
+    <string name="toast_cancel_order_fail">取消订单失败</string>
 
 
 </resources>

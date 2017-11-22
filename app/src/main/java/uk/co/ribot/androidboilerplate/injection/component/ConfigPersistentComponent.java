@@ -25,4 +25,6 @@ public interface ConfigPersistentComponent {
     OrderCommitSuccessActivityComponent orderCommitSuccessActivityComponent(ActivityModule activityModule);
     SelfHelpPlaceOrderActivityComponent selfHelpPlaceOrderActivityComponent(ActivityModule activityModule);
     PlaceOrderProductListCompoent placeOrderProductListCompoent(ActivityModule activityModule);
+    OrderListActivityComponent orderListActivityComponent(ActivityModule activityModule);
+    ReturnOrderListActivityComponent returnOrderListActivityComponent(ActivityModule activityModule);
 }

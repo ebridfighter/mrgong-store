@@ -19,12 +19,10 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateReq
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
-import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
-import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
-import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
@@ -38,9 +36,10 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitRespons
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
@@ -141,5 +140,8 @@ public interface RunwiseService {
 
     @POST("/gongfu/v2/order/create")
     Observable<OrderCommitResponse> commitOrder(@Body CommitOrderRequest commitOrderRequest);
+
+    @POST("/api/sale/shop/info")
+    Observable<ShopInfoResponse> getShopInfo(@Body EmptyRequest emptyRequest);
 
 }

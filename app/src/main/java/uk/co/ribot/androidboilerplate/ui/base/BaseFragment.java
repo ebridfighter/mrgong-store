@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.runwise.commomlibrary.swipetoloadlayout.OnLoadMoreListener;
 import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
+import com.runwise.commomlibrary.view.LoadingDialog;
 
 import javax.inject.Inject;
 
@@ -26,6 +27,7 @@ import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.frament.DaggerFragmentBaseComponent;
 import uk.co.ribot.androidboilerplate.injection.component.frament.FragmentBaseComponent;
+import uk.co.ribot.androidboilerplate.util.RxEventBus;
 import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
 
 /**
@@ -39,6 +41,7 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
     protected RunwiseDialog mDialog;
 
     ViewGroup mRootView;
+    LoadingDialog mLoadingDialog;
 
     @Nullable
     @Override
@@ -75,6 +78,7 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
         mFragmentBaseComponent = DaggerFragmentBaseComponent.builder().
                 applicationComponent(BoilerplateApplication.get(getActivity()).getComponent())
                 .build();
+        mLoadingDialog = new LoadingDialog(getActivity());
     }
 
     protected View getLayout(int layoutId) {
@@ -105,6 +109,18 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
         mDialog.show();
     }
 
+    protected void showLoadingDialog(String text) {
+        mLoadingDialog.setMsg(text);
+        mLoadingDialog.show();
+    }
+    protected void showLoadingDialog() {
+        mLoadingDialog.show();
+    }
+
+    protected void dismissLoadingDialog() {
+        mLoadingDialog.dismiss();
+    }
+
     @Override
     public void onRefresh() {
 
@@ -117,6 +133,9 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
 
     protected Observable<Object> getBusObservable(){
         return BoilerplateApplication.get(getActivity()).getComponent().eventBus().observable();
+    }
+    protected RxEventBus getBus(){
+        return BoilerplateApplication.get(getActivity()).getComponent().eventBus();
     }
 
     @Override

@@ -76,7 +76,6 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
     }
 
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -93,10 +92,10 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
         mOrderAdapter.setDoActionInterface(this);
         mOrderAdapter.setOnItemClickListener((view, position) -> {
             OrderListWrap orderListWrap = mOrderAdapter.getItem(position);
-            if (orderListWrap.getOrderListBean()!= null){
-                startActivity(OrderDetailActivity.getStartIntent(getActivity(),orderListWrap.getOrderListBean().getOrderID()));
-            }else{
-                startActivity(OrderDetailActivity.getStartIntent(getActivity(),orderListWrap.getReturnOrderListBean().getReturnOrderID()));
+            if (orderListWrap.getOrderListBean() != null) {
+                startActivity(OrderDetailActivity.getStartIntent(getActivity(), orderListWrap.getOrderListBean().getOrderID()));
+            } else {
+                startActivity(OrderDetailActivity.getStartIntent(getActivity(), orderListWrap.getReturnOrderListBean().getReturnOrderID()));
             }
         });
 
@@ -199,6 +198,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
 
     @Override
     public void cancelOrderSuccess() {
+        dismissLoadingDialog();
         toast(R.string.toast_cancel_order_success);
         mOrderAdapter.removeOrder(mCancelOrderId);
         mHeaderAndFooterWrapper.notifyDataSetChanged();
@@ -206,6 +206,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
 
     @Override
     public void finishReturnOrderSuccess(FinishReturnResponse finishReturnResponse) {
+        dismissLoadingDialog();
         toast(R.string.toast_finish_return_order_success);
         mOrderAdapter.removeReturnOrder(finishReturnResponse.getReturnOrder().getReturnOrderID());
         mHeaderAndFooterWrapper.notifyDataSetChanged();
@@ -249,12 +250,13 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
 
     @Override
     public void cancelOrderError() {
-
+        toast(R.string.toast_cancel_order_fail);
+        dismissLoadingDialog();
     }
 
     @Override
     public void finishReturnOrderError() {
-
+        dismissLoadingDialog();
     }
 
     @Override
@@ -282,6 +284,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
                 showDialog(getString(R.string.dialog_title_tip), getString(R.string.dialog_message_cancel_order), new RunwiseDialog.DialogListener() {
                     @Override
                     public void doClickButton(Button btn, RunwiseDialog mDialog) {
+                        showLoadingDialog();
                         mCancelOrderId = mOrderAdapter.getItem(position).getOrderListBean().getOrderID();
                         mHomePagePresenter.cancelOrder(mCancelOrderId);
                         mDialog.dismiss();
@@ -353,6 +356,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
                 showDialog(getString(R.string.dialog_title_tip), "确认数量一致?", new RunwiseDialog.DialogListener() {
                     @Override
                     public void doClickButton(Button btn, RunwiseDialog mDialog) {
+                        showLoadingDialog();
                         mHomePagePresenter.finishOrder(mOrderAdapter.getItem(position).getReturnOrderListBean().getReturnOrderID());
                     }
                 });
