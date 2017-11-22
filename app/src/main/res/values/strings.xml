@@ -91,6 +91,7 @@
     <string name="toast_no_procument_permission">没有自采权限</string>
     <string name="toast_no_transfer_permission">没有门店调拨权限</string>
     <string name="toast_cancel_order_fail">取消订单失败</string>
+    <string name="title_order_list">订单列表</string>
 
 
 </resources>

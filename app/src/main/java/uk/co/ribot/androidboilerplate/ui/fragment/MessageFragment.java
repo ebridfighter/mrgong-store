@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
+import uk.co.ribot.androidboilerplate.injection.component.frament.MessageFragmentComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.adapter.MessageAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;

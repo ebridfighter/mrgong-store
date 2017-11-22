@@ -30,6 +30,8 @@ public class OrderListActivity extends BaseActivity implements OrderListMvpView 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
+        setTitle(R.string.title_order_list);
+        showBackBtn();
         OrderListActivityComponent activityComponent = configPersistentComponent.orderListActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mOrderListPresenter.attachView(this);
