@@ -4,4 +4,11 @@
    android:layout_width="match_parent"
    android:layout_height="match_parent">
 
+    <com.runwise.commomlibrary.swipetoloadlayout.RefreshRecyclerView
+        android:id="@+id/rv_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.runwise.commomlibrary.swipetoloadlayout.RefreshRecyclerView>
+
 </RelativeLayout>

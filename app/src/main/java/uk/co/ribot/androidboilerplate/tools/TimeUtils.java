@@ -111,7 +111,7 @@ public class TimeUtils {
 
 	@SuppressLint("SimpleDateFormat")
 	public static String formatDate2(String date) {
-		if(TextUtils.isEmpty(date)) {
+		if (TextUtils.isEmpty(date)) {
 			return "";
 		}
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
@@ -162,8 +162,21 @@ public class TimeUtils {
 		return sdf.format(new Date(time));
 	}
 
+	public static long stringToTimeStamp(String date){
+		if (TextUtils.isEmpty(date)) {
+			return 0;
+		}
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date sDate = ft.parse(date);
+			return sDate.getTime();
+		} catch (ParseException e) {
+			return 0;
+		}
+	}
+
 	public static String getTimeStamps3(String date) {
-		if(TextUtils.isEmpty(date)) {
+		if (TextUtils.isEmpty(date)) {
 			return "";
 		}
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -175,7 +188,8 @@ public class TimeUtils {
 			return date;
 		}
 	}
-	public static String getTimeStamps4(String date){
+
+	public static String getTimeStamps4(String date) {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat ft2 = new SimpleDateFormat("MM-dd");
 		try {
@@ -185,7 +199,13 @@ public class TimeUtils {
 			return date;
 		}
 	}
-	public static String getMMdd(String date){
+
+	public static String getMMdd(long timeStamp) {
+		SimpleDateFormat ft = new SimpleDateFormat("MM-dd");
+		return ft.format(new Date(timeStamp));
+	}
+
+	public static String getMMdd(String date) {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat ft2 = new SimpleDateFormat("MM-dd");
 		try {
@@ -195,7 +215,8 @@ public class TimeUtils {
 			return date;
 		}
 	}
-	public static String getMMddHHmm(String date){
+
+	public static String getMMddHHmm(String date) {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat ft2 = new SimpleDateFormat("MM-dd HH:mm");
 		try {
@@ -205,7 +226,8 @@ public class TimeUtils {
 			return date;
 		}
 	}
-	public static String getMMddHHmm2(String date){
+
+	public static String getMMddHHmm2(String date) {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		SimpleDateFormat ft2 = new SimpleDateFormat("MM-dd HH:mm");
 		try {
@@ -215,14 +237,31 @@ public class TimeUtils {
 			return date;
 		}
 	}
-	public static String getYMD(Date date){
+
+	public static String getYMD(Date date) {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-			return ft.format(date);
+		return ft.format(date);
 	}
-	public static String getYMDHMS(Date date){
+
+	public static String getYMDHMS(Date date) {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return ft.format(date);
 	}
+
+	public static String getHM(String date) {
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat ft1 = new SimpleDateFormat("HH:mm");
+		Date date1 = null;
+		try {
+			date1 = ft.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return "";
+		}
+
+		return ft1.format(date1);
+	}
+
 	/**
 	 * 计算宝宝年龄
 	 *
@@ -342,6 +381,25 @@ public class TimeUtils {
 	}
 
 	/**
+	 * 通过时间秒毫秒数判断两个时间的间隔
+	 *
+	 * @return
+	 */
+	public static int differentDaysByMillisecond(long dateTimeStamp1, long dateTimeStamp2) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟
+		int days = 0;
+		try {
+			Date date1 = sdf.parse(getYMD(new Date(dateTimeStamp1)));
+			Date date2 = sdf.parse(getYMD(new Date(dateTimeStamp2)));
+			long diff = date1.getTime() - date2.getTime();
+			days = (int) (diff / (1000 * 3600 * 24));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return days;
+	}
+
+	/**
 	 * 获取几天前或后的YYYY-MM-dd
 	 * 参数：正数往后推，负数是往前移动
 	 */
@@ -351,26 +409,28 @@ public class TimeUtils {
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, dayNum);//把日期往后增加一天.整数往后推,负数往前移动
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String str =  sdf.format(calendar.getTime());
+		String str = sdf.format(calendar.getTime());
 		return str;
 	}
-	public static String getAB2FormatData(int dayNum){
+
+	public static String getAB2FormatData(int dayNum) {
 		Date date = new Date();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, dayNum);//把日期往后增加一天.整数往后推,负数往前移动
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String str =  sdf.format(calendar.getTime());
+		String str = sdf.format(calendar.getTime());
 		return str;
 	}
 
-    //当前时间
+	//当前时间
 	public static String getCurrentDate() {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String str =  sdf.format(date.getTime());
+		String str = sdf.format(date.getTime());
 		return str;
 	}
+
 	//本周开始时间
 	public static String getThisWeekStart() {
 		Date date = new Date();
@@ -381,9 +441,29 @@ public class TimeUtils {
 		//本周第一天
 		calendar.add(Calendar.DATE, -dayInWeek);//把日期往后增加一天.整数往后推,负数往前移动
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String str =  sdf.format(calendar.getTime());
+		String str = sdf.format(calendar.getTime());
 		return str;
 	}
+
+	public static String getThisWeekEnd() {
+		Calendar cal = Calendar.getInstance();
+		try {
+			cal.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(getThisWeekStart()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		int d = 0;
+		if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
+			d = -6;
+		} else {
+			d = 2 - cal.get(Calendar.DAY_OF_WEEK);
+		}
+		cal.add(Calendar.DAY_OF_WEEK, 7);
+		//所在周结束日期
+		return new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+
+	}
+
 	//上周结束时间
 	public static String getPerWeekEnd() {
 		Date date = new Date();
@@ -391,11 +471,12 @@ public class TimeUtils {
 		calendar.setTime(date);
 		int dayInWeek = calendar.get(Calendar.DAY_OF_WEEK);
 		//本周第一天
-		calendar.add(Calendar.DATE, -dayInWeek);//把日期往后增加一天.整数往后推,负数往前移动
+		calendar.add(Calendar.DATE, -dayInWeek + 1);//把日期往后增加一天.整数往后推,负数往前移动
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String str =  sdf.format(calendar.getTime());
+		String str = sdf.format(calendar.getTime());
 		return str;
 	}
+
 	//上周开始
 	public static String getPerWeekStart() {
 		Date date = new Date();
@@ -406,18 +487,19 @@ public class TimeUtils {
 		calendar.add(Calendar.DATE, -dayInWeek);//把日期往后增加一天.整数往后推,负数往前移动
 		calendar.add(Calendar.DATE, -6);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String str =  sdf.format(calendar.getTime());
+		String str = sdf.format(calendar.getTime());
 		return str;
 	}
 
 	//获取前月的第一天
 	public static String getPerMonthStart() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal_1= Calendar.getInstance();//获取当前日期 
-		cal_1.add(Calendar.MONTH,-1);
-		cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
+		Calendar cal_1 = Calendar.getInstance();//获取当前日期 
+		cal_1.add(Calendar.MONTH, -1);
+		cal_1.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为本月第一天 
 		return format.format(cal_1.getTime());
 	}
+
 	//获取前月的最后一天
 	public static String getPerMonthEnd() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -428,18 +510,19 @@ public class TimeUtils {
 
 	/**
 	 * 今天是否在指定的时间段内
-     */
+	 */
 	public static boolean isTimeInner(String beginTimeStr, String endTimeStr) {
 		final Calendar beginCalend = DateFormateUtil.dateFormatFromString(beginTimeStr, DateFormateUtil.FORMAT_DATE);
 		final Calendar endCalend = DateFormateUtil.dateFormatFromString(endTimeStr, DateFormateUtil.FORMAT_DATE);
 		Calendar today = Calendar.getInstance();
-        if(today.before(endCalend) && today.after(beginCalend)) {
-			return  true;
+		if (today.before(endCalend) && today.after(beginCalend)) {
+			return true;
 		}
 		return false;
 	}
+
 	public static boolean isMoreThan7Days(String timeStr) {
-		if (TextUtils.isEmpty(timeStr)){
+		if (TextUtils.isEmpty(timeStr)) {
 			return false;
 		}
 		long time = getFormatTime(timeStr);
@@ -447,7 +530,7 @@ public class TimeUtils {
 		calendar.setTime(new Date());//把当前时间赋给日历
 		calendar.add(Calendar.DAY_OF_MONTH, -7);  //设置为7天前
 		Date before7days = calendar.getTime();   //得到7天前的时间
-		if (before7days.getTime() < time){
+		if (before7days.getTime() < time) {
 			return false;
 		}
 		return true;

@@ -22,6 +22,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.OrderListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
@@ -35,6 +36,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.OrderResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
@@ -50,7 +52,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RunwiseService {
 
     boolean test = true;
-    public String ENDPOINT = test ? "http://develop.runwise.cn" : "https://api.ribot.io";
+    public String ENDPOINT = test ? "http://develop.runwise.cn:80" : "https://api.ribot.io";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
@@ -143,5 +145,8 @@ public interface RunwiseService {
 
     @POST("/api/sale/shop/info")
     Observable<ShopInfoResponse> getShopInfo(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/order/list")
+    Observable<OrderResponse> getOrderList(@Body OrderListRequest orderListRequest);
 
 }

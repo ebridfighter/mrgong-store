@@ -92,6 +92,11 @@
     <string name="toast_no_transfer_permission">没有门店调拨权限</string>
     <string name="toast_cancel_order_fail">取消订单失败</string>
     <string name="title_order_list">订单列表</string>
+    <string name="fragment_title_order_all">全部</string>
+    <string name="fragment_title_order_this_week">本周</string>
+    <string name="fragment_title_order_last_week">上周</string>
+    <string name="fragment_title_order_earlier">更早</string>
+    <string name="system_upgrading_toast">系统更新中，%1$s后才能使用哦!</string>
 
 
 </resources>

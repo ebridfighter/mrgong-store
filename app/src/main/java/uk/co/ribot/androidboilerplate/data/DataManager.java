@@ -19,6 +19,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.OrderListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
@@ -32,6 +33,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.OrderResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
@@ -338,4 +340,23 @@ public class DataManager {
                 });
     }
 
+    public Observable<OrderResponse> getOrderList(int page, int pageNum, String startTime, String endTime) {
+        OrderListRequest orderListRequest = new OrderListRequest();
+        orderListRequest.setLimit(pageNum);
+        orderListRequest.setPz(page);
+        if (startTime != null && !startTime.trim().equals("")) {
+            orderListRequest.setStart(startTime);
+        }
+        if (endTime != null && !endTime.trim().equals("")) {
+            orderListRequest.setEnd(endTime);
+        }
+        return mRunwiseService.getOrderList(orderListRequest)
+                .onErrorReturn(new Func1<Throwable, OrderResponse>() {
+                    @Override
+                    public OrderResponse call(Throwable throwable) {
+                        Log.i("onErrorReturn", throwable.toString());
+                        return null;
+                    }
+                });
+    }
 }

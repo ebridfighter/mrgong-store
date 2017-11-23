@@ -27,6 +27,9 @@ public class OrderListPresenter extends BasePresenter<OrderListMvpView> {
         super.attachView(mvpView);
     }
 
+
+
+
     @Override
     public void detachView() {
         super.detachView();
