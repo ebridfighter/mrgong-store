@@ -3,7 +3,6 @@ package uk.co.ribot.androidboilerplate.injection.component.frament;
 import dagger.Subcomponent;
 import uk.co.ribot.androidboilerplate.injection.PerActivity;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
-import uk.co.ribot.androidboilerplate.ui.fragment.HomePageFragment;
 import uk.co.ribot.androidboilerplate.ui.fragment.StockListContainerFragment;
 
 /**

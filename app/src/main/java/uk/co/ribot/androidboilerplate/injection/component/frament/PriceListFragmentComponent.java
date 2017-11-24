@@ -5,14 +5,15 @@ import dagger.Subcomponent;
 import uk.co.ribot.androidboilerplate.injection.PerActivity;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 
-import uk.co.ribot.androidboilerplate.ui.fragment.ReturnOrderListFragment;
+import uk.co.ribot.androidboilerplate.ui.fragment.PriceListFragment;
+import dagger.Component;
 
 
 /**
- * Created by mike on 2017/11/22.
+ * Created by mike on 2017/11/24.
  */
 @PerActivity
 @Subcomponent(modules = ActivityModule.class)
-public interface ReturnOrderListFragmentComponent {
-    void inject(ReturnOrderListFragment fragment);
+public interface PriceListFragmentComponent {
+    void inject(PriceListFragment fragment);
 }

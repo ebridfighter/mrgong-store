@@ -1,5 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import javax.inject.Inject;
@@ -18,6 +20,11 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.ReturnOrderListMvpView;
 public class ReturnOrderListActivity extends BaseActivity implements ReturnOrderListMvpView {
     @Inject
     ReturnOrderListPresenter mReturnOrderListPresenter;
+
+    public static Intent getStartIntent(Context context) {
+        Intent intent = new Intent(context, ReturnOrderListActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

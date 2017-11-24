@@ -12,6 +12,7 @@ import uk.co.ribot.androidboilerplate.injection.module.ApplicationModule;
 public class BoilerplateApplication extends Application  {
 
     ApplicationComponent mApplicationComponent;
+    public static BoilerplateApplication INSTANCE;
 
     @Override
     public void onCreate() {
@@ -22,6 +23,7 @@ public class BoilerplateApplication extends Application  {
 //            Fabric.with(this, new Crashlytics());
         }
         BGASwipeBackHelper.init(this, null);
+        INSTANCE = this;
     }
 
     public static BoilerplateApplication get(Context context) {

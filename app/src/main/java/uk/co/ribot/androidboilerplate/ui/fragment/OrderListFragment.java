@@ -41,6 +41,8 @@ public class OrderListFragment extends BaseFragment implements OrderListFragment
     final int mPageSize = 20;
     @BindView(R.id.rv_order)
     RefreshRecyclerView mRvOrder;
+    @BindView(R.id.include_loading)
+    View mIncludeLoading;
     Unbinder unbinder;
 
     @Nullable
@@ -70,6 +72,7 @@ public class OrderListFragment extends BaseFragment implements OrderListFragment
         mRvOrder.setAdapter(mOrderListAdapter);
         mPage = 1;
         mOrderListFragmentPresenter.getOrders(mPage, mPageSize, mStartTime, mEndTime);
+        mIncludeLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -86,10 +89,16 @@ public class OrderListFragment extends BaseFragment implements OrderListFragment
 
     @Override
     public void showOrders(OrderResponse orderResponse) {
-        if (mPage == 1){
+        mIncludeLoading.setVisibility(View.GONE);
+        if (mPage == 1) {
             mOrderListAdapter.setData(orderResponse.getList());
-        }else{
+            mRvOrder.setRefreshing(false);
+        } else {
             mOrderListAdapter.appendData(orderResponse.getList());
+            mRvOrder.setLoadingMore(false);
+        }
+        if (orderResponse.getList().size() < mPageSize) {
+            mRvOrder.setLoadingMoreEnable(false);
         }
     }
 

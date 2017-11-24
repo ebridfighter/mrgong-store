@@ -14,11 +14,11 @@ import uk.co.ribot.androidboilerplate.util.ObjectTransformUtil;
 @Singleton
 public class PreferencesHelper {
 
-    public static final String PREF_FILE_NAME = "android_boilerplate_pref_file";
+    public static final String PREF_FILE_NAME = "android_runwise_pref_file";
     public static final String PREF_KEY_DATABASE = "pref_key_database";
     public static final String PREF_KEY_COOKIES = "pref_key_cookies";
     public static final String PREF_KEY_USER_INFO = "pref_key_user_info";
-    public static final String DEFAULT_DATABASE_NAME = "MFTest1117";
+    public static final String DEFAULT_DATABASE_NAME = "1124test";
 
 
     private static SharedPreferences mPref = null;
@@ -29,7 +29,8 @@ public class PreferencesHelper {
     }
 
     public boolean isLogin() {
-        return !TextUtils.isEmpty(getCookie());
+        String cookie = getCookie();
+        return !TextUtils.isEmpty(cookie);
     }
 
     /**

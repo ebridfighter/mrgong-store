@@ -2,9 +2,6 @@ package uk.co.ribot.androidboilerplate.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 /**
  * Created by Dong on 2017/11/8.

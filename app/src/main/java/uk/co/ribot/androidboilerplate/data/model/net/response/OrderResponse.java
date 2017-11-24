@@ -3,7 +3,6 @@ package uk.co.ribot.androidboilerplate.data.model.net.response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 import java.io.Serializable;
 import java.util.List;
 

@@ -12,6 +12,8 @@ import java.io.StringReader;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
+import uk.co.ribot.androidboilerplate.BoilerplateApplication;
+import uk.co.ribot.androidboilerplate.data.model.event.LogOutEvent;
 import uk.co.ribot.androidboilerplate.data.model.net.exception.ApiException;
 import uk.co.ribot.androidboilerplate.data.model.net.httpstatus.HttpStatus;
 import uk.co.ribot.androidboilerplate.data.model.net.response.base.BaseResponse;
@@ -47,7 +49,7 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
                 errorCode = baseResponse.getError().getCode();
                 //sessino失效,通知界面退出登陆
                 if (CODE_LOGOUT == errorCode) {
-
+                    BoilerplateApplication.INSTANCE.getComponent().eventBus().post(new LogOutEvent());
                 }
             }
         }

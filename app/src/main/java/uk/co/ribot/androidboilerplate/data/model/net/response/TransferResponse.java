@@ -23,7 +23,7 @@ public class TransferResponse implements Parcelable {
     private String pickingStateFull;
     private String locationName;
     private String locationDestName;
-    private List<String> stateTracker;
+    private transient List<String> stateTracker;
     private float totalPrice;//根据当前状态的数量，如提交则是订单数，已出库则是出库数，已入库则是实际完成数
     private int totalNum;//same as totalPrice
     private int pickingStateNum;

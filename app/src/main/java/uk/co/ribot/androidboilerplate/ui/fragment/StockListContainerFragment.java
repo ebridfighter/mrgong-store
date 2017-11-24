@@ -28,9 +28,6 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.StockListContainerMvpVie
 import uk.co.ribot.androidboilerplate.view.CategoryDropDownView;
 import uk.co.ribot.androidboilerplate.view.SystemUpgradeLayout;
 
-import static uk.co.ribot.androidboilerplate.ui.fragment.AbstractStockListFragment.ARG_CATEGORY;
-import static uk.co.ribot.androidboilerplate.ui.fragment.StockListFragment.ARG_CURRENT;
-
 /**
  *
  * todo:1.搜索；
@@ -90,7 +87,7 @@ public class StockListContainerFragment extends BaseFragment implements StockLis
 
         titles.add("全部");
         AbstractStockListFragment allStockListFragment = newRepertoryListFragment("");
-        allStockListFragment.getArguments().putBoolean(ARG_CURRENT,true);//全部为打开tab
+        allStockListFragment.getArguments().putBoolean(StockListFragment.ARG_CURRENT,true);//全部为打开tab
         repertoryEntityFragmentList.add(0, allStockListFragment);
 
         for(String category:categoryList){
@@ -130,7 +127,7 @@ public class StockListContainerFragment extends BaseFragment implements StockLis
             repertoryListFragment = new StockListFragment();//正常显示
         }
         Bundle bundle = new Bundle();
-        bundle.putString(ARG_CATEGORY,category);
+        bundle.putString(AbstractStockListFragment.ARG_CATEGORY,category);
         repertoryListFragment.setArguments(bundle);
         return repertoryListFragment;
     }

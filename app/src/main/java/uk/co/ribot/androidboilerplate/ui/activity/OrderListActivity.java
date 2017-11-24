@@ -47,8 +47,11 @@ public class OrderListActivity extends BaseActivity implements OrderListMvpView 
     public static final int ORDER_TIME_SHANGZHOU = 1 << 2;
     public static final int ORDER_TIME_GENGZAO = 1 << 3;
 
-    public static Intent getStartIntent(Context context) {
+    public static final String INTENT_KEY_INDEX = "intent_key_index";
+
+    public static Intent getStartIntent(Context context,int index) {
         Intent intent = new Intent(context, OrderListActivity.class);
+        intent.putExtra(INTENT_KEY_INDEX,index);
         return intent;
     }
 
@@ -89,6 +92,8 @@ public class OrderListActivity extends BaseActivity implements OrderListMvpView 
 
             }
         });
+        int index = getIntent().getIntExtra(INTENT_KEY_INDEX,0);
+        mVp.setCurrentItem(index);
     }
 
     private OrderListFragment newOrderListFragment(int type) {
