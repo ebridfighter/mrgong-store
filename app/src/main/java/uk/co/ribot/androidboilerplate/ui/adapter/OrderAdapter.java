@@ -101,8 +101,8 @@ public class OrderAdapter extends BaseAdapter<OrderAdapter.OrderViewHolder> {
                 break;
             }
         }
+        mOrderListWraps.remove(deleteIndex);
         notifyItemRemoved(deleteIndex);
-        mOrderListWraps.remove(findOrderListWrap);
     }
 
     public void setOrders(List<OrderListResponse.ListBean> orders) {

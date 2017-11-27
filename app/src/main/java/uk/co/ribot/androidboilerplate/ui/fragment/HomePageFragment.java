@@ -2,6 +2,7 @@ package uk.co.ribot.androidboilerplate.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.OrderDoAction;
 import uk.co.ribot.androidboilerplate.data.model.business.OrderListWrap;
@@ -102,7 +102,7 @@ public class HomePageFragment extends BaseFragment implements HomePageMvpView, O
         mRvProduct.init(new LinearLayoutManager(getActivity()), this, null);
         mRvProduct.setRefreshEnabled(true);
         mRvProduct.setAdapter(mHeaderAndFooterWrapper);
-        mRvProduct.getRecyclerView().setItemAnimator(new SlideInLeftAnimator());
+        mRvProduct.getRecyclerView().setItemAnimator(new DefaultItemAnimator());
 
 
         mHomePagePresenter.attachView(this);
