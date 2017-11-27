@@ -38,6 +38,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailRespons
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
@@ -52,7 +53,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RunwiseService {
 
     boolean test = true;
-    String ENDPOINT = test ? "http://develop.runwise.cn:9000" : "https://api.ribot.io";
+    String ENDPOINT = test ? "http://async.uat.runwise.cn" : "https://api.ribot.io";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
@@ -148,5 +149,8 @@ public interface RunwiseService {
 
     @POST("/gongfu/order/list")
     Observable<OrderResponse> getOrderList(@Body OrderListRequest orderListRequest);
+
+    @POST("/API/v2/return_order/list")
+    Observable<ReturnDataResponse> getReturnOrderList(@Body EmptyRequest emptyRequest);
 
 }

@@ -1,6 +1,5 @@
 package uk.co.ribot.androidboilerplate.ui.activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -78,22 +77,15 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
         mLoginPresenter.login(mTeacherRegPhone.getText().toString().trim(), mTeacherRegPassword.getText().toString().trim());
     }
 
-    Dialog mDialog;
 
     @Override
     public void showProgressDialog() {
-        if (mDialog == null) {
-            mDialog = new Dialog(getActivityContext());
-            mDialog.setTitle("登录中...");
-        }
-        mDialog.show();
+        showLoadingDialog("登录中...");
     }
 
     @Override
     public void hideProgressDialog() {
-        if (mDialog != null) {
-            mDialog.hide();
-        }
+      dismissLoadingDialog();
     }
 
     @Override
@@ -103,8 +95,13 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     }
 
     @Override
-    public void showError() {
-        toast("登录失败");
+    public void showError(String error) {
+        toast(error);
+    }
+
+    @Override
+    public void loginConflict() {
+        toast("登录冲突");
     }
 
     @Override

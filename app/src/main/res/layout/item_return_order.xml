@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_order_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/state_restaurant_4_received" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_pay_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="efwf"
+                    android:textColor="#3b3b3b"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_pay_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="efw"
+                    android:textColor="#4b4b4b"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_pay_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="fewfew"
+                android:textColor="#9b9b9b"
+                android:textSize="15sp"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_pat_sum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawableLeft="@drawable/icon_item"
+                android:drawablePadding="6dp"
+                android:maxLines="1"
+                android:text="fewfew"
+                android:textColor="#3b3b3b"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_pay_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="#ffff"
+                android:drawableLeft="@drawable/icon_price"
+                android:drawablePadding="6dp"
+                android:text="wefew"
+                android:textColor="#3b3b3b"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:background="#e9e9e9" />
+</LinearLayout>

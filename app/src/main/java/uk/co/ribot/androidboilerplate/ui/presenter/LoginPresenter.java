@@ -61,7 +61,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                     public void onError(Throwable e) {
                         super.onError(e);
                         Timber.e(e, "网络错误");
-                        getMvpView().showError();
+                        getMvpView().showError(e.getMessage());
                         getMvpView().hideProgressDialog();
                     }
 
@@ -70,7 +70,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                         super.onNext(loginResponse);
                         String success = loginResponse.getIsSuccess();
                         if (TextUtils.isEmpty(success)||"false".equals(success)) {
-                            getMvpView().showError();
+                            getMvpView().loginConflict();
                         } else {
                             mDataManager.saveUser(loginResponse.getUser());
                             getMvpView().onSuccess();

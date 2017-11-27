@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.functions.Func1;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
@@ -35,6 +34,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailRespons
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
@@ -63,12 +63,7 @@ public class DataManager {
 
     public Observable<Ribot> syncRibots() {
         return mRunwiseService.getRibots()
-                .concatMap(new Func1<List<Ribot>, Observable<Ribot>>() {
-                    @Override
-                    public Observable<Ribot> call(List<Ribot> ribots) {
-                        return mDatabaseHelper.setRibots(ribots);
-                    }
-                });
+                .concatMap(ribots -> mDatabaseHelper.setRibots(ribots));
     }
 
     public Observable<List<Ribot>> getRibots() {
@@ -105,17 +100,9 @@ public class DataManager {
 
     public Observable<ProductListResponse> syncProducts() {
         return mRunwiseService.getProducts(new EmptyRequest())
-                .concatMap(new Func1<ProductListResponse, Observable<ProductListResponse>>() {
-                    @Override
-                    public Observable<ProductListResponse> call(ProductListResponse productListResponse) {
-                        return mDatabaseHelper.setProducts(productListResponse);
-                    }
-                }).onErrorReturn(new Func1<Throwable, ProductListResponse>() {
-                    @Override
-                    public ProductListResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .concatMap(productListResponse -> mDatabaseHelper.setProducts(productListResponse)).onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
@@ -138,12 +125,9 @@ public class DataManager {
                     public Observable<OrderListResponse> call(OrderListResponse orderListResponse) {
                         return mDatabaseHelper.setOrders(orderListResponse);
                     }
-                })*/.onErrorReturn(new Func1<Throwable, OrderListResponse>() {
-                    @Override
-                    public OrderListResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                })*/.onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
@@ -154,12 +138,9 @@ public class DataManager {
                     public Observable<OrderListResponse> call(OrderListResponse orderListResponse) {
                         return mDatabaseHelper.setOrders(orderListResponse);
                     }
-                })*/.onErrorReturn(new Func1<Throwable, ReturnOrderListResponse>() {
-                    @Override
-                    public ReturnOrderListResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                })*/.onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
@@ -167,58 +148,43 @@ public class DataManager {
         HomePageBannerRequest homePageBannerRequest = new HomePageBannerRequest();
         homePageBannerRequest.setTag(tag);
         return mRunwiseService.getHomePageBanner(homePageBannerRequest)
-                .onErrorReturn(new Func1<Throwable, HomePageBannerResponse>() {
-                    @Override
-                    public HomePageBannerResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
 
     public Observable<DashBoardResponse> getDashboard() {
         return mRunwiseService.getDashboard(new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, DashBoardResponse>() {
-                    @Override
-                    public DashBoardResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
     public Observable<EmptyResponse> logout() {
         return mRunwiseService.logout(new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, EmptyResponse>() {
-                    @Override
-                    public EmptyResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
     public Observable<MessageResponse> getMessages() {
         return mRunwiseService.getMessage(new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, MessageResponse>() {
-                    @Override
-                    public MessageResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
 
     public Observable<LastBuyResponse> getLastOrderAmount() {
         return mRunwiseService.getLastOrderAmount(new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, LastBuyResponse>() {
-                    @Override
-                    public LastBuyResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
@@ -226,45 +192,33 @@ public class DataManager {
         ChangeOrderStateRequest changeOrderStateRequest = new ChangeOrderStateRequest();
         changeOrderStateRequest.setState(state);
         return mRunwiseService.changeOrderState(orderId, changeOrderStateRequest)
-                .onErrorReturn(new Func1<Throwable, EmptyResponse>() {
-                    @Override
-                    public EmptyResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
     public Observable<FinishReturnResponse> finishReturnOrder(int returnOrderId) {
         return mRunwiseService.finishReturnOrder(returnOrderId, new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, FinishReturnResponse>() {
-                    @Override
-                    public FinishReturnResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
     public Observable<OrderDetailResponse> getOrderDetail(int orderId) {
         return mRunwiseService.getOrderDetail(orderId, new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, OrderDetailResponse>() {
-                    @Override
-                    public OrderDetailResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
     public Observable<ReturnOrderDetailResponse> getReturnOrderDetail(int returnOrderId) {
         return mRunwiseService.getReturnOrderDetail(returnOrderId, new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, ReturnOrderDetailResponse>() {
-                    @Override
-                    public ReturnOrderDetailResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
@@ -272,23 +226,17 @@ public class DataManager {
         CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUser_id(Integer.parseInt(loadUser().getUid()));
         return mRunwiseService.getCategorys(categoryRequest)
-                .onErrorReturn(new Func1<Throwable, CategoryResponse>() {
-                    @Override
-                    public CategoryResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
     public Observable<UserInfoResponse> getUserInfo() {
         return mRunwiseService.getUserInfo(new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, UserInfoResponse>() {
-                    @Override
-                    public UserInfoResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 }).doOnNext(userInfoResponse -> {
                     saveUser(userInfoResponse);
                 });
@@ -304,12 +252,9 @@ public class DataManager {
         getIntelligentProductsRequest.setYongliang_factor(safetyFactor);
 
         return mRunwiseService.getIntelligentProducts(getIntelligentProductsRequest)
-                .onErrorReturn(new Func1<Throwable, IntelligentProductDataResponse>() {
-                    @Override
-                    public IntelligentProductDataResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
@@ -320,23 +265,17 @@ public class DataManager {
         commitOrderRequest.setProducts(products);
 
         return mRunwiseService.commitOrder(commitOrderRequest)
-                .onErrorReturn(new Func1<Throwable, OrderCommitResponse>() {
-                    @Override
-                    public OrderCommitResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
     public Observable<ShopInfoResponse> getShopInfo() {
         return mRunwiseService.getShopInfo(new EmptyRequest())
-                .onErrorReturn(new Func1<Throwable, ShopInfoResponse>() {
-                    @Override
-                    public ShopInfoResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
 
@@ -351,12 +290,19 @@ public class DataManager {
             orderListRequest.setEnd(endTime);
         }
         return mRunwiseService.getOrderList(orderListRequest)
-                .onErrorReturn(new Func1<Throwable, OrderResponse>() {
-                    @Override
-                    public OrderResponse call(Throwable throwable) {
-                        Log.i("onErrorReturn", throwable.toString());
-                        return null;
-                    }
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
                 });
     }
+
+    public Observable<ReturnDataResponse> getReturnOrderList() {
+        return mRunwiseService.getReturnOrderList(new EmptyRequest())
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
+                });
+    }
+
+
 }

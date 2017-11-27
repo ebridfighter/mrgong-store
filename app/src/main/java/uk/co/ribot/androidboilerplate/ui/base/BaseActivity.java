@@ -212,7 +212,6 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
     LoadingDialog mLoadingDialog;
 
     protected void showLoadingDialog() {
-        mLoadingDialog.setMsg("");
         mLoadingDialog.show();
     }
 

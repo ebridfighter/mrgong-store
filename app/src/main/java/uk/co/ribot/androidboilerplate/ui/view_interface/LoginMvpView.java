@@ -12,6 +12,7 @@ public interface LoginMvpView extends MvpView{
     void hideProgressDialog();
 
     void onSuccess();
-    void showError();
+    void showError(String error);
+    void loginConflict();
 
 }

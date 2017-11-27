@@ -121,11 +121,13 @@ public class UserInfoActivity extends BaseActivity implements UserInfoMvpView {
 
     @Override
     public void logoutError() {
+        dismissLoadingDialog();
         toast(R.string.toast_logout_fail);
     }
 
     @Override
     public void logout() {
+        dismissLoadingDialog();
         getRxBus().post(new LogOutEvent());
     }
     private void showLogoutDialog() {
@@ -136,6 +138,7 @@ public class UserInfoActivity extends BaseActivity implements UserInfoMvpView {
         mLogoutDialog.setOnBottomDialogClick(view -> {
             switch (view.getId()) {
                 case 0:
+                    showLoadingDialog();
                     mUserInfoPresenter.logout();
                     break;
             }
