@@ -10,6 +10,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -23,6 +24,7 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
 public class ProductListPresenter extends BasePresenter<ProductListMvpView> {
     private final DataManager mDataManager;
     private Subscription mSubscription;
+    private Subscription mCategorySubscription;
 
     @Inject
     public ProductListPresenter(DataManager dataManager) {
@@ -38,10 +40,34 @@ public class ProductListPresenter extends BasePresenter<ProductListMvpView> {
     public void detachView() {
         super.detachView();
         if (mSubscription != null) mSubscription.unsubscribe();
+        if (mCategorySubscription != null) mCategorySubscription.unsubscribe();
     }
 
     public UserInfoResponse loadUser(){
         return mDataManager.loadUser();
+    }
+
+    public void getCategorys() {
+        checkViewAttached();
+        RxUtil.unsubscribe(mCategorySubscription);
+        mCategorySubscription = mDataManager.getCategorys()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<CategoryResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(CategoryResponse categoryResponse) {
+                        getMvpView().showCategorys(categoryResponse);
+                    }
+                });
     }
 
     public void loadProducts() {

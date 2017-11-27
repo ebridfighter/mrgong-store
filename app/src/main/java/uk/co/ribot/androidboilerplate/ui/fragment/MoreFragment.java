@@ -36,6 +36,7 @@ import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.OrderListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.PriceListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.ReturnOrderListActivity;
+import uk.co.ribot.androidboilerplate.ui.activity.UserInfoActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.MorePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.MoreMvpView;
@@ -214,7 +215,7 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
 
     @Override
     public void logout() {
-        getBus().post(new LogOutEvent());
+        getRxBus().post(new LogOutEvent());
     }
 
     @Override
@@ -287,6 +288,7 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.sdv_head:
+                startActivity(UserInfoActivity.getStartIntent(getActivity()));
                 break;
             case R.id.ll_1:
                 startActivity(OrderListActivity.getStartIntent(getActivity(),1));

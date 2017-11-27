@@ -52,7 +52,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RunwiseService {
 
     boolean test = true;
-    public String ENDPOINT = test ? "http://develop.runwise.cn:9000" : "https://api.ribot.io";
+    String ENDPOINT = test ? "http://develop.runwise.cn:9000" : "https://api.ribot.io";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";

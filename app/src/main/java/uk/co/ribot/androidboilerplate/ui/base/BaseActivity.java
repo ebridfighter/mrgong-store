@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
+import rx.Observable;
 import rx.Subscriber;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
@@ -258,6 +259,9 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
 
     protected RxEventBus getRxBus() {
         return BoilerplateApplication.get(getActivityContext()).getComponent().eventBus();
+    }
+    protected Observable<Object> getRxBusObservable(){
+        return BoilerplateApplication.get(getActivityContext()).getComponent().eventBus().observable();
     }
 
     @Override

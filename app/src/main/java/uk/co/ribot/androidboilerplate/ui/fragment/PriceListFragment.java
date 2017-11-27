@@ -30,6 +30,8 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.PriceListMvpView;
  * Created by mike on 2017/11/24.
  */
 public class PriceListFragment extends BaseFragment implements PriceListMvpView {
+    public static final String BUNDLE_KEY_LIST = "bundle_key_list";
+    public static final String BUNDLE_KEY_CAN_SEE_PRICE = "bundle_key_can_see_price";
     @Inject
     PriceListPresenter mPriceListPresenter;
     @BindView(R.id.rv_product)
@@ -58,9 +60,9 @@ public class PriceListFragment extends BaseFragment implements PriceListMvpView 
         mRvProduct.getItemAnimator().setAddDuration(500);
         mRvProduct.getItemAnimator().setRemoveDuration(500);
         mRvProduct.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         mRvProduct.setAdapter(mProductsAdapter);
-        mPriceListPresenter.loadProducts();
+        mProductsAdapter.setRibots((List<ProductListResponse.Product>) getArguments().getSerializable(BUNDLE_KEY_LIST));
+        mProductsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -71,8 +73,7 @@ public class PriceListFragment extends BaseFragment implements PriceListMvpView 
 
     @Override
     public void showProducts(List<ProductListResponse.Product> products) {
-        mProductsAdapter.setRibots(products);
-        mProductsAdapter.notifyDataSetChanged();
+
     }
 
     @Override

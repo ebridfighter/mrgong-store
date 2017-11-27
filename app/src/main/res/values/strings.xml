@@ -97,6 +97,8 @@
     <string name="fragment_title_order_last_week">上周</string>
     <string name="fragment_title_order_earlier">更早</string>
     <string name="system_upgrading_toast">系统更新中，%1$s后才能使用哦!</string>
+    <string name="title_person_info">个人信息</string>
+    <string name="menu_logout">退出登录</string>
 
 
 </resources>

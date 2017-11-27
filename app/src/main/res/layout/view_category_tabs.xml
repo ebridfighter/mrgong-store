@@ -34,7 +34,7 @@
         android:id="@+id/iv_shadow"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/about_logo"
+        app:srcCompat="@drawable/tab_shadow"
         app:layout_constraintRight_toLeftOf="@+id/iv_open_dropdown_tab"
         app:layout_constraintTop_toTopOf="@+id/tl_tabs"/>
 

@@ -81,7 +81,7 @@ public class ProductListFragment extends BaseFragment {
         canSeePrice = mProductListPresenter.loadUser().isCanSeePrice();
         setUpListData();
 
-        getBusObservable().subscribe(new Subscriber<Object>() {
+        getRxBusObservable().subscribe(new Subscriber<Object>() {
             @Override
             public void onCompleted() {
 

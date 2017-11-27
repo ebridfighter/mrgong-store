@@ -131,10 +131,10 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
 
     }
 
-    protected Observable<Object> getBusObservable(){
+    protected Observable<Object> getRxBusObservable(){
         return BoilerplateApplication.get(getActivity()).getComponent().eventBus().observable();
     }
-    protected RxEventBus getBus(){
+    protected RxEventBus getRxBus(){
         return BoilerplateApplication.get(getActivity()).getComponent().eventBus();
     }
 

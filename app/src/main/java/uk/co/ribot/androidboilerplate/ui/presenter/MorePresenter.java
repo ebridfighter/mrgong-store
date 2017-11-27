@@ -6,9 +6,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
-import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -149,29 +147,7 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
                 });
     }
 
-    public void logout() {
-        checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.logout()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<EmptyResponse>() {
-                    @Override
-                    public void onCompleted() {
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e, "There was an error loading the DashBoardResponse.");
-                        getMvpView().logoutError();
-                    }
-
-                    @Override
-                    public void onNext(EmptyResponse emptyResponse) {
-                        getMvpView().logout();
-                    }
-                });
-    }
 
     public void logoutLocal() {
         checkViewAttached();

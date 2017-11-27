@@ -23,7 +23,6 @@ import uk.co.ribot.androidboilerplate.data.model.business.OrderState;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.adapter.OrderProductsAdapter;
-import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 
 public class OrderProductFragment extends BaseFragment {
@@ -63,32 +62,29 @@ public class OrderProductFragment extends BaseFragment {
         mOrderProductsAdapter.setProducts(products);
         mOrderProductsAdapter.setStatus(mListBean.getState());
         mOrderProductsAdapter.setCanSeePrice(getArguments().getBoolean(BUNDLE_KEY_CAN_SEE_PRICE));
-        mOrderProductsAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //发货状态订单
-                if (OrderState.PEISONG.getName().equals(mListBean.getState())) {
-                    String deliveryType = mListBean.getDeliveryType();
-                    if (deliveryType.equals(OrderListResponse.ListBean.TYPE_STANDARD) || deliveryType.equals(OrderListResponse.ListBean.TYPE_THIRD_PART_DELIVERY)
-                            || deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH) || deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_THIRD_PART_DELIVERY)) {
-                        if (!mListBean.getState().equals(OrderState.PEISONG.getName()) && !mListBean.getState().equals(OrderState.DONE.getName()) && !mListBean.getState().equals(OrderState.RATED.getName())) {
-                            return;
-                        }
+        mOrderProductsAdapter.setOnItemClickListener((view, position) -> {
+            //发货状态订单
+            if (OrderState.PEISONG.getName().equals(mListBean.getState())) {
+                String deliveryType = mListBean.getDeliveryType();
+                if (deliveryType.equals(OrderListResponse.ListBean.TYPE_STANDARD) || deliveryType.equals(OrderListResponse.ListBean.TYPE_THIRD_PART_DELIVERY)
+                        || deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH) || deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_THIRD_PART_DELIVERY)) {
+                    if (!mListBean.getState().equals(OrderState.PEISONG.getName()) && !mListBean.getState().equals(OrderState.DONE.getName()) && !mListBean.getState().equals(OrderState.RATED.getName())) {
+                        return;
                     }
-                    if (deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_VENDOR_DELIVERY) || deliveryType.equals(OrderListResponse.ListBean.TYPE_VENDOR_DELIVERY)) {
-                        if ((mListBean.getState().equals(OrderState.DONE.getName()) || mListBean.getState().equals(OrderState.RATED.getName())) && (products.get(position).getLotList() != null && products.get(position).getLotList().size() == 0)) {
-                           toast(R.string.toast_product_without_batch);
-                            return;
-                        }
-                        if (mListBean.getState().equals(OrderState.PEISONG.getName()) || mListBean.getState().equals(OrderState.DRAFT.getName()) || mListBean.getState().equals(OrderState.SALE.getName())) {
-                            return;
-                        }
+                }
+                if (deliveryType.equals(OrderListResponse.ListBean.TYPE_FRESH_VENDOR_DELIVERY) || deliveryType.equals(OrderListResponse.ListBean.TYPE_VENDOR_DELIVERY)) {
+                    if ((mListBean.getState().equals(OrderState.DONE.getName()) || mListBean.getState().equals(OrderState.RATED.getName())) && (products.get(position).getLotList() != null && products.get(position).getLotList().size() == 0)) {
+                       toast(R.string.toast_product_without_batch);
+                        return;
                     }
+                    if (mListBean.getState().equals(OrderState.PEISONG.getName()) || mListBean.getState().equals(OrderState.DRAFT.getName()) || mListBean.getState().equals(OrderState.SALE.getName())) {
+                        return;
+                    }
+                }
 //                    Intent intent = new Intent(context, LotListActivity.class);
 //                    intent.putExtra("title", basicBean.getName());
 //                    intent.putExtra("bean", (Parcelable) bean);
 //                    context.startActivity(intent);
-                }
             }
         });
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mOrderProductsAdapter);
