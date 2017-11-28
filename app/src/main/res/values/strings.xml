@@ -100,6 +100,8 @@
     <string name="title_person_info">个人信息</string>
     <string name="menu_logout">退出登录</string>
     <string name="title_return_record">退货记录</string>
+    <string name="title_statement_account">对账单</string>
+    <string name="toast_no_data">没有数据</string>
 
 
 </resources>

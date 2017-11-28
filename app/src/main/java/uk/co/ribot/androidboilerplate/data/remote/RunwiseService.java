@@ -42,6 +42,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnDataResponse
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.StatementAccountListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
@@ -152,5 +153,8 @@ public interface RunwiseService {
 
     @POST("/API/v2/return_order/list")
     Observable<ReturnDataResponse> getReturnOrderList(@Body EmptyRequest emptyRequest);
+
+    @POST("/gongfu/v2/account_invoice/list")
+    Observable<StatementAccountListResponse> getStatementAccountList(@Body EmptyRequest emptyRequest);
 
 }

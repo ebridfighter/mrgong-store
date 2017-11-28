@@ -38,6 +38,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnDataResponse
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.StatementAccountListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
@@ -303,6 +304,16 @@ public class DataManager {
                     return null;
                 });
     }
+
+    public Observable<StatementAccountListResponse> getStatementAccountList() {
+        return mRunwiseService.getStatementAccountList(new EmptyRequest())
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
+                });
+    }
+
+
 
 
 }

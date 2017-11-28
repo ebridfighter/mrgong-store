@@ -36,6 +36,7 @@ import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.OrderListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.PriceListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.ReturnOrderListActivity;
+import uk.co.ribot.androidboilerplate.ui.activity.StatementAccountActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.UserInfoActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.MorePresenter;
@@ -312,6 +313,7 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
                 startActivity(PriceListActivity.getIntent(getActivity()));
                 break;
             case R.id.rl_bill:
+                startActivity(StatementAccountActivity.getStartIntent(getActivity()));
                 break;
             case R.id.rl_procurement:
                 mMorePresenter.getProcumentPermission();

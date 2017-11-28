@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.runwise.commomlibrary.swipetoloadlayout.OnLoadMoreListener;
+import com.runwise.commomlibrary.swipetoloadlayout.OnRefreshListener;
 import com.runwise.commomlibrary.view.LoadingDialog;
 
 import java.util.HashMap;
@@ -45,7 +47,7 @@ import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
  * creation of Dagger components and makes sure that instances of ConfigPersistentComponent survive
  * across configuration changes.
  */
-public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelper.Delegate{
+public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelper.Delegate,OnRefreshListener, OnLoadMoreListener {
     protected BGASwipeBackHelper mSwipeBackHelper;
     private static final String KEY_ACTIVITY_ID = "KEY_ACTIVITY_ID";
     private static final AtomicLong NEXT_ID = new AtomicLong(0);
@@ -263,6 +265,7 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
         return BoilerplateApplication.get(getActivityContext()).getComponent().eventBus().observable();
     }
 
+
     @Override
     public boolean isSupportSwipeBack() {
         return true;
@@ -317,6 +320,16 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
         mSwipeBackHelper.setSwipeBackThreshold(0.3f);
         // 设置底部导航条是否悬浮在内容上，默认值为 false
         mSwipeBackHelper.setIsNavigationBarOverlap(false);
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 
     static class ViewHolder {
