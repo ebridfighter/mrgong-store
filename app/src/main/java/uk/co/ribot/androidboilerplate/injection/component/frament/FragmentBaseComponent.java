@@ -23,4 +23,5 @@ public interface FragmentBaseComponent {
     ReturnOrderListFragmentComponent returnOrderListFragmentComponent(ActivityModule activityModule);
     PriceListFragmentComponent priceListFragmentComponent(ActivityModule activityModule);
     MakeInventoryFragmentComponent makeInventoryFragmentComponent(ActivityModule activityModule);
+    MakeInventoryDetailFragmentComponent makeInventoryDetailFragmentComponent(ActivityModule activityModule);
 }

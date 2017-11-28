@@ -78,10 +78,12 @@ public class StatementAccountActivity extends BaseActivity implements StatementA
     @Override
     public void showStatementAccountListError(String error) {
         toast(error);
+        mIncludeLoading.setVisibility(View.GONE);
     }
 
     @Override
     public void showStatementAccountListEmpty() {
         toast(R.string.toast_no_data);
+        mIncludeLoading.setVisibility(View.GONE);
     }
 }
