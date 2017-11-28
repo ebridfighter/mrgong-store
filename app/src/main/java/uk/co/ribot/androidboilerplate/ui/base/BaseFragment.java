@@ -49,7 +49,9 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
         super.onCreateView(inflater, container, savedInstanceState);
         return null;
     }
+
     ViewHolder mViewHolder;
+
     protected View warpTitleView(View contentView) {
         mRootView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.layout_base, null);
         mViewHolder = new ViewHolder(mRootView);
@@ -57,7 +59,7 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
         return mRootView;
     }
 
-    public void showBackBtn(){
+    public void showBackBtn() {
         mViewHolder.mIvTitileLeft.setImageResource(R.drawable.back_btn);
         mViewHolder.mIvTitileLeft.setVisibility(View.VISIBLE);
         mViewHolder.mIvTitileLeft.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +69,7 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
         });
     }
 
-    protected  void setTitle(int textId){
+    protected void setTitle(int textId) {
         mViewHolder.mTvTitle.setVisibility(View.VISIBLE);
         mViewHolder.mTvTitle.setText(textId);
     }
@@ -87,6 +89,10 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
 
     protected void toast(int textId) {
         Toast.makeText(getActivity(), getString(textId), Toast.LENGTH_SHORT).show();
+    }
+
+    protected void toast(String text) {
+        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     protected boolean isTextViewEmpty(TextView textView) {
@@ -113,6 +119,7 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
         mLoadingDialog.setMsg(text);
         mLoadingDialog.show();
     }
+
     protected void showLoadingDialog() {
         mLoadingDialog.show();
     }
@@ -131,10 +138,11 @@ public class BaseFragment extends Fragment implements OnRefreshListener, OnLoadM
 
     }
 
-    protected Observable<Object> getRxBusObservable(){
+    protected Observable<Object> getRxBusObservable() {
         return BoilerplateApplication.get(getActivity()).getComponent().eventBus().observable();
     }
-    protected RxEventBus getRxBus(){
+
+    protected RxEventBus getRxBus() {
         return BoilerplateApplication.get(getActivity()).getComponent().eventBus();
     }
 

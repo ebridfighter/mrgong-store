@@ -33,6 +33,7 @@ import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.tools.ImageManager;
 import uk.co.ribot.androidboilerplate.tools.UserUtils;
 import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
+import uk.co.ribot.androidboilerplate.ui.activity.MakeInventoryActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.OrderListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.PriceListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.ReturnOrderListActivity;
@@ -306,6 +307,7 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
             case R.id.iv_right_row:
                 break;
             case R.id.rl_stocktaking_record:
+                startActivity(MakeInventoryActivity.getStartIntent(getActivity()));
                 break;
             case R.id.iv_right_row1:
                 break;

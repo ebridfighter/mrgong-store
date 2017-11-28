@@ -56,6 +56,7 @@
         <activity android:name=".ui.activity.ReturnOrderListActivity"></activity>
         <activity android:name=".ui.activity.UserInfoActivity"></activity>
         <activity android:name=".ui.activity.StatementAccountActivity"></activity>
+        <activity android:name=".ui.activity.MakeInventoryActivity"></activity>
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -20,6 +21,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetInventoryListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.OrderListRequest;
@@ -30,6 +32,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.IntelligentProductDataResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.InventoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
@@ -58,6 +61,7 @@ public interface RunwiseService {
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
+    int CONNECT_TIMEOUT =60;
 
 
     class Creator {
@@ -73,6 +77,7 @@ public interface RunwiseService {
                     .addInterceptor(new GetCookiesInterceptor())
                     .addInterceptor(new HttpLoggingInterceptor())
                     .retryOnConnectionFailure(true)
+                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -156,5 +161,11 @@ public interface RunwiseService {
 
     @POST("/gongfu/v2/account_invoice/list")
     Observable<StatementAccountListResponse> getStatementAccountList(@Body EmptyRequest emptyRequest);
+
+    @POST("/api/inventory/list")
+    Observable<InventoryResponse> getInventoryList(@Body GetInventoryListRequest getInventoryListRequest);
+
+    @POST("/api/inventory/state")
+    Observable<EmptyResponse> cancleMakeInventory(@Body CancelMakeInventoryRequest cancelMakeInventoryRequest);
 
 }

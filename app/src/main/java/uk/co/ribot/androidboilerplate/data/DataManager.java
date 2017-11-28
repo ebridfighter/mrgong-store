@@ -16,6 +16,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateReq
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetInventoryListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.OrderListRequest;
@@ -26,6 +27,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.IntelligentProductDataResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.InventoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.MessageResponse;
@@ -41,6 +43,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StatementAccountListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
+import uk.co.ribot.androidboilerplate.data.remote.CancelMakeInventoryRequest;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 
 @Singleton
@@ -313,7 +316,30 @@ public class DataManager {
                 });
     }
 
+    public Observable<InventoryResponse> getInventoryList(int page, int pageNum, int type) {
+        GetInventoryListRequest getInventoryListRequest = new GetInventoryListRequest();
+        getInventoryListRequest.setLimit(pageNum);
+        getInventoryListRequest.setPz(page);
+        getInventoryListRequest.setDate_type(type);
 
+        return mRunwiseService.getInventoryList(getInventoryListRequest)
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
+                });
+    }
+
+    public Observable<EmptyResponse> cancelMakeInventory(int id, String state) {
+        CancelMakeInventoryRequest cancelMakeInventoryRequest = new CancelMakeInventoryRequest();
+        cancelMakeInventoryRequest.setId(id);
+        cancelMakeInventoryRequest.setState(state);
+
+        return mRunwiseService.cancleMakeInventory(cancelMakeInventoryRequest)
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
+                });
+    }
 
 
 }
