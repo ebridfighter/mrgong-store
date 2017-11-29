@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
-import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.injection.component.LauncherActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
@@ -31,8 +30,8 @@ public class LauncherActivity extends BaseActivity implements LauncherMvpView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launcher);
-        hideTitleBar();
+//        setContentView(R.layout.activity_launcher);
+//        hideTitleBar();
         LauncherActivityComponent activityComponent = configPersistentComponent.launcherActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mLauncherPresenter.attachView(this);

@@ -156,4 +156,8 @@
         <!-- 改变未选中字体的颜色-->
         <item name="tabTextColor">@color/black</item>
     </style>
+
+    <style name="SplashTheme" parent="Theme.AnimStyle">
+        <item name="android:windowBackground">@drawable/logo_splash</item>
+    </style>
 </resources>
