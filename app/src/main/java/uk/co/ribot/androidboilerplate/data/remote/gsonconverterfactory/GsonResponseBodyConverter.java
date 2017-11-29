@@ -49,7 +49,9 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
                 errorCode = baseResponse.getError().getCode();
                 //sessino失效,通知界面退出登陆
                 if (CODE_LOGOUT == errorCode) {
-                    BoilerplateApplication.INSTANCE.getComponent().eventBus().post(new LogOutEvent());
+                    LogOutEvent logOutEvent = new LogOutEvent();
+                    logOutEvent.setSessionExpired(true);
+                    BoilerplateApplication.INSTANCE.getComponent().eventBus().post(logOutEvent);
                 }
             }
         }

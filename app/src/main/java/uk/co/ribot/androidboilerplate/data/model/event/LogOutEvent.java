@@ -5,4 +5,13 @@ package uk.co.ribot.androidboilerplate.data.model.event;
  */
 
 public class LogOutEvent {
+    boolean mSessionExpired;
+
+    public boolean isSessionExpired() {
+        return mSessionExpired;
+    }
+
+    public void setSessionExpired(boolean sessionExpired) {
+        mSessionExpired = sessionExpired;
+    }
 }

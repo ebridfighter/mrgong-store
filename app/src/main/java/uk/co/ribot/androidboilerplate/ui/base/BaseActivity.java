@@ -95,6 +95,9 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
             public void onNext(Object object) {
                 //收到了登出事件
                 if (LogOutEvent.class.isInstance(object)) {
+                    if (((LogOutEvent)object).isSessionExpired()){
+                        toast(R.string.toast_session_expired);
+                    }
                     BoilerplateApplication.get(getActivityContext()).getComponent().preferencesHelper().clear();
                     ActivityUtil.getInstance().finishAll();
                     startActivity(LoginActivity.getStartIntent(getActivityContext()));

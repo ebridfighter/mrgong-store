@@ -105,6 +105,7 @@
     <string name="toast_cancel_make_inventory_success">取消盘点成功!</string>
     <string name="toast_get_make_inventory_list_fail">获取盘点列表失败</string>
     <string name="title_make_inventory">盘点记录</string>
+    <string name="toast_session_expired">登录失效</string>
 
 
 </resources>

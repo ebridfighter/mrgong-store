@@ -31,4 +31,5 @@ public interface ConfigPersistentComponent {
     StatementAccountActivityComponent statementAccountActivityComponent(ActivityModule activityModule);
     MakeInventoryActivityComponent makeInventoryActivityComponent(ActivityModule activityModule);
     MakeInventoryDetailActivityComponent makeInventoryDetailActivityComponent(ActivityModule activityModule);
+    LauncherActivityComponent launcherActivityComponent(ActivityModule activityModule);
 }
