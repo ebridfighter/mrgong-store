@@ -14,12 +14,14 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
+import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetCategoryRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetHostRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetInventoryListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
@@ -31,6 +33,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HostResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.IntelligentProductDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.InventoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
@@ -51,17 +54,18 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.GetCookiesInterceptor;
+import uk.co.ribot.androidboilerplate.data.remote.interceptor.HostSelectionInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.HttpLoggingInterceptor;
 import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 
 public interface RunwiseService {
 
     boolean test = true;
-    String ENDPOINT = test ? "http://async.uat.runwise.cn" : "https://api.ribot.io";
+    String ENDPOINT = test ? PreferencesHelper.DEFAULT_HOST: "https://api.ribot.io";
 
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
-    int CONNECT_TIMEOUT =60;
+    int CONNECT_TIMEOUT = 60;
 
 
     class Creator {
@@ -73,6 +77,7 @@ public interface RunwiseService {
                     .create();
 
             OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new HostSelectionInterceptor())
                     .addInterceptor(new AddHeaderInterceptor())
                     .addInterceptor(new GetCookiesInterceptor())
                     .addInterceptor(new HttpLoggingInterceptor())
@@ -88,6 +93,7 @@ public interface RunwiseService {
                     .build();
             return retrofit.create(RunwiseService.class);
         }
+
     }
 
     @GET("/ribots")
@@ -167,5 +173,8 @@ public interface RunwiseService {
 
     @POST("/api/inventory/state")
     Observable<EmptyResponse> cancleMakeInventory(@Body CancelMakeInventoryRequest cancelMakeInventoryRequest);
+
+    @POST("/api/get/host")
+    Observable<HostResponse> getHost(@Body GetHostRequest getHostRequest);
 
 }

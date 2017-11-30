@@ -15,6 +15,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.EmptyRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.GetHostRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetIntelligentProductsRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.GetInventoryListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
@@ -26,6 +27,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.FinishReturnResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HomePageBannerResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HostResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.IntelligentProductDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.InventoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
@@ -78,12 +80,24 @@ public class DataManager {
         return mDatabaseHelper.getProducts().distinct();
     }
 
-    public Observable<LoginResponse> login(LoginRequest loginRequest) {
+    public Observable<LoginResponse> login(String account, String password) {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setLogin(account);
+        loginRequest.setPassword(password);
+        loginRequest.setRegistrationID("test");
         return mRunwiseService.login(loginRequest);
     }
 
     public void saveUser(UserInfoResponse userInfoResponse) {
         mPreferencesHelper.setUserInfo(userInfoResponse);
+    }
+
+    public void saveHost(String host) {
+        mPreferencesHelper.setHost(host);
+    }
+
+    public void saveDataBase(String databaseName) {
+        mPreferencesHelper.setCurrentDataBaseName(databaseName);
     }
 
     public UserInfoResponse loadUser() {
@@ -335,6 +349,16 @@ public class DataManager {
         cancelMakeInventoryRequest.setState(state);
 
         return mRunwiseService.cancleMakeInventory(cancelMakeInventoryRequest)
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
+                });
+    }
+
+    public Observable<HostResponse> getHost(String companyName) {
+        GetHostRequest getHostRequest = new GetHostRequest();
+        getHostRequest.setCompanyName(companyName);
+        return mRunwiseService.getHost(getHostRequest)
                 .onErrorReturn(throwable -> {
                     Log.i("onErrorReturn", throwable.toString());
                     return null;

@@ -5,12 +5,13 @@ import android.text.TextUtils;
 
 import javax.inject.Inject;
 
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
-import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HostResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.data.remote.subscriber.BaseSubscriber;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -25,6 +26,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
     private final DataManager mDataManager;
     private Subscription mSubscription;
+    private Subscription mGetHostSubscription;
 
     @Inject
     public LoginPresenter(DataManager dataManager) {
@@ -36,19 +38,29 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         super.attachView(mvpView);
     }
 
-    public boolean isLogin(){
+    @Override
+    public void detachView() {
+        super.detachView();
+        if (mGetHostSubscription != null) mGetHostSubscription.unsubscribe();
+        if (mSubscription != null) mSubscription.unsubscribe();
+    }
+
+    public boolean isLogin() {
         return mDataManager.isLogin();
+    }
+
+    public void saveHost(String host) {
+        mDataManager.saveHost(host);
+    }
+
+    public void saveDataBase(String databaseName) {
+        mDataManager.saveDataBase(databaseName);
     }
 
     public void login(String account, String password) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setLogin(account);
-        loginRequest.setPassword(password);
-        loginRequest.setRegistrationID("test");
-        getMvpView().showProgressDialog();
-        mSubscription = mDataManager.login(loginRequest)
+        mSubscription = mDataManager.login(account,password)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new BaseSubscriber<LoginResponse>((Context) getMvpView()) {
@@ -62,26 +74,44 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                         super.onError(e);
                         Timber.e(e, "网络错误");
                         getMvpView().showError(e.getMessage());
-                        getMvpView().hideProgressDialog();
                     }
 
                     @Override
                     public void onNext(LoginResponse loginResponse) {
                         super.onNext(loginResponse);
                         String success = loginResponse.getIsSuccess();
-                        if (TextUtils.isEmpty(success)||"false".equals(success)) {
+                        if (TextUtils.isEmpty(success) || "false".equals(success)) {
                             getMvpView().loginConflict();
                         } else {
                             mDataManager.saveUser(loginResponse.getUser());
                             getMvpView().onSuccess();
                         }
-                        getMvpView().hideProgressDialog();
                     }
                 });
     }
 
-    public void clear(){
+    public void getHost(String companyName) {
+        checkViewAttached();
+        RxUtil.unsubscribe(mGetHostSubscription);
+        mGetHostSubscription = mDataManager.getHost(companyName)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<HostResponse>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getMvpView().getHostError(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(HostResponse hostResponse) {
+                        if(hostResponse != null){
+                            getMvpView().getHostSuccess(hostResponse);
+                        }
+                    }
+                });
     }
-
 }

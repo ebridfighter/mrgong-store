@@ -37,6 +37,44 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="12dp"
+                android:paddingTop="4dp"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/login_ico_company"
+                    />
+                <uk.co.ribot.androidboilerplate.view.ClearEditText
+                    android:id="@+id/cet_company"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="#0000"
+                    android:hint="请输入公司名"
+                    android:text="LBZ"
+                    android:maxLength="11"
+                    android:padding="10dp"
+                    android:textColorHint="#b7b7b7"
+                    android:textSize="14sp"
+                    android:layout_marginRight="12dp"
+                    android:singleLine="true"
+                    />
+                <ImageView
+                    android:id="@+id/iv_company"
+                    android:layout_width="18dp"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/topLayout"
                 android:layout_width="match_parent"

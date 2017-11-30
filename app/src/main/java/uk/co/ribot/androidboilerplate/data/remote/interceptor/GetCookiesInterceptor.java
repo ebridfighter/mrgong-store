@@ -41,7 +41,7 @@ public class GetCookiesInterceptor implements Interceptor {
                             cookieBuffer.append(cookie);
                         }
                     });
-            if (cookieBuffer.toString().contains("session_id")){
+            if (cookieBuffer.toString().contains("session_id")&&chain.request().url().uri().getPath().contains("/gongfu/v2/authenticate")){
                 PreferencesHelper.setCookie(cookieBuffer.toString());
                 Log.i("session_id",cookieBuffer.toString());
             }

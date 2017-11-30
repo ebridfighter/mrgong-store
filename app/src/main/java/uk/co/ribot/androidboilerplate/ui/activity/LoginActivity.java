@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.net.response.HostResponse;
 import uk.co.ribot.androidboilerplate.injection.component.LoginActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
@@ -52,6 +53,9 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     @Inject
     LoginPresenter mLoginPresenter;
+    @BindView(R.id.cet_company)
+    ClearEditText mCetCompany;
+
     public static Intent getStartIntent(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         return intent;
@@ -66,7 +70,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
         LoginActivityComponent activityComponent = configPersistentComponent.loginActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mLoginPresenter.attachView(this);
-        if (mLoginPresenter.isLogin()){
+        if (mLoginPresenter.isLogin()) {
             finish();
             startActivity(MainActivity.getStartIntent(getActivityContext()));
         }
@@ -74,34 +78,40 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     @OnClick(R.id.login_btn)
     public void onViewClicked() {
-        mLoginPresenter.login(mTeacherRegPhone.getText().toString().trim(), mTeacherRegPassword.getText().toString().trim());
-    }
-
-
-    @Override
-    public void showProgressDialog() {
         showLoadingDialog("登录中...");
-    }
-
-    @Override
-    public void hideProgressDialog() {
-      dismissLoadingDialog();
+        mLoginPresenter.getHost(mCetCompany.getText().toString());
     }
 
     @Override
     public void onSuccess() {
+        dismissLoadingDialog();
         toast("登录成功");
         startActivity(MainActivity.getStartIntent(LoginActivity.this));
     }
 
     @Override
     public void showError(String error) {
+        dismissLoadingDialog();
         toast(error);
     }
 
     @Override
     public void loginConflict() {
         toast("登录冲突");
+        dismissLoadingDialog();
+    }
+
+    @Override
+    public void getHostSuccess(HostResponse hostResponse) {
+        mLoginPresenter.saveHost(hostResponse.getHost());
+        mLoginPresenter.saveDataBase(hostResponse.getDbName());
+        mLoginPresenter.login(mTeacherRegPhone.getText().toString().trim(), mTeacherRegPassword.getText().toString().trim());
+    }
+
+    @Override
+    public void getHostError(String error) {
+        toast(error);
+        dismissLoadingDialog();
     }
 
     @Override

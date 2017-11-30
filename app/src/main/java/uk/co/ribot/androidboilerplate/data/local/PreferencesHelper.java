@@ -16,9 +16,11 @@ public class PreferencesHelper {
 
     public static final String PREF_FILE_NAME = "android_runwise_pref_file";
     public static final String PREF_KEY_DATABASE = "pref_key_database";
+    public static final String PREF_KEY_HOST = "pref_key_host";
     public static final String PREF_KEY_COOKIES = "pref_key_cookies";
     public static final String PREF_KEY_USER_INFO = "pref_key_user_info";
-    public static final String DEFAULT_DATABASE_NAME = "MF-PreGolive-Test";
+    public static final String DEFAULT_DATABASE_NAME = "ZY-PreGolive-001";
+    public static final String DEFAULT_HOST = "http://test.uat.runwise.cn";
 
 
     private static SharedPreferences mPref = null;
@@ -40,6 +42,15 @@ public class PreferencesHelper {
      */
     public static String getCurrentDataBaseName() {
         return mPref.getString(PREF_KEY_DATABASE, DEFAULT_DATABASE_NAME);
+    }
+
+    /**
+     * 设置当前数据库
+     *
+     * @return
+     */
+    public static void setCurrentDataBaseName(String dataBaseName) {
+        mPref.edit().putString(PREF_KEY_DATABASE, dataBaseName).commit();
     }
 
     /**
@@ -66,7 +77,15 @@ public class PreferencesHelper {
 
     public static UserInfoResponse getUserInfo() {
         String userInfoStr = mPref.getString(PREF_KEY_USER_INFO, "");
-        return (UserInfoResponse) ObjectTransformUtil.toObject(userInfoStr,UserInfoResponse.class);
+        return (UserInfoResponse) ObjectTransformUtil.toObject(userInfoStr, UserInfoResponse.class);
+    }
+
+    public static String getHost() {
+        return mPref.getString(PREF_KEY_HOST, DEFAULT_HOST);
+    }
+
+    public static void setHost(String host) {
+        mPref.edit().putString(PREF_KEY_HOST, host).commit();
     }
 
 
