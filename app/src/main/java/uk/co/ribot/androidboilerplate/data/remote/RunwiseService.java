@@ -16,6 +16,7 @@ import retrofit2.http.Path;
 import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.request.CancelMakeInventoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;

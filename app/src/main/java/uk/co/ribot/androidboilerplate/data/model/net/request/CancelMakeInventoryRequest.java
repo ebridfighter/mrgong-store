@@ -1,4 +1,4 @@
-package uk.co.ribot.androidboilerplate.data.remote;
+package uk.co.ribot.androidboilerplate.data.model.net.request;
 
 /**
  * Created by mike on 2017/11/28.

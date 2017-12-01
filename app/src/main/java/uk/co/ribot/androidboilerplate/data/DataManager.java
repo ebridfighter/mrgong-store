@@ -45,7 +45,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StatementAccountListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
-import uk.co.ribot.androidboilerplate.data.remote.CancelMakeInventoryRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.CancelMakeInventoryRequest;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 
 @Singleton
