@@ -70,7 +70,7 @@ public interface RunwiseService {
 
     class Creator {
         /******** Helper class that sets up a new services *******/
-        public static RunwiseService newRibotsService() {
+        public static RunwiseService newRunwiseService() {
             Gson gson = new GsonBuilder()
                     .registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create())
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

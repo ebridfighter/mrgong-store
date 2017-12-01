@@ -35,7 +35,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     RunwiseService provideRibotsService() {
-        return RunwiseService.Creator.newRibotsService();
+        return RunwiseService.Creator.newRunwiseService();
     }
 
 }
