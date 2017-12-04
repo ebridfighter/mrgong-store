@@ -21,6 +21,7 @@ import retrofit2.Converter;
 public class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
     private static final Charset UTF_8 = Charset.forName("UTF-8");
+    private static final String TAG = "RequestBody";
 
     private final Gson gson;
     private final TypeAdapter<T> adapter;
@@ -37,6 +38,7 @@ public class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
         JsonWriter jsonWriter = gson.newJsonWriter(writer);
         adapter.write(jsonWriter, value);
         jsonWriter.close();
+//        Log.i(TAG, "request:" + buffer.readString(UTF_8));
         return RequestBody.create(MEDIA_TYPE, buffer.readByteString());
     }
 }

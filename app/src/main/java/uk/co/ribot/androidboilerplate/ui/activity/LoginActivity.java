@@ -3,6 +3,7 @@ package uk.co.ribot.androidboilerplate.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -56,6 +57,8 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @BindView(R.id.cet_company)
     ClearEditText mCetCompany;
 
+    HostResponse mHostResponse;
+
     public static Intent getStartIntent(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         return intent;
@@ -103,6 +106,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     @Override
     public void getHostSuccess(HostResponse hostResponse) {
+        mHostResponse = hostResponse;
         mLoginPresenter.saveHost(hostResponse.getHost());
         mLoginPresenter.saveDataBase(hostResponse.getDbName());
         mLoginPresenter.login(mTeacherRegPhone.getText().toString().trim(), mTeacherRegPassword.getText().toString().trim());
@@ -110,7 +114,11 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     @Override
     public void getHostError(String error) {
-        toast(error);
+        if(TextUtils.isEmpty(error)){
+            toast(R.string.toast_company_no_exist);
+        }else{
+            toast(error);
+        }
         dismissLoadingDialog();
     }
 

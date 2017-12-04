@@ -64,8 +64,11 @@ public interface RunwiseService {
     boolean test = true;
     String ENDPOINT = test ? PreferencesHelper.DEFAULT_HOST: "https://api.ribot.io";
 
+    String HOST_URL = "/api/get/host";
+
     String HEAD_KEY_COOKIE = "Cookie";
     String HEAD_KEY_DATABASE = "X-Odoo-Db";
+    String HEAD_KEY_TIMESTAMP = "timeStamp";
     int CONNECT_TIMEOUT = 60;
 
 

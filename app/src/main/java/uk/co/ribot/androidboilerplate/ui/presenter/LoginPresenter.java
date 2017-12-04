@@ -1,6 +1,5 @@
 package uk.co.ribot.androidboilerplate.ui.presenter;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import javax.inject.Inject;
@@ -13,7 +12,6 @@ import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HostResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
-import uk.co.ribot.androidboilerplate.data.remote.subscriber.BaseSubscriber;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.LoginMvpView;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
@@ -63,22 +61,20 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         mSubscription = mDataManager.login(account,password)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new BaseSubscriber<LoginResponse>((Context) getMvpView()) {
+                .subscribe(new Subscriber<LoginResponse>() {
                     @Override
                     public void onCompleted() {
-                        super.onCompleted();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        super.onError(e);
                         Timber.e(e, "网络错误");
                         getMvpView().showError(e.getMessage());
                     }
 
                     @Override
                     public void onNext(LoginResponse loginResponse) {
-                        super.onNext(loginResponse);
                         String success = loginResponse.getIsSuccess();
                         if (TextUtils.isEmpty(success) || "false".equals(success)) {
                             getMvpView().loginConflict();
@@ -110,6 +106,8 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                     public void onNext(HostResponse hostResponse) {
                         if(hostResponse != null){
                             getMvpView().getHostSuccess(hostResponse);
+                        }else{
+                            getMvpView().getHostError("");
                         }
                     }
                 });

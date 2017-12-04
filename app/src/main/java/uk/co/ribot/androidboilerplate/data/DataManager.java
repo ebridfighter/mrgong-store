@@ -72,6 +72,10 @@ public class DataManager {
                 .concatMap(ribots -> mDatabaseHelper.setRibots(ribots));
     }
 
+    public void setCookies(String cookies){
+        mPreferencesHelper.setCookie("");
+    }
+
     public Observable<List<Ribot>> getRibots() {
         return mDatabaseHelper.getRibots().distinct();
     }
@@ -218,7 +222,7 @@ public class DataManager {
 
     public Observable<FinishReturnResponse> finishReturnOrder(int returnOrderId) {
         return mRunwiseService.finishReturnOrder(returnOrderId, new EmptyRequest())
-                .onErrorReturn(throwable -> {
+                .onErrorReturn((Throwable throwable) -> {
                     Log.i("onErrorReturn", throwable.toString());
                     return null;
                 });

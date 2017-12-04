@@ -106,6 +106,7 @@
     <string name="toast_get_make_inventory_list_fail">获取盘点列表失败</string>
     <string name="title_make_inventory">盘点记录</string>
     <string name="toast_session_expired">登录失效</string>
+    <string name="toast_company_no_exist">该企业号不存在!</string>
 
 
 </resources>

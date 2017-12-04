@@ -207,7 +207,9 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
     }
 
     protected void toast(String text) {
-        ToastUtil.show(getActivityContext(), text);
+        if(!TextUtils.isEmpty(text)){
+            ToastUtil.show(getActivityContext(), text);
+        }
     }
 
     protected void toast(int textId) {
