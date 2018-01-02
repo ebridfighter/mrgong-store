@@ -107,7 +107,11 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @Override
     public void getHostSuccess(HostResponse hostResponse) {
         mHostResponse = hostResponse;
-        mLoginPresenter.saveHost(hostResponse.getHost());
+        if (TextUtils.isEmpty(hostResponse.getPort())){
+            mLoginPresenter.saveHost(hostResponse.getHost());
+        }else{
+            mLoginPresenter.saveHost(hostResponse.getHost()+":"+hostResponse.getPort());
+        }
         mLoginPresenter.saveDataBase(hostResponse.getDbName());
         mLoginPresenter.login(mTeacherRegPhone.getText().toString().trim(), mTeacherRegPassword.getText().toString().trim());
     }

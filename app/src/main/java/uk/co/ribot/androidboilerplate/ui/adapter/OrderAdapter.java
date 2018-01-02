@@ -195,9 +195,9 @@ public class OrderAdapter extends BaseAdapter<OrderAdapter.OrderViewHolder> {
             }
             //派单前，派单后，用户收货后
             StringBuffer etSb = new StringBuffer();
-            if (bean.getState().equals(OrderState.DRAFT.getName()) || bean.getState().equals(OrderState.SALE.getName())) {
+            if (OrderState.DRAFT.getName().equals(bean.getState()) || OrderState.SALE.getName().equals(bean.getState())) {
                 etSb.append("预计").append(formatTimeStr(bean.getEstimatedDate())).append("送达");
-            } else if (bean.getState().equals(OrderState.PEISONG.getName())) {
+            } else if (OrderState.PEISONG.getName().equals(bean.getState())) {
                 etSb.append("预计").append(formatTimeStr(bean.getEstimatedDate())).append("送达");
             } else {
                 etSb.append(bean.getDoneDatetime()).append("已送达");
@@ -268,10 +268,12 @@ public class OrderAdapter extends BaseAdapter<OrderAdapter.OrderViewHolder> {
             } else {
                 holder.mTvReal.setVisibility(View.GONE);
             }
-            if (bean.getHasAttachment() == 0 && bean.getOrderSettleName().contains("单次结算") && bean.getOrderSettleName().contains("先付款后收货") && bean.getState().equals(OrderState.DRAFT.getName())) {
-                holder.mTvToPay.setVisibility(View.VISIBLE);
-            } else {
-                holder.mTvToPay.setVisibility(View.GONE);
+            if (bean.getOrderSettleName() != null){
+                if (bean.getHasAttachment() == 0 && bean.getOrderSettleName().contains("单次结算") && bean.getOrderSettleName().contains("先付款后收货") && OrderState.DRAFT.getName().equals(bean.getState())) {
+                    holder.mTvToPay.setVisibility(View.VISIBLE);
+                } else {
+                    holder.mTvToPay.setVisibility(View.GONE);
+                }
             }
         } else {
             final ReturnOrderListResponse.ListBean bean = mOrderListWraps.get(position).getReturnOrderListBean();

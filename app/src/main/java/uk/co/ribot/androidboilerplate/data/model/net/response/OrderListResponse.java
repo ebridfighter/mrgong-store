@@ -248,6 +248,9 @@ public class OrderListResponse {
         }
 
         public String getState() {
+            if (state == null){
+                state = "";
+            }
             return state;
         }
 

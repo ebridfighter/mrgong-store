@@ -14,12 +14,12 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 public class OrderActionUtils {
     //通过订单状态，获取按钮上该显示什么字
     public static String getDoBtnTextByState(OrderListResponse.ListBean bean) {
-        String btnText = null;
-        if (bean.getState().equals(OrderState.DRAFT.getName())){
+        String btnText = "无状态";
+        if (OrderState.DRAFT.getName().equals(bean.getState())){
             btnText = "取消订单";
-        }else if(bean.getState().equals(OrderState.SALE.getName())){
+        }else if(OrderState.SALE.getName().equals(bean.getState())){
             //不做任务事情，返回null,隐藏此按钮
-        }else if(bean.getState().equals(OrderState.PEISONG.getName())){
+        }else if(OrderState.PEISONG.getName().equals(bean.getState())){
             if (bean.isIsDoubleReceive()){
                 if (bean.isIsFinishTallying()){
                     //双人收货
@@ -33,14 +33,14 @@ public class OrderActionUtils {
                 btnText = "收货";
             }
 
-        }else if(bean.getState().equals(OrderState.DONE.getName())){
+        }else if(OrderState.DONE.getName().equals(bean.getState())){
 //            if (bean.getHasAttachment() != 0){
 //                btnText = "查看支付凭证";
 //            }else{
 //                btnText = "上传支付凭证";
 //            }
             btnText = "评价";
-        }else if(bean.getState().equals(OrderState.RATED.getName())){
+        }else if(OrderState.RATED.getName().equals(bean.getState())){
             btnText = "已评价";
         }else if(OrderState.CANCEL.getName().equals(bean.getState())){
             btnText = "删除订单";

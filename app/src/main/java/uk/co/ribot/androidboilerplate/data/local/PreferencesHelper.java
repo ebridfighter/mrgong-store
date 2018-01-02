@@ -19,8 +19,8 @@ public class PreferencesHelper {
     public static final String PREF_KEY_HOST = "pref_key_host";
     public static final String PREF_KEY_COOKIES = "pref_key_cookies";
     public static final String PREF_KEY_USER_INFO = "pref_key_user_info";
-    public static final String DEFAULT_DATABASE_NAME = "ZY-PreGolive-001";
-    public static final String DEFAULT_HOST = "http://test.uat.runwise.cn";
+    public static final String DEFAULT_DATABASE_NAME = "gethost";
+    public static final String DEFAULT_HOST = "http://gethost.runwise.cn";
 
 
     private static SharedPreferences mPref = null;

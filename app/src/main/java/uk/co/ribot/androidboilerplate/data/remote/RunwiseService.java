@@ -53,6 +53,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.StatementAccountLi
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.CustomGsonConverterFactory;
+import uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory.StringConverter;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.AddHeaderInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.GetCookiesInterceptor;
 import uk.co.ribot.androidboilerplate.data.remote.interceptor.HostSelectionInterceptor;
@@ -62,7 +63,7 @@ import uk.co.ribot.androidboilerplate.util.MyGsonTypeAdapterFactory;
 public interface RunwiseService {
 
     boolean test = true;
-    String ENDPOINT = test ? PreferencesHelper.DEFAULT_HOST: "https://api.ribot.io";
+    String ENDPOINT = test ? PreferencesHelper.DEFAULT_HOST : "https://api.ribot.io";
 
     String HOST_URL = "/api/get/host";
 
@@ -77,6 +78,8 @@ public interface RunwiseService {
         public static RunwiseService newRunwiseService() {
             Gson gson = new GsonBuilder()
                     .registerTypeAdapterFactory(MyGsonTypeAdapterFactory.create())
+//                    .registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory())
+                    .registerTypeAdapter(String.class, new StringConverter())
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                     .create();
 

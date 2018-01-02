@@ -109,7 +109,7 @@ public class DataManager {
     }
 
     public boolean isLogin() {
-        return mPreferencesHelper.isLogin();
+        return mPreferencesHelper.isLogin() && loadUser() !=null;
     }
 
     public boolean canSeePrice() {
@@ -246,6 +246,10 @@ public class DataManager {
 
     public Observable<CategoryResponse> getCategorys() {
         CategoryRequest categoryRequest = new CategoryRequest();
+        UserInfoResponse userInfoResponse = loadUser();
+        if (userInfoResponse == null){
+            return null;
+        }
         categoryRequest.setUser_id(Integer.parseInt(loadUser().getUid()));
         return mRunwiseService.getCategorys(categoryRequest)
                 .onErrorReturn(throwable -> {
