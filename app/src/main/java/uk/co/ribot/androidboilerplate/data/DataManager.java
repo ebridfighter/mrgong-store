@@ -11,6 +11,7 @@ import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.net.request.CancelMakeInventoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
@@ -21,6 +22,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.GetInventoryListReq
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.OrderListRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.ProcurementRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
@@ -37,6 +39,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitRespons
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProcurementResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
@@ -45,7 +48,6 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StatementAccountListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.StockListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.request.CancelMakeInventoryRequest;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 
 @Singleton
@@ -367,6 +369,16 @@ public class DataManager {
         GetHostRequest getHostRequest = new GetHostRequest();
         getHostRequest.setCompanyName(companyName);
         return mRunwiseService.getHost(getHostRequest)
+                .onErrorReturn(throwable -> {
+                    Log.i("onErrorReturn", throwable.toString());
+                    return null;
+                });
+    }
+
+    public Observable<ProcurementResponse> getZiCaiList(int type) {
+        ProcurementRequest procurementRequest = new ProcurementRequest();
+        procurementRequest.setType(type);
+        return mRunwiseService.getZiCaiList(procurementRequest)
                 .onErrorReturn(throwable -> {
                     Log.i("onErrorReturn", throwable.toString());
                     return null;

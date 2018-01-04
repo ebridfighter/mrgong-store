@@ -60,6 +60,7 @@
         <activity android:name=".ui.activity.StatementAccountActivity"></activity>
         <activity android:name=".ui.activity.MakeInventoryActivity"></activity>
         <activity android:name=".ui.activity.MakeInventoryDetailActivity"></activity>
+        <activity android:name=".ui.activity.ProcurementActivity"></activity>
     </application>
 
 </manifest>

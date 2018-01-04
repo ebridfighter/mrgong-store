@@ -28,6 +28,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.GetInventoryListReq
 import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.OrderListRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.ProcurementRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
@@ -44,6 +45,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitRespons
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderResponse;
+import uk.co.ribot.androidboilerplate.data.model.net.response.ProcurementResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnDataResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
@@ -183,5 +185,8 @@ public interface RunwiseService {
 
     @POST("/api/get/host")
     Observable<HostResponse> getHost(@Body GetHostRequest getHostRequest);
+
+    @POST("/gongfu/shop/zicai/list")
+    Observable<ProcurementResponse> getZiCaiList(@Body ProcurementRequest procurementRequest);
 
 }

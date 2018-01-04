@@ -36,6 +36,7 @@ import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.MakeInventoryActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.OrderListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.PriceListActivity;
+import uk.co.ribot.androidboilerplate.ui.activity.ProcurementActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.ReturnOrderListActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.StatementAccountActivity;
 import uk.co.ribot.androidboilerplate.ui.activity.UserInfoActivity;
@@ -270,7 +271,7 @@ public class MoreFragment extends BaseFragment implements MoreMvpView {
     public void showProcumentPermission(UserInfoResponse userInfoResponse) {
         if (Boolean.parseBoolean(userInfoResponse.getIsZicai())) {
             //跳去采购页面
-//            startActivity(new Intent(mContext, ProcurementActivity.class));
+            startActivity(ProcurementActivity.getStartIntent(getActivity()));
         } else {
             toast(R.string.toast_no_procument_permission);
         }

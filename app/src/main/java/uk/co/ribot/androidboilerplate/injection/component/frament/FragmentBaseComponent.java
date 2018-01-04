@@ -24,4 +24,5 @@ public interface FragmentBaseComponent {
     PriceListFragmentComponent priceListFragmentComponent(ActivityModule activityModule);
     MakeInventoryFragmentComponent makeInventoryFragmentComponent(ActivityModule activityModule);
     MakeInventoryDetailFragmentComponent makeInventoryDetailFragmentComponent(ActivityModule activityModule);
+    ProcurementFragmentComponent procurementFragmentComponent(ActivityModule activityModule);
 }
