@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -89,7 +91,8 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     public void onSuccess() {
         dismissLoadingDialog();
         toast("登录成功");
-        startActivity(MainActivity.getStartIntent(LoginActivity.this));
+//        startActivity(MainActivity.getStartIntent(LoginActivity.this));
+        ARouter.getInstance().build("/test/MainActivity").navigation();
     }
 
     @Override
