@@ -71,7 +71,6 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                 }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<LoginResponse>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
