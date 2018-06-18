@@ -1,1 +1,1 @@
-include ':app', ':commomlibrary', 'ucrop'
+include ':app', ':commomlibrary', ':moduleInventory', 'ucrop'

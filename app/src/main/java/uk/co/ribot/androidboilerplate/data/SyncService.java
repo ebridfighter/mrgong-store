@@ -48,7 +48,6 @@ public class SyncService extends Service {
             stopSelf(startId);
             return START_NOT_STICKY;
         }
-
         RxUtil.unsubscribe(mSubscription);
 //        mSubscription = mDataManager.syncRibots()
 //                .subscribeOn(Schedulers.io())

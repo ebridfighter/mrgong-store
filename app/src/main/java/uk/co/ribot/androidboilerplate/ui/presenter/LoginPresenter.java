@@ -4,9 +4,11 @@ import android.text.TextUtils;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
@@ -47,21 +49,26 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         return mDataManager.isLogin();
     }
 
-    public void saveHost(String host) {
-        mDataManager.saveHost(host);
-    }
-
-    public void saveDataBase(String databaseName) {
-        mDataManager.saveDataBase(databaseName);
-    }
-
-    public void login(String account, String password) {
+    public void login(String companyName,String account, String password) {
         checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.login(account,password)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<LoginResponse>() {
+        RxUtil.unsubscribe(mGetHostSubscription);
+        mGetHostSubscription = mDataManager.getHost(companyName)
+                .flatMap(new Func1<HostResponse, Observable<LoginResponse>>(){
+                    @Override
+                    public Observable<LoginResponse> call(HostResponse hostResponse) {
+                        if(hostResponse == null){
+                            getMvpView().getHostError("");
+                            return null;
+                        }
+                        if (TextUtils.isEmpty(hostResponse.getPort())){
+                            mDataManager.saveHost(hostResponse.getHost());
+                        }else{
+                            mDataManager.saveHost(hostResponse.getHost()+":"+hostResponse.getPort());
+                        }
+                        mDataManager.saveDataBase(hostResponse.getDbName());
+                        return  mDataManager.login(account, password);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<LoginResponse>() {
                     @Override
                     public void onCompleted() {
 
@@ -84,32 +91,6 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                         }
                     }
                 });
-    }
 
-    public void getHost(String companyName) {
-        checkViewAttached();
-        RxUtil.unsubscribe(mGetHostSubscription);
-        mGetHostSubscription = mDataManager.getHost(companyName)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<HostResponse>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().getHostError(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(HostResponse hostResponse) {
-                        if(hostResponse != null){
-                            getMvpView().getHostSuccess(hostResponse);
-                        }else{
-                            getMvpView().getHostError("");
-                        }
-                    }
-                });
     }
 }

@@ -10,6 +10,7 @@ import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.injection.component.ApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.component.DaggerApplicationComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ApplicationModule;
+import uk.co.ribot.androidboilerplate.util.MyActivityLifecycleCallbacks;
 
 public class BoilerplateApplication extends Application  {
 
@@ -29,6 +30,8 @@ public class BoilerplateApplication extends Application  {
         ARouter.init(this); // 尽可能早，推荐在Application中初始化
         BGASwipeBackHelper.init(this, null);
         INSTANCE = this;
+        registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks());
+
     }
 
     public static BoilerplateApplication get(Context context) {

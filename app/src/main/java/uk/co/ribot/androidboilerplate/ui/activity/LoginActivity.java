@@ -11,15 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.net.response.HostResponse;
 import uk.co.ribot.androidboilerplate.injection.component.LoginActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
@@ -59,8 +56,6 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @BindView(R.id.cet_company)
     ClearEditText mCetCompany;
 
-    HostResponse mHostResponse;
-
     public static Intent getStartIntent(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         return intent;
@@ -84,15 +79,15 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @OnClick(R.id.login_btn)
     public void onViewClicked() {
         showLoadingDialog("登录中...");
-        mLoginPresenter.getHost(mCetCompany.getText().toString());
+        mLoginPresenter.login(mCetCompany.getText().toString(),mTeacherRegPhone.getText().toString().trim(), mTeacherRegPassword.getText().toString().trim());
     }
 
     @Override
     public void onSuccess() {
         dismissLoadingDialog();
         toast("登录成功");
-//        startActivity(MainActivity.getStartIntent(LoginActivity.this));
-        ARouter.getInstance().build("/test/MainActivity").navigation();
+        startActivity(MainActivity.getStartIntent(LoginActivity.this));
+//        ARouter.getInstance().build("/test/InventoryActivity").navigation();
     }
 
     @Override
@@ -105,18 +100,6 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     public void loginConflict() {
         toast("登录冲突");
         dismissLoadingDialog();
-    }
-
-    @Override
-    public void getHostSuccess(HostResponse hostResponse) {
-        mHostResponse = hostResponse;
-        if (TextUtils.isEmpty(hostResponse.getPort())){
-            mLoginPresenter.saveHost(hostResponse.getHost());
-        }else{
-            mLoginPresenter.saveHost(hostResponse.getHost()+":"+hostResponse.getPort());
-        }
-        mLoginPresenter.saveDataBase(hostResponse.getDbName());
-        mLoginPresenter.login(mTeacherRegPhone.getText().toString().trim(), mTeacherRegPassword.getText().toString().trim());
     }
 
     @Override
