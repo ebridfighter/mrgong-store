@@ -9,9 +9,10 @@ import android.os.IBinder;
 
 import javax.inject.Inject;
 
-import rx.Observer;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
@@ -70,19 +71,25 @@ public class SyncService extends Service {
 //                    }
 //                });
 
-        mSubscription = mDataManager.syncProducts()
+      mDataManager.syncProducts()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<ProductListResponse>() {
-                    @Override
-                    public void onCompleted() {
-                        Timber.i("Synced successfully!");
-                        stopSelf(startId);
-                    }
 
                     @Override
                     public void onError(Throwable e) {
                         Timber.w(e, "Error syncing.");
                         stopSelf(startId);
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Timber.i("Synced successfully!");
+                        stopSelf(startId);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
                     }
 

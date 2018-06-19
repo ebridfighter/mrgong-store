@@ -2,10 +2,11 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.InventoryResponse;
@@ -33,53 +34,58 @@ public class MakeInventoryFragmentPresenter extends BasePresenter<MakeInventoryF
         super.attachView(mvpView);
     }
 
-    public UserInfoResponse loadUser(){
+    public UserInfoResponse loadUser() {
         return mDataManager.loadUser();
     }
 
     public void getInventoryList(int page, int pageNum, int type) {
         checkViewAttached();
-        if (mSubscription != null) {
-            mSubscription.unsubscribe();
-        }
-        mSubscription = mDataManager.getInventoryList(page, pageNum, type).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<InventoryResponse>() {
-                    @Override
-                    public void onCompleted() {
+        mDataManager.getInventoryList(page, pageNum, type).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<InventoryResponse>() {
 
-                    }
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showInventoryListError(e.toString());
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().showInventoryListError(e.toString());
-                    }
+            @Override
+            public void onComplete() {
 
-                    @Override
-                    public void onNext(InventoryResponse inventoryResponse) {
-                        if (inventoryResponse.getList().isEmpty()) {
-                            getMvpView().showInventoryListEmpty();
-                        } else {
-                            getMvpView().showInventoryList(inventoryResponse);
-                        }
-                    }
-                });
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(InventoryResponse inventoryResponse) {
+                if (inventoryResponse.getList().isEmpty()) {
+                    getMvpView().showInventoryListEmpty();
+                } else {
+                    getMvpView().showInventoryList(inventoryResponse);
+                }
+            }
+        });
     }
 
     public void cancelMakeInventory(int id, String state) {
         checkViewAttached();
-        if (mCancleMakeInventorySubscription != null) {
-            mCancleMakeInventorySubscription.unsubscribe();
-        }
-        mCancleMakeInventorySubscription = mDataManager.cancelMakeInventory(id, state).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<EmptyResponse>() {
+       mDataManager.cancelMakeInventory(id, state).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<EmptyResponse>() {
                     @Override
-                    public void onCompleted() {
+                    public void onError(Throwable e) {
+                        getMvpView().cancelMakeInventoryError(e.toString());
+                    }
+
+                    @Override
+                    public void onComplete() {
 
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        getMvpView().cancelMakeInventoryError(e.toString());
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override

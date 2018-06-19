@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
@@ -15,7 +17,6 @@ import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListRespons
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.SelfHelpPlaceOrderMvpView;
-import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 /**
  * Created by mike on 2017/11/16.
@@ -52,40 +53,50 @@ public class SelfHelpPlaceOrderPresenter extends BasePresenter<SelfHelpPlaceOrde
 
     public void getUserInfo() {
         checkViewAttached();
-        RxUtil.unsubscribe(mGetUserInfoSubscription);
-        mGetUserInfoSubscription = mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<UserInfoResponse>() {
-                    @Override
-                    public void onCompleted() {
+        mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<UserInfoResponse>() {
 
-                    }
+            @Override
+            public void onError(Throwable e) {
 
-                    @Override
-                    public void onError(Throwable e) {
+            }
 
-                    }
+            @Override
+            public void onComplete() {
 
-                    @Override
-                    public void onNext(UserInfoResponse userInfoResponse) {
-                        getMvpView().getUserInfoSuccess(userInfoResponse);
-                    }
-                });
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(UserInfoResponse userInfoResponse) {
+                getMvpView().getUserInfoSuccess(userInfoResponse);
+            }
+        });
     }
 
     public void commitOrder(String estimated_time, String order_type_id, List<CommitOrderRequest.ProductsBean> products) {
         checkViewAttached();
-        RxUtil.unsubscribe(mCommitOrderSubscription);
-        mCommitOrderSubscription = mDataManager.commitOrder(estimated_time, order_type_id, products)
+       mDataManager.commitOrder(estimated_time, order_type_id, products)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<OrderCommitResponse>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<OrderCommitResponse>() {
 
                     @Override
                     public void onError(Throwable e) {
                         getMvpView().commitOrderError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override
@@ -95,10 +106,10 @@ public class SelfHelpPlaceOrderPresenter extends BasePresenter<SelfHelpPlaceOrde
                 });
     }
 
-    public void loadProduct(int productId){
+    public void loadProduct(int productId) {
         checkViewAttached();
-        mDataManager.loadProduct(productId).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<ProductListResponse.Product>() {
+        mDataManager.loadProduct(productId) .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribeOn(rx.schedulers.Schedulers.io()).subscribe(new Subscriber<ProductListResponse.Product>() {
             @Override
             public void onCompleted() {
 

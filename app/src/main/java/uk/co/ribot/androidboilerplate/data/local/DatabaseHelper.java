@@ -12,8 +12,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
@@ -38,10 +39,10 @@ public class DatabaseHelper {
     }
 
     public Observable<Ribot> setRibots(final Collection<Ribot> newRibots) {
-        return Observable.create(new Observable.OnSubscribe<Ribot>() {
+        return Observable.create(new ObservableOnSubscribe<Ribot>() {
             @Override
-            public void call(Subscriber<? super Ribot> subscriber) {
-                if (subscriber.isUnsubscribed()) return;
+            public void subscribe(ObservableEmitter<Ribot> e) throws Exception {
+                if (e.isDisposed()) return;
                 BriteDatabase.Transaction transaction = mDb.newTransaction();
                 try {
                     mDb.delete(Db.RibotProfileTable.TABLE_NAME, null);
@@ -49,10 +50,10 @@ public class DatabaseHelper {
                         long result = mDb.insert(Db.RibotProfileTable.TABLE_NAME,
                                 Db.RibotProfileTable.toContentValues(ribot.profile()),
                                 SQLiteDatabase.CONFLICT_REPLACE);
-                        if (result >= 0) subscriber.onNext(ribot);
+                        if (result >= 0) e.onNext(ribot);
                     }
                     transaction.markSuccessful();
-                    subscriber.onCompleted();
+                    e.onComplete();
                 } finally {
                     transaction.end();
                 }
@@ -60,7 +61,7 @@ public class DatabaseHelper {
         });
     }
 
-    public Observable<List<Ribot>> getRibots() {
+    public rx.Observable<List<Ribot>> getRibots() {
         return mDb.createQuery(Db.RibotProfileTable.TABLE_NAME,
                 "SELECT * FROM " + Db.RibotProfileTable.TABLE_NAME)
                 .mapToList(new Func1<Cursor, Ribot>() {
@@ -72,10 +73,10 @@ public class DatabaseHelper {
     }
 
     public Observable<ProductListResponse> setProducts(final ProductListResponse productListResponse) {
-        return Observable.create(new Observable.OnSubscribe<ProductListResponse>() {
+        return Observable.create(new ObservableOnSubscribe<ProductListResponse>() {
             @Override
-            public void call(Subscriber<? super ProductListResponse> subscriber) {
-                if (subscriber.isUnsubscribed()) return;
+            public void subscribe(ObservableEmitter<ProductListResponse> e) throws Exception {
+                if (e.isDisposed()) return;
                 BriteDatabase.Transaction transaction = mDb.newTransaction();
                 try {
                     mDb.delete(Db.ProductProfileTable.TABLE_NAME, null);
@@ -83,10 +84,10 @@ public class DatabaseHelper {
                         long result = mDb.insert(Db.ProductProfileTable.TABLE_NAME,
                                 Db.ProductProfileTable.toContentValues(product),
                                 SQLiteDatabase.CONFLICT_REPLACE);
-                        if (result >= 0) subscriber.onNext(productListResponse);
+                        if (result >= 0) e.onNext(productListResponse);
                     }
                     transaction.markSuccessful();
-                    subscriber.onCompleted();
+                    e.onComplete();
                 } finally {
                     transaction.end();
                 }
@@ -95,16 +96,16 @@ public class DatabaseHelper {
     }
 
     public Observable<OrderListResponse> setOrders(final OrderListResponse orderListResponse) {
-        return Observable.create(new Observable.OnSubscribe<OrderListResponse>() {
+        return Observable.create(new ObservableOnSubscribe<OrderListResponse>() {
             @Override
-            public void call(Subscriber<? super OrderListResponse> subscriber) {
-                if (subscriber.isUnsubscribed()) return;
+            public void subscribe(ObservableEmitter<OrderListResponse> e) throws Exception {
+                if (e.isDisposed()) return;
 //               做保存订单操作
             }
         });
     }
 
-    public Observable<List<ProductListResponse.Product>> getProducts() {
+    public rx.Observable<List<ProductListResponse.Product>> getProducts() {
         return mDb.createQuery(Db.ProductProfileTable.TABLE_NAME,
                 "SELECT * FROM " + Db.ProductProfileTable.TABLE_NAME)
                 .mapToList(new Func1<Cursor, ProductListResponse.Product>() {
@@ -115,7 +116,7 @@ public class DatabaseHelper {
                 });
     }
 
-    public Observable<ProductListResponse.Product> getProduct(int productId) {
+    public rx.Observable<ProductListResponse.Product> getProduct(int productId) {
         return mDb.createQuery(Db.ProductProfileTable.TABLE_NAME,
                 "SELECT * FROM " + Db.ProductProfileTable.TABLE_NAME,COLUMN_PRODUCTID+"=?",String.valueOf(productId))
                 .mapToList(new Func1<Cursor, ProductListResponse.Product>() {

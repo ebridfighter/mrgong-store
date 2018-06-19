@@ -2,16 +2,16 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.EmptyResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.UserInfoMvpView;
-import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 /**
  * Created by mike on 2017/11/27.
@@ -34,19 +34,25 @@ public class UserInfoPresenter extends BasePresenter<UserInfoMvpView> {
 
     public void logout() {
         checkViewAttached();
-        RxUtil.unsubscribe(mLogoutSubscription);
-        mLogoutSubscription = mDataManager.logout()
+        mDataManager.logout()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<EmptyResponse>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(new Observer<EmptyResponse>() {
 
                     @Override
                     public void onError(Throwable e) {
                         Timber.e(e, "There was an error loading the DashBoardResponse.");
                         getMvpView().logoutError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override

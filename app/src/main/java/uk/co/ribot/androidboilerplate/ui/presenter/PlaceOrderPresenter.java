@@ -2,17 +2,17 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LastBuyResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.PlaceOrderMvpView;
-import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 /**
  * Created by mike on 2017/11/6.
@@ -32,9 +32,9 @@ public class PlaceOrderPresenter extends BasePresenter<PlaceOrderMvpView> {
         super.attachView(mvpView);
     }
 
-    public boolean canSeePrice(){
+    public boolean canSeePrice() {
         UserInfoResponse userInfoResponse = mDataManager.loadUser();
-        if (userInfoResponse != null){
+        if (userInfoResponse != null) {
             return userInfoResponse.isCanSeePrice();
         }
         return false;
@@ -42,14 +42,10 @@ public class PlaceOrderPresenter extends BasePresenter<PlaceOrderMvpView> {
 
     public void getLastBuy() {
         checkViewAttached();
-        RxUtil.unsubscribe(mLastBuySubscription);
-        mLastBuySubscription = mDataManager.getLastOrderAmount()
+        mDataManager.getLastOrderAmount()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<LastBuyResponse>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(new Observer<LastBuyResponse>() {
 
                     @Override
                     public void onError(Throwable e) {
@@ -58,12 +54,21 @@ public class PlaceOrderPresenter extends BasePresenter<PlaceOrderMvpView> {
                     }
 
                     @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
                     public void onNext(LastBuyResponse lastBuyResponse) {
-                            getMvpView().showLastOrderAmount(lastBuyResponse);
+                        getMvpView().showLastOrderAmount(lastBuyResponse);
                     }
                 });
     }
-
 
 
 }

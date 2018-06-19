@@ -7,7 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
@@ -78,11 +78,11 @@ public class DataManager {
         mPreferencesHelper.setCookie("");
     }
 
-    public Observable<List<Ribot>> getRibots() {
+    public rx.Observable<List<Ribot>> getRibots() {
         return mDatabaseHelper.getRibots().distinct();
     }
 
-    public Observable<List<ProductListResponse.Product>> loadProducts() {
+    public rx.Observable<List<ProductListResponse.Product>> loadProducts() {
         return mDatabaseHelper.getProducts().distinct();
     }
 
@@ -270,7 +270,7 @@ public class DataManager {
                 });
     }
 
-    public Observable<ProductListResponse.Product> loadProduct(int productId) {
+    public rx.Observable<ProductListResponse.Product> loadProduct(int productId) {
         return mDatabaseHelper.getProduct(productId);
     }
 

@@ -2,10 +2,11 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnDataResponse;
@@ -38,19 +39,24 @@ public class ReturnOrderListPresenter extends BasePresenter<ReturnOrderListMvpVi
 
     public void getReturnOrderList() {
         checkViewAttached();
-        if (mSubscription != null) mSubscription.unsubscribe();
-        mSubscription = mDataManager.getReturnOrderList()
+      mDataManager.getReturnOrderList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<ReturnDataResponse>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
+                .subscribe(new Observer<ReturnDataResponse>() {
                     @Override
                     public void onError(Throwable e) {
                         Timber.e(e, "网络错误");
                         getMvpView().showReturnOrdersError(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
 
                     @Override

@@ -2,10 +2,11 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ShopInfoResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
@@ -54,99 +55,117 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
     public UserInfoResponse loadUser() {
         return mDataManager.loadUser();
     }
+
     public boolean canSeePrice() {
         return mDataManager.canSeePrice();
     }
 
     public void getUser() {
         checkViewAttached();
-        RxUtil.unsubscribe(mGetUserSubscription);
-        mGetUserSubscription = mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<UserInfoResponse>() {
-                    @Override
-                    public void onCompleted() {
+        mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<UserInfoResponse>() {
 
-                    }
+            @Override
+            public void onError(Throwable e) {
 
-                    @Override
-                    public void onError(Throwable e) {
+            }
 
-                    }
+            @Override
+            public void onComplete() {
 
-                    @Override
-                    public void onNext(UserInfoResponse userInfoResponse) {
-                        getMvpView().showUserInfo(userInfoResponse);
-                    }
-                });
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(UserInfoResponse userInfoResponse) {
+                getMvpView().showUserInfo(userInfoResponse);
+            }
+        });
     }
 
     public void getProcumentPermission() {
         checkViewAttached();
-        RxUtil.unsubscribe(mGetProcumentPermissionSubscription);
-        mGetProcumentPermissionSubscription = mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<UserInfoResponse>() {
-                    @Override
-                    public void onCompleted() {
+        mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<UserInfoResponse>() {
 
-                    }
+            @Override
+            public void onError(Throwable e) {
 
-                    @Override
-                    public void onError(Throwable e) {
+            }
 
-                    }
+            @Override
+            public void onComplete() {
 
-                    @Override
-                    public void onNext(UserInfoResponse userInfoResponse) {
-                        getMvpView().showProcumentPermission(userInfoResponse);
-                    }
-                });
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(UserInfoResponse userInfoResponse) {
+                getMvpView().showProcumentPermission(userInfoResponse);
+            }
+        });
     }
 
     public void getTransferPermission() {
         checkViewAttached();
-        RxUtil.unsubscribe(mGetTransferPermissionSubscription);
-        mGetTransferPermissionSubscription = mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<UserInfoResponse>() {
-                    @Override
-                    public void onCompleted() {
+        mDataManager.getUserInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<UserInfoResponse>() {
+            @Override
+            public void onError(Throwable e) {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onComplete() {
 
-                    }
+            }
 
-                    @Override
-                    public void onNext(UserInfoResponse userInfoResponse) {
-                        getMvpView().showTransferPermission(userInfoResponse);
-                    }
-                });
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(UserInfoResponse userInfoResponse) {
+                getMvpView().showTransferPermission(userInfoResponse);
+            }
+        });
     }
 
 
     public void getShopInfo() {
         checkViewAttached();
-        RxUtil.unsubscribe(mGetShopInfoSubscription);
-        mGetShopInfoSubscription = mDataManager.getShopInfo().observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<ShopInfoResponse>() {
-                    @Override
-                    public void onCompleted() {
+        mDataManager.getShopInfo().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<ShopInfoResponse>() {
+            @Override
+            public void onError(Throwable e) {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onComplete() {
 
-                    }
+            }
 
-                    @Override
-                    public void onNext(ShopInfoResponse shopInfoResponse) {
-                        getMvpView().showShopInfo(shopInfoResponse);
-                    }
-                });
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ShopInfoResponse shopInfoResponse) {
+                getMvpView().showShopInfo(shopInfoResponse);
+            }
+        });
     }
-
 
 
     public void logoutLocal() {

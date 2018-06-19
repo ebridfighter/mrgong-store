@@ -2,18 +2,18 @@ package uk.co.ribot.androidboilerplate.data.remote;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import rx.Observable;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CancelMakeInventoryRequest;
@@ -98,7 +98,7 @@ public interface RunwiseService {
                     .client(client)
                     .baseUrl(RunwiseService.ENDPOINT)
                     .addConverterFactory(CustomGsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
             return retrofit.create(RunwiseService.class);
         }

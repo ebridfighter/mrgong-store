@@ -4,11 +4,13 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
@@ -42,57 +44,65 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
     }
 
 
-    public boolean isCanSeePrice(){
+    public boolean isCanSeePrice() {
         return mDataManager.canSeePrice();
     }
 
     public void getCategorys() {
         checkViewAttached();
-        RxUtil.unsubscribe(mCategorySubscription);
-        mCategorySubscription = mDataManager.getCategorys()
+        mDataManager.getCategorys()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<CategoryResponse>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<CategoryResponse>() {
+            @Override
+            public void onError(Throwable e) {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onComplete() {
 
-                    }
+            }
 
-                    @Override
-                    public void onNext(CategoryResponse categoryResponse) {
-                        getMvpView().showCategorys(categoryResponse);
-                    }
-                });
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(CategoryResponse categoryResponse) {
+                getMvpView().showCategorys(categoryResponse);
+            }
+        });
     }
 
     public void getOrderDetail(int orderId) {
         checkViewAttached();
-        RxUtil.unsubscribe(mOrderDetailSubscription);
-        mOrderDetailSubscription = mDataManager.getOrderDetail(orderId)
+        mDataManager.getOrderDetail(orderId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<OrderDetailResponse>() {
-                    @Override
-                    public void onCompleted() {
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<OrderDetailResponse>() {
+            @Override
+            public void onError(Throwable e) {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onComplete() {
 
-                    }
+            }
 
-                    @Override
-                    public void onNext(OrderDetailResponse orderDetailResponse) {
-                        getMvpView().showOrder(orderDetailResponse);
-                    }
-                });
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(OrderDetailResponse orderDetailResponse) {
+                getMvpView().showOrder(orderDetailResponse);
+            }
+        });
     }
 
-    public void loadProduct(int productId){
+    public void loadProduct(int productId) {
         checkViewAttached();
         RxUtil.unsubscribe(mCategorySubscription);
         mCategorySubscription = mDataManager.loadProduct(productId).subscribe(new Subscriber<ProductListResponse.Product>() {
@@ -113,17 +123,22 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
         });
     }
 
-    public void getReturnOrder(int returnOrderId){
+    public void getReturnOrder(int returnOrderId) {
         checkViewAttached();
-        RxUtil.unsubscribe(mReturnOrderDetailSubscription);
-        mReturnOrderDetailSubscription = mDataManager.getReturnOrderDetail(returnOrderId).subscribe(new Subscriber<ReturnOrderDetailResponse>() {
+        mDataManager.getReturnOrderDetail(returnOrderId).subscribe(new Observer<ReturnOrderDetailResponse>() {
+
             @Override
-            public void onCompleted() {
+            public void onError(Throwable e) {
 
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
 
             }
 
@@ -135,14 +150,19 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
     }
 
     public void getCategoryAndOrderDetail(int orderId) {
-        Observable.merge(mDataManager.getCategorys(), mDataManager.getOrderDetail(orderId)).subscribe(new Subscriber<Object>() {
+        Observable.merge(mDataManager.getCategorys(), mDataManager.getOrderDetail(orderId)).subscribe(new Observer<Object>() {
             @Override
-            public void onCompleted() {
+            public void onError(Throwable e) {
 
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
 
             }
 
@@ -152,6 +172,7 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
             }
         });
     }
+
     @Override
     public void detachView() {
         super.detachView();

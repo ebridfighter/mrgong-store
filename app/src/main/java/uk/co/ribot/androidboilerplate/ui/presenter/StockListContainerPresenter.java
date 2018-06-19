@@ -4,10 +4,10 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -30,22 +30,22 @@ public class StockListContainerPresenter extends BasePresenter<StockListContaine
     @Override
     public void attachView(StockListContainerMvpView mvpView) {
         super.attachView(mvpView);
-        if(mDataManager.isLogin()){//已登录，查类别
+        if (mDataManager.isLogin()) {//已登录，查类别
             mDataManager.getCategorys()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<CategoryResponse>() {
+                    .subscribe(new Consumer<CategoryResponse>() {
                         @Override
-                        public void call(CategoryResponse categoryResponse) {
+                        public void accept(CategoryResponse categoryResponse) throws Exception {
                             getMvpView().showCategories(categoryResponse.getCategoryList());
                         }
-                    }, new Action1<Throwable>() {
+                    }, new Consumer<Throwable>() {
                         @Override
-                        public void call(Throwable throwable) {
-                            Log.d("haha",throwable.getMessage());
+                        public void accept(Throwable throwable) throws Exception {
+                            Log.d("haha", throwable.getMessage());
                         }
                     });
-        }else{
+        } else {
             //todo:没有登录，用假数据
         }
     }

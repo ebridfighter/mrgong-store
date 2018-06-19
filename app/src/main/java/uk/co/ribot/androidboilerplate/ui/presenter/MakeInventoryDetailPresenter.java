@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
@@ -43,17 +45,22 @@ public class MakeInventoryDetailPresenter extends BasePresenter<MakeInventoryDet
 
     public void getCategorys() {
         checkViewAttached();
-        RxUtil.unsubscribe(mCategorySubscription);
-        mCategorySubscription = mDataManager.getCategorys()
+     mDataManager.getCategorys()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Subscriber<CategoryResponse>() {
+                .subscribeOn(Schedulers.io()).subscribe(new Observer<CategoryResponse>() {
+
                     @Override
-                    public void onCompleted() {
+                    public void onError(Throwable e) {
 
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
                     }
 
@@ -67,8 +74,8 @@ public class MakeInventoryDetailPresenter extends BasePresenter<MakeInventoryDet
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.loadProducts()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribeOn(rx.schedulers.Schedulers.io())
                 .subscribe(new Subscriber<List<ProductListResponse.Product>>() {
                     @Override
                     public void onCompleted() {
