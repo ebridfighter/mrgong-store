@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 import timber.log.Timber;
@@ -20,7 +22,6 @@ public class BoilerplateApplication extends Application  {
     @Override
     public void onCreate() {
         super.onCreate();
-
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
 //            Fabric.with(this, new Crashlytics());
@@ -28,6 +29,7 @@ public class BoilerplateApplication extends Application  {
             ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
         ARouter.init(this); // 尽可能早，推荐在Application中初始化
+        FlowManager.init(new FlowConfig.Builder(this).build());
         BGASwipeBackHelper.init(this, null);
         INSTANCE = this;
         registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks());

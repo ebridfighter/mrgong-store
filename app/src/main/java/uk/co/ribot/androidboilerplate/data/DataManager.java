@@ -2,14 +2,19 @@ package uk.co.ribot.androidboilerplate.data;
 
 import android.util.Log;
 
+import com.raizlabs.android.dbflow.rx2.language.RXSQLite;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.data.model.database.Product;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CancelMakeInventoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
@@ -82,8 +87,8 @@ public class DataManager {
         return mDatabaseHelper.getRibots().distinct();
     }
 
-    public rx.Observable<List<ProductListResponse.Product>> loadProducts() {
-        return mDatabaseHelper.getProducts().distinct();
+    public Single<List<Product>> loadProducts() {
+        return RXSQLite.rx(SQLite.select().from(Product.class)).queryList();
     }
 
     public Observable<LoginResponse> login(String account, String password) {
