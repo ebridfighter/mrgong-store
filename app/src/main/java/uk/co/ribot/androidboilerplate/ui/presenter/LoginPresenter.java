@@ -29,8 +29,9 @@ import uk.co.ribot.androidboilerplate.ui.view_interface.LoginMvpView;
 public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
     private final DataManager mDataManager;
-    private Subscription mSubscription;
-    private Subscription mGetHostSubscription;
+    private Disposable mDisposable;
+    private Disposable mGetHostDisposable;
+    private Disposable mLoadUserListDisposable;
 
     @Inject
     public LoginPresenter(DataManager dataManager) {
@@ -45,8 +46,9 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mGetHostSubscription != null) mGetHostSubscription.unsubscribe();
-        if (mSubscription != null) mSubscription.unsubscribe();
+        if (mGetHostDisposable != null) mGetHostDisposable.dispose();
+        if (mDisposable != null) mDisposable.dispose();
+        if (mLoadUserListDisposable != null) mLoadUserListDisposable.dispose();
     }
 
     public boolean isLogin() {
@@ -58,7 +60,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         mDataManager.loadUserList().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new SingleObserver<List<UserBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                mLoadUserListDisposable = d;
             }
 
             @Override
@@ -105,13 +107,14 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
                         @Override
                         public void onSubscribe(Disposable d) {
-
+                            mGetHostDisposable = d;
                         }
 
                         @Override
                         public void onNext(LoginResponse loginResponse) {
                             String success = loginResponse.getIsSuccess();
                             mDataManager.saveUserToDB(companyName,account, password);
+                            loadUserList();
                             if (TextUtils.isEmpty(success) || "false".equals(success)) {
                                 getMvpView().loginConflict();
                             } else {

@@ -20,11 +20,11 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 public class MorePresenter extends BasePresenter<MoreMvpView> {
     private final DataManager mDataManager;
-    private Subscription mSubscription;
-    private Subscription mGetShopInfoSubscription;
-    private Subscription mGetUserSubscription;
-    private Subscription mGetProcumentPermissionSubscription;
-    private Subscription mGetTransferPermissionSubscription;
+    private Disposable mDisposable;
+    private Disposable mGetShopInfoDisposable;
+    private Disposable mGetUserDisposable;
+    private Disposable mGetProcumentPermissionDisposable;
+    private Disposable mGetTransferPermissionDisposable;
 
     @Inject
     public MorePresenter(DataManager dataManager) {
@@ -39,13 +39,13 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mSubscription != null) mSubscription.unsubscribe();
-        if (mGetShopInfoSubscription != null) mGetShopInfoSubscription.unsubscribe();
-        if (mGetUserSubscription != null) mGetUserSubscription.unsubscribe();
-        if (mGetProcumentPermissionSubscription != null)
-            mGetProcumentPermissionSubscription.unsubscribe();
-        if (mGetTransferPermissionSubscription != null)
-            mGetTransferPermissionSubscription.unsubscribe();
+        if (mDisposable != null) mDisposable.dispose();
+        if (mGetShopInfoDisposable != null) mGetShopInfoDisposable.dispose();
+        if (mGetUserDisposable != null) mGetUserDisposable.dispose();
+        if (mGetProcumentPermissionDisposable != null)
+            mGetProcumentPermissionDisposable.dispose();
+        if (mGetTransferPermissionDisposable != null)
+            mGetTransferPermissionDisposable.dispose();
     }
 
     public boolean isLogin() {
@@ -77,7 +77,7 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
 
             @Override
             public void onSubscribe(Disposable d) {
-
+                mGetUserDisposable = d;
             }
 
             @Override
@@ -104,7 +104,7 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
 
             @Override
             public void onSubscribe(Disposable d) {
-
+                mGetProcumentPermissionDisposable = d;
             }
 
             @Override
@@ -130,7 +130,7 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
 
             @Override
             public void onSubscribe(Disposable d) {
-
+                mGetTransferPermissionDisposable = d;
             }
 
             @Override
@@ -157,7 +157,7 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
 
             @Override
             public void onSubscribe(Disposable d) {
-
+                mGetShopInfoDisposable = d;
             }
 
             @Override
@@ -170,7 +170,9 @@ public class MorePresenter extends BasePresenter<MoreMvpView> {
 
     public void logoutLocal() {
         checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
+        if (mDisposable != null){
+            mDisposable.dispose();
+        }
         getMvpView().logout();
     }
 }

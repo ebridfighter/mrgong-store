@@ -139,7 +139,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @Override
     public void loadUserListSuccess(List<UserBean> userBeanList) {
         mUserBeanList = userBeanList;
-        if (mUserBeanList == null ||mUserBeanList.size() == 0){
+        if (mUserBeanList == null ||mUserBeanList.size()<= 1){
             mLoginPopBtn.setVisibility(View.INVISIBLE);
             return;
         }
@@ -161,8 +161,12 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
             @Override
             public void onItemClick(View childView, int position) {
                 if (childView.getId() == R.id.deleteImg){
+                    if (userBeanList.size() == 0||userBeanList.size()<=position){
+                        return;
+                    }
 //                    删除数据库中的用户
                     mLoginPresenter.deleteUser(userBeanList.get(position));
+                    userBeanList.remove(position);
 
                 }
             }

@@ -31,14 +31,14 @@ import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     private final DataManager mDataManager;
-    private Subscription mOrderSubscription;
-    private Subscription mOrderPollingSubscription;
-    private Subscription mReturnOrderPollingSubscription;
-    private Subscription mReturnOrderSubscription;
-    private Subscription mHomePageBannerSubscription;
-    private Subscription mDashBoardSubscription;
-    private Subscription mCancelOrderSubscription;
-    private Subscription mFinishReturnOrderSubscription;
+    private Disposable mOrderDisposable;
+    private Disposable mOrderPollingDisposable;
+    private Disposable mReturnOrderPollingDisposable;
+    private Disposable mReturnOrderDisposable;
+    private Disposable mHomePageBannerDisposable;
+    private Disposable mDashBoardDisposable;
+    private Disposable mCancelOrderDisposable;
+    private Disposable mFinishReturnOrderDisposable;
 
     @Inject
     public HomePagePresenter(DataManager dataManager) {
@@ -57,7 +57,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                 .subscribeOn(Schedulers.io()).subscribe(new Observer<OrderListResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        mOrderPollingDisposable = d;
                     }
 
                     @Override
@@ -89,7 +89,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                 .subscribeOn(Schedulers.io()).subscribe(new Observer<ReturnOrderListResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                mReturnOrderPollingDisposable = d;
             }
 
             @Override
@@ -125,7 +125,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                 .subscribeOn(Schedulers.io()).subscribe(new Observer<OrderListResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                mOrderDisposable = d;
             }
 
             @Override
@@ -157,7 +157,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                 .subscribeOn(Schedulers.io()).subscribe(new Observer<ReturnOrderListResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                mReturnOrderDisposable = d;
             }
 
             @Override
@@ -198,7 +198,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
            }}).subscribe(new Observer<List<String>>() {
            @Override
            public void onSubscribe(Disposable d) {
-
+               mHomePageBannerDisposable = d;
            }
 
            @Override
@@ -226,7 +226,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                 .subscribeOn(Schedulers.io()).subscribe(new Observer<DashBoardResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        mDashBoardDisposable = d;
                     }
 
                     @Override
@@ -259,7 +259,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                 .subscribeOn(Schedulers.io()).subscribe(new Observer<EmptyResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                mCancelOrderDisposable = d;
             }
 
             @Override
@@ -287,7 +287,7 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
                 .subscribeOn(Schedulers.io()).subscribe(new Observer<FinishReturnResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        mFinishReturnOrderDisposable = d;
                     }
 
                     @Override
@@ -311,13 +311,13 @@ public class HomePagePresenter extends BasePresenter<HomePageMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mOrderSubscription != null) mOrderSubscription.unsubscribe();
-        if (mReturnOrderSubscription != null) mReturnOrderSubscription.unsubscribe();
-        if (mHomePageBannerSubscription != null) mHomePageBannerSubscription.unsubscribe();
-        if (mDashBoardSubscription != null) mDashBoardSubscription.unsubscribe();
-        if (mCancelOrderSubscription != null) mCancelOrderSubscription.unsubscribe();
-        if (mFinishReturnOrderSubscription != null) mFinishReturnOrderSubscription.unsubscribe();
-        if (mOrderPollingSubscription != null) mOrderPollingSubscription.unsubscribe();
-        if (mReturnOrderPollingSubscription != null) mReturnOrderPollingSubscription.unsubscribe();
+        if (mOrderDisposable != null) mOrderDisposable.dispose();
+        if (mReturnOrderDisposable != null) mReturnOrderDisposable.dispose();
+        if (mHomePageBannerDisposable != null) mHomePageBannerDisposable.dispose();
+        if (mDashBoardDisposable != null) mDashBoardDisposable.dispose();
+        if (mCancelOrderDisposable != null) mCancelOrderDisposable.dispose();
+        if (mFinishReturnOrderDisposable != null) mFinishReturnOrderDisposable.dispose();
+        if (mOrderPollingDisposable != null) mOrderPollingDisposable.dispose();
+        if (mReturnOrderPollingDisposable != null) mReturnOrderPollingDisposable.dispose();
     }
 }
