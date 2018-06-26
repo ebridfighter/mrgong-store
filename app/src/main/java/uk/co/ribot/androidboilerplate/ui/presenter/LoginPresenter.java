@@ -2,10 +2,13 @@ package uk.co.ribot.androidboilerplate.ui.presenter;
 
 import android.text.TextUtils;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -13,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.database.UserBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.HostResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.LoginResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -47,6 +51,26 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
     public boolean isLogin() {
         return mDataManager.isLogin();
+    }
+
+    public void loadUserList(){
+        checkViewAttached();
+        mDataManager.loadUserList().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new SingleObserver<List<UserBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(List<UserBean> userBeanList) {
+                getMvpView().loadUserListSuccess(userBeanList);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "加载账号列表,数据库操作出错");
+            }
+        });
     }
 
     public void login(String companyName, String account, String password) {
@@ -87,14 +111,19 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                         @Override
                         public void onNext(LoginResponse loginResponse) {
                             String success = loginResponse.getIsSuccess();
+                            mDataManager.saveUserToDB(companyName,account, password);
                             if (TextUtils.isEmpty(success) || "false".equals(success)) {
                                 getMvpView().loginConflict();
                             } else {
-                                mDataManager.saveUser(loginResponse.getUser());
+                                mDataManager.saveUserToPre(loginResponse.getUser());
                                 getMvpView().onSuccess();
                             }
                         }
         });
 
+    }
+
+    public void deleteUser(UserBean userBean){
+        mDataManager.deleteUser(userBean);
     }
 }

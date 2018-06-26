@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import uk.co.ribot.androidboilerplate.data.model.database.Name;
+import uk.co.ribot.androidboilerplate.data.model.database.NameBean;
 import uk.co.ribot.androidboilerplate.data.model.database.Profile;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 
@@ -42,8 +42,8 @@ public class TestDataFactory {
                 .build();
     }
 
-    public static Name makeName(String uniqueSuffix) {
-        return Name.create("Name-" + uniqueSuffix, "Surname-" + uniqueSuffix);
+    public static NameBean makeName(String uniqueSuffix) {
+        return NameBean.create("NameBean-" + uniqueSuffix, "Surname-" + uniqueSuffix);
     }
 
 }

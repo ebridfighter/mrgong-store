@@ -48,14 +48,14 @@ public class MakeInventoryAdapter extends BaseAdapter<MakeInventoryAdapter.ViewH
     }
 
     @Override
-    public MakeInventoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = getLayout(parent.getContext(), R.layout.item_make_inventory);
-        MakeInventoryAdapter.ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MakeInventoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         setOnItemListener(holder.itemView,position);
         final InventoryResponse.ListBean listBean = mListBeans.get(position);
         holder.mTvPayDate.setText(TimeUtils.getTimeStamps3(listBean.getCreateDate()));

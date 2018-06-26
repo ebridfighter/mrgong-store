@@ -32,9 +32,9 @@ import butterknife.OnClick;
 import me.shaohui.bottomdialog.BottomDialog;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.AddedProduct;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.tools.TimeUtils;
@@ -516,7 +516,7 @@ public class SelfHelpPlaceOrderActivity extends BaseActivity implements SelfHelp
     }
 
     @Override
-    public void showProductSuccess(ProductListResponse.Product product) {
+    public void showProductSuccess(ProductBean product) {
 
 
     }

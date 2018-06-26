@@ -5,15 +5,15 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import rx.Subscriber;
 import rx.Subscription;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.PlaceOrderProductListMvpView;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
@@ -74,12 +74,22 @@ public class PlaceOrderProductListPresenter extends BasePresenter<PlaceOrderProd
     public void loadProducts() {
         checkViewAttached();
         RxUtil.unsubscribe(mLoadProductsSubscription);
-        mLoadProductsSubscription = mDataManager.loadProducts()
-                .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribeOn(rx.schedulers.Schedulers.io())
-                .subscribe(new Subscriber<List<ProductListResponse.Product>>() {
+        mDataManager.loadProducts()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<List<ProductBean>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<ProductBean> products) {
+                        if (products.isEmpty()) {
+                            getMvpView().showProductsEmpty();
+                        } else {
+                            getMvpView().showProducts(products);
+                        }
                     }
 
                     @Override
@@ -87,16 +97,8 @@ public class PlaceOrderProductListPresenter extends BasePresenter<PlaceOrderProd
                         Timber.e(e, "There was an error loading the ribots.");
                         getMvpView().showError();
                     }
-
-                    @Override
-                    public void onNext(List<ProductListResponse.Product> products) {
-                        if (products.isEmpty()) {
-                            getMvpView().showProductsEmpty();
-                        } else {
-                            getMvpView().showProducts(products);
-                        }
-                    }
                 });
+
     }
 
 

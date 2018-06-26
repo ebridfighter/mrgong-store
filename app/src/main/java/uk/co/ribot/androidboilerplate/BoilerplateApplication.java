@@ -3,7 +3,6 @@ package uk.co.ribot.androidboilerplate;
 import android.app.Application;
 import android.content.Context;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
@@ -25,10 +24,10 @@ public class BoilerplateApplication extends Application  {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
 //            Fabric.with(this, new Crashlytics());
-            ARouter.openLog();     // 打印日志
-            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+//            ARouter.openLog();     // 打印日志
+//            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
-        ARouter.init(this); // 尽可能早，推荐在Application中初始化
+//        ARouter.init(this); // 尽可能早，推荐在Application中初始化
         FlowManager.init(new FlowConfig.Builder(this).build());
         BGASwipeBackHelper.init(this, null);
         INSTANCE = this;

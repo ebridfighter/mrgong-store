@@ -2,20 +2,20 @@ package uk.co.ribot.androidboilerplate.data;
 
 import android.util.Log;
 
-import com.raizlabs.android.dbflow.rx2.language.RXSQLite;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
-import uk.co.ribot.androidboilerplate.data.model.database.Product;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.database.UserBean;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CancelMakeInventoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CategoryRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ChangeOrderStateRequest;
@@ -28,6 +28,7 @@ import uk.co.ribot.androidboilerplate.data.model.net.request.HomePageBannerReque
 import uk.co.ribot.androidboilerplate.data.model.net.request.LoginRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.OrderListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.ProcurementRequest;
+import uk.co.ribot.androidboilerplate.data.model.net.request.ProductListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.request.StockListRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.DashBoardResponse;
@@ -87,8 +88,8 @@ public class DataManager {
         return mDatabaseHelper.getRibots().distinct();
     }
 
-    public Single<List<Product>> loadProducts() {
-        return RXSQLite.rx(SQLite.select().from(Product.class)).queryList();
+    public Single<List<ProductBean>> loadProducts() {
+        return mDatabaseHelper.loadProducts();
     }
 
     public Observable<LoginResponse> login(String account, String password) {
@@ -99,8 +100,17 @@ public class DataManager {
         return mRunwiseService.login(loginRequest);
     }
 
-    public void saveUser(UserInfoResponse userInfoResponse) {
+    public void saveUserToPre(UserInfoResponse userInfoResponse) {
         mPreferencesHelper.setUserInfo(userInfoResponse);
+    }
+
+    public Single<List<UserBean>> loadUserList() {
+        return mDatabaseHelper.loadUserList();
+    }
+
+
+    public void saveUserToDB(String companyName,String userName,String password) {
+        mDatabaseHelper.saveUser(companyName,userName,password);
     }
 
     public void saveHost(String host) {
@@ -127,9 +137,21 @@ public class DataManager {
         return false;
     }
 
+    public void saveProductListVersion(int version){
+        mPreferencesHelper.setProductListVersion(version);
+    }
+
     public Observable<ProductListResponse> syncProducts() {
-        return mRunwiseService.getProducts(new EmptyRequest())
-                .concatMap(productListResponse -> mDatabaseHelper.setProducts(productListResponse)).onErrorReturn(throwable -> {
+        ProductListRequest productListRequest = new ProductListRequest();
+        productListRequest.setVersion(mPreferencesHelper.getProductListVersion());
+        return mRunwiseService.getProducts(productListRequest)
+                .concatMap(new Function<ProductListResponse, Observable<ProductListResponse>>() {
+                    @Override
+                    public Observable<ProductListResponse> apply(ProductListResponse productListResponse) throws Exception {
+                        return mDatabaseHelper.setProducts(productListResponse);
+                    }
+                })
+               .onErrorReturn(throwable -> {
                     Log.i("onErrorReturn", throwable.toString());
                     return null;
                 });
@@ -271,12 +293,12 @@ public class DataManager {
                     Log.i("onErrorReturn", throwable.toString());
                     return null;
                 }).doOnNext(userInfoResponse -> {
-                    saveUser(userInfoResponse);
+                    saveUserToPre(userInfoResponse);
                 });
     }
 
-    public rx.Observable<ProductListResponse.Product> loadProduct(int productId) {
-        return mDatabaseHelper.getProduct(productId);
+    public Maybe<ProductBean> loadProduct(int productId) {
+        return mDatabaseHelper.loadProduct(productId);
     }
 
     public Observable<IntelligentProductDataResponse> getIntelligentProducts(double estimatedTurnover, double safetyFactor) {
@@ -388,6 +410,10 @@ public class DataManager {
                     Log.i("onErrorReturn", throwable.toString());
                     return null;
                 });
+    }
+
+    public void deleteUser(UserBean userBean){
+        mDatabaseHelper.deleteUser(userBean);
     }
 
 

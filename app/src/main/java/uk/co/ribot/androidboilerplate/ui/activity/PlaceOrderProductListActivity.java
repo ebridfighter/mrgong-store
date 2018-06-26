@@ -33,10 +33,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.AddedProduct;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.event.ProductCountChangeEvent;
 import uk.co.ribot.androidboilerplate.data.model.event.ProductQueryEvent;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.adapter.FragmentAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
@@ -67,7 +67,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
     PlaceOrderProductListPresenter mPlaceOrderProductListPresenter;
     CategoryResponse mCategoryResponse;
     private ArrayList<AddedProduct> addedPros;       //从前面页面传来的数组。
-    private ArrayList<ProductListResponse.Product> dataList = new ArrayList<>();//全部的商品信息
+    private ArrayList<ProductBean> dataList = new ArrayList<>();//全部的商品信息
     private ProductTypePopup mTypeWindow;//商品类型弹出框
 
     public static final String INTENT_KEY_BACKAP = "backap";
@@ -172,16 +172,16 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
 
     private void setUpDataForViewPage() {
         List<Fragment> repertoryEntityFragmentList = new ArrayList<>();
-        HashMap<String, ArrayList<ProductListResponse.Product>> map = new HashMap<>();
+        HashMap<String, ArrayList<ProductBean>> map = new HashMap<>();
         List<String> titles = new ArrayList<>();
         titles.add(getString(R.string.category_all));
         for (String category : mCategoryResponse.getCategoryList()) {
             titles.add(category);
-            map.put(category, new ArrayList<ProductListResponse.Product>());
+            map.put(category, new ArrayList<ProductBean>());
         }
-        for (ProductListResponse.Product listBean : dataList) {
+        for (ProductBean listBean : dataList) {
             if (!TextUtils.isEmpty(listBean.getCategory())) {
-                ArrayList<ProductListResponse.Product> listBeen = map.get(listBean.getCategory());
+                ArrayList<ProductBean> listBeen = map.get(listBean.getCategory());
                 if (listBeen == null) {
                     listBeen = new ArrayList<>();
                     map.put(listBean.getCategory(), listBeen);
@@ -190,7 +190,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
             }
         }
         for (String category : mCategoryResponse.getCategoryList()) {
-            ArrayList<ProductListResponse.Product> value = map.get(category);
+            ArrayList<ProductBean> value = map.get(category);
             repertoryEntityFragmentList.add(newProductListFragment(value));
         }
         repertoryEntityFragmentList.add(0, newProductListFragment(dataList));
@@ -198,7 +198,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
         initPopWindow((ArrayList<String>) titles);
     }
 
-    public ProductListFragment newProductListFragment(ArrayList<ProductListResponse.Product> value) {
+    public ProductListFragment newProductListFragment(ArrayList<ProductBean> value) {
         ProductListFragment productListFragment = new ProductListFragment();
         Bundle bundle = new Bundle();
         if (addedPros != null && addedPros.size() > 0) {
@@ -276,7 +276,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
     }
 
     @Override
-    public void showProducts(List<ProductListResponse.Product> products) {
+    public void showProducts(List<ProductBean> products) {
         if (products != null && products.size() != 0) {
             dataList.clear();
             dataList.addAll(products);

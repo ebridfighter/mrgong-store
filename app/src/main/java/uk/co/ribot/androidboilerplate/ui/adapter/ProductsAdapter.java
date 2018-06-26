@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 
@@ -27,13 +27,14 @@ import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
 
-    private List<ProductListResponse.Product> mRibots;
+    private List<ProductBean> mRibots;
 
     @Inject
     public ProductsAdapter() {
         mRibots = new ArrayList<>();
     }
-    public void setRibots(List<ProductListResponse.Product> ribots) {
+
+    public void setRibots(List<ProductBean> ribots) {
         mRibots = ribots;
     }
 
@@ -46,18 +47,14 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        ProductListResponse.Product product = mRibots.get(position);
+        ProductBean product = mRibots.get(position);
         holder.mTvName.setText(product.getName());
         holder.mTvNumber.setText(product.getDefaultCode());
         holder.mTvContent.setText(product.getUnit());
-        if (product.getImage() != null){
+        if (product.getImage() != null) {
             FrecoFactory.getInstance(holder.itemView.getContext()).disPlay(holder.mSdvProduct, RunwiseService.ENDPOINT + product.getImage().getImageSmall());
         }
-        if (product.isTwoUnit()){
-            holder.mTvValue.setText("￥"+ NumberUtil.getIOrD(product.getSettlePrice()+"") + "/" +product.getSettleUomId());
-        }else{
-            holder.mTvValue.setText("￥"+NumberUtil.getIOrD(product.getPrice()+"") + "/" +product.getUom());
-        }
+        holder.mTvValue.setText("￥" + NumberUtil.getIOrD(product.getPrice() + "") + "/" + product.getUom());
     }
 
     @Override

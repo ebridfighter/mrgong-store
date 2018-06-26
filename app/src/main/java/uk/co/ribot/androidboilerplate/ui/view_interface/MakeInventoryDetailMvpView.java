@@ -2,7 +2,7 @@ package uk.co.ribot.androidboilerplate.ui.view_interface;
 
 import java.util.List;
 
-import uk.co.ribot.androidboilerplate.data.model.database.Product;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 
@@ -14,7 +14,7 @@ public interface MakeInventoryDetailMvpView extends MvpView {
 
     void showProductsEmpty();
 
-    void showProducts(List<Product> products);
+    void showProducts(List<ProductBean> products);
 
     void showProductsError(String error);
 }

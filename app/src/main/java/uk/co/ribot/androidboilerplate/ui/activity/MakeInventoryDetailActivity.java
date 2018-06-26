@@ -20,10 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import github.chenupt.dragtoplayout.DragTopLayout;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.InventoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.PandianResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.injection.component.MakeInventoryDetailActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
@@ -141,15 +141,15 @@ public class MakeInventoryDetailActivity extends BaseActivity implements MakeInv
 
     }
 
-    List<ProductListResponse.Product> mProducts;
+    List<ProductBean> mProducts;
 
     @Override
-    public void showProducts(List<ProductListResponse.Product> products) {
+    public void showProducts(List<ProductBean> products) {
         mProducts = products;
         for (PandianResponse.InventoryBean.LinesBean lines : mListBean.getLines()) {
-            ProductListResponse.Product product = findProductById(lines.getProductID());
+            ProductBean product = findProductById(lines.getProductID());
             if (product == null) {
-                product = new ProductListResponse.Product();
+                product = new ProductBean();
                 product.setStockType("gege");
             }
             lines.setProduct(product);
@@ -160,8 +160,8 @@ public class MakeInventoryDetailActivity extends BaseActivity implements MakeInv
         }
     }
 
-    private ProductListResponse.Product findProductById(int productId) {
-        for (ProductListResponse.Product product : mProducts) {
+    private ProductBean findProductById(int productId) {
+        for (ProductBean product : mProducts) {
             if (product.getProductID() == productId) {
                 return product;
             }

@@ -19,6 +19,7 @@ public class PreferencesHelper {
     public static final String PREF_KEY_HOST = "pref_key_host";
     public static final String PREF_KEY_COOKIES = "pref_key_cookies";
     public static final String PREF_KEY_USER_INFO = "pref_key_user_info";
+    public static final String PREF_KEY_PRODUCT_LIST_VERSION = "pref_key_product_list_version";
     public static final String DEFAULT_DATABASE_NAME = "gethost";
     public static final String DEFAULT_HOST = "http://gethost.runwise.cn";
 
@@ -78,6 +79,15 @@ public class PreferencesHelper {
     public static UserInfoResponse getUserInfo() {
         String userInfoStr = mPref.getString(PREF_KEY_USER_INFO, "");
         return (UserInfoResponse) ObjectTransformUtil.toObject(userInfoStr, UserInfoResponse.class);
+    }
+
+    public static void setProductListVersion(int version){
+        mPref.edit().putInt(PREF_KEY_PRODUCT_LIST_VERSION, version).commit();
+    }
+
+    public static int getProductListVersion(){
+        int version = mPref.getInt(PREF_KEY_PRODUCT_LIST_VERSION, 0);
+        return version;
     }
 
     public static String getHost() {

@@ -1,7 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.view_interface;
 
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.MvpView;
 
@@ -14,5 +14,5 @@ public interface SelfHelpPlaceOrderMvpView extends MvpView{
     void getUserInfoSuccess(UserInfoResponse userInfoResponse);
     void commitOrderSuccess(OrderCommitResponse orderCommitResponse);
     void commitOrderError();
-    void showProductSuccess(ProductListResponse.Product product);
+    void showProductSuccess(ProductBean product);
 }

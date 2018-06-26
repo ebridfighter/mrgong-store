@@ -303,7 +303,7 @@ public class IntelligentPlaceOrderAdapter extends BaseAdapter<IntelligentPlaceOr
         @BindView(R.id.ib_input_minus)
         ImageButton mIbInputMinus;
         @BindView(R.id.et)
-        android.widget.EditText mEt;
+        EditText mEt;
         @BindView(R.id.ib_input_add)
         ImageButton mIbInputAdd;
         @BindView(R.id.ll_edit)

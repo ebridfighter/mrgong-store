@@ -2,7 +2,7 @@ package uk.co.ribot.androidboilerplate.data.model.business;
 
 import java.io.Serializable;
 
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 
 /**
  * Created by libin on 2017/7/10.
@@ -12,15 +12,15 @@ public class AddedProduct implements Serializable {
     private String productId;       //当前购物车里面产品id
     private int count;              //当前购物车里面件数
 
-    public ProductListResponse.Product getProduct() {
+    public ProductBean getProduct() {
         return product;
     }
 
-    public void setProduct(ProductListResponse.Product product) {
+    public void setProduct(ProductBean product) {
         this.product = product;
     }
 
-    ProductListResponse.Product product;
+    ProductBean product;
 
     public String getProductId() {
         return productId;

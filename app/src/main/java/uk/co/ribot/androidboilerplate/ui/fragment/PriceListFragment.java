@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.injection.component.frament.PriceListFragmentComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.adapter.ProductsAdapter;
@@ -61,7 +61,7 @@ public class PriceListFragment extends BaseFragment implements PriceListMvpView 
         mRvProduct.getItemAnimator().setRemoveDuration(500);
         mRvProduct.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvProduct.setAdapter(mProductsAdapter);
-        mProductsAdapter.setRibots((List<ProductListResponse.Product>) getArguments().getSerializable(BUNDLE_KEY_LIST));
+        mProductsAdapter.setRibots((List<ProductBean>) getArguments().getSerializable(BUNDLE_KEY_LIST));
         mProductsAdapter.notifyDataSetChanged();
     }
 
@@ -72,7 +72,7 @@ public class PriceListFragment extends BaseFragment implements PriceListMvpView 
     }
 
     @Override
-    public void showProducts(List<ProductListResponse.Product> products) {
+    public void showProducts(List<ProductBean> products) {
 
     }
 

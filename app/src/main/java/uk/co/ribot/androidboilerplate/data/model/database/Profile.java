@@ -11,7 +11,7 @@ import java.util.Date;
 
 @AutoValue
 public abstract class Profile implements Parcelable {
-    public abstract Name name();
+    public abstract NameBean name();
     public abstract String email();
     public abstract String hexColor();
     public abstract Date dateOfBirth();
@@ -28,7 +28,7 @@ public abstract class Profile implements Parcelable {
 
     @AutoValue.Builder
     public abstract static class Builder {
-        public abstract Builder setName(Name name);
+        public abstract Builder setName(NameBean name);
         public abstract Builder setEmail(String email);
         public abstract Builder setHexColor(String hexColor);
         public abstract Builder setDateOfBirth(Date dateOfBirth);

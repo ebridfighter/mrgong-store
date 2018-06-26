@@ -75,12 +75,12 @@ public class SelfHelpPlaceOrderAdapter extends BaseAdapter<SelfHelpPlaceOrderAda
         void countChanged();
 
         //选择的类型,0没选，1全选,2部分选
-        void selectClicked(SelfHelpPlaceOrderAdapter.SELECTTYPE selectType);
+        void selectClicked(SELECTTYPE selectType);
     }
 
-    private SelfHelpPlaceOrderAdapter.OneKeyInterface callback;
+    private OneKeyInterface callback;
 
-    public void setCallback(SelfHelpPlaceOrderAdapter.OneKeyInterface callback) {
+    public void setCallback(OneKeyInterface callback) {
         this.callback = callback;
     }
 
@@ -122,13 +122,13 @@ public class SelfHelpPlaceOrderAdapter extends BaseAdapter<SelfHelpPlaceOrderAda
 
 
     @Override
-    public SelfHelpPlaceOrderAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = getLayout(parent.getContext(), R.layout.item_place_order_product);
-        return new SelfHelpPlaceOrderAdapter.ViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final SelfHelpPlaceOrderAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         setOnItemListener(holder.itemView, position);
         final AddedProduct bean =  mDefaultPBeans.get(position);
         final EditText edittext = holder.mEt;
@@ -262,11 +262,11 @@ public class SelfHelpPlaceOrderAdapter extends BaseAdapter<SelfHelpPlaceOrderAda
     private void checkSelectState() {
         //返回是否全选标记,true全选, false一个没选
         if (selectArr.size() == mDefaultPBeans.size() && selectArr.size() != 0) {
-            callback.selectClicked(SelfHelpPlaceOrderAdapter.SELECTTYPE.ALL_SELECT);
+            callback.selectClicked(SELECTTYPE.ALL_SELECT);
         } else if (selectArr.size() == 0) {
-            callback.selectClicked(SelfHelpPlaceOrderAdapter.SELECTTYPE.NO_SELECT);
+            callback.selectClicked(SELECTTYPE.NO_SELECT);
         } else {
-            callback.selectClicked(SelfHelpPlaceOrderAdapter.SELECTTYPE.PART_SELECT);
+            callback.selectClicked(SELECTTYPE.PART_SELECT);
         }
     }
 
@@ -290,7 +290,7 @@ public class SelfHelpPlaceOrderAdapter extends BaseAdapter<SelfHelpPlaceOrderAda
         mDefaultPBeans.removeAll(selectArr);
         selectArr.clear();
         if (mDefaultPBeans.isEmpty()) {
-            callback.selectClicked(SelfHelpPlaceOrderAdapter.SELECTTYPE.NO_SELECT);
+            callback.selectClicked(SELECTTYPE.NO_SELECT);
         }
         notifyDataSetChanged();
     }
@@ -305,7 +305,7 @@ public class SelfHelpPlaceOrderAdapter extends BaseAdapter<SelfHelpPlaceOrderAda
         @BindView(R.id.ib_input_minus)
         ImageButton mIbInputMinus;
         @BindView(R.id.et)
-        android.widget.EditText mEt;
+        EditText mEt;
         @BindView(R.id.ib_input_add)
         ImageButton mIbInputAdd;
         @BindView(R.id.ll_edit)

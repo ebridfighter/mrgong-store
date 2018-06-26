@@ -65,13 +65,13 @@ public class OrderListAdapter extends BaseAdapter<OrderListAdapter.ViewHolder> {
     }
 
     @Override
-    public OrderListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder viewHolder = new ViewHolder(getLayout(parent.getContext(), R.layout.item_order));
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(OrderListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         setOnItemListener(holder.itemView, position);
         final OrderResponse.ListBean bean = mOrders.get(position);
         //待确认

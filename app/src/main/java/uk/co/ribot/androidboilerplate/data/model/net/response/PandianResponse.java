@@ -3,6 +3,8 @@ package uk.co.ribot.androidboilerplate.data.model.net.response;
 import java.io.Serializable;
 import java.util.List;
 
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
+
 /**
  * Created by mike on 2017/11/28.
  */
@@ -135,13 +137,13 @@ public class PandianResponse implements Serializable {
             private boolean checked;
             private int type;
             private double editNum;
-            private ProductListResponse.Product product;
+            private ProductBean product;
 
-            public ProductListResponse.Product getProduct() {
+            public ProductBean getProduct() {
                 return product;
             }
 
-            public void setProduct(ProductListResponse.Product product) {
+            public void setProduct(ProductBean product) {
                 this.product = product;
             }
 

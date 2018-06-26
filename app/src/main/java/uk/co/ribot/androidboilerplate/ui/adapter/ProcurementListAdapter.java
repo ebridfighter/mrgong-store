@@ -61,7 +61,7 @@ public class ProcurementListAdapter extends BaseAdapter<ProcurementListAdapter.V
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ProcurementListAdapter.ViewHolder viewHolder = new ProcurementListAdapter.ViewHolder(getLayout(parent.getContext(), R.layout.procurement_layout_item));
+        ViewHolder viewHolder = new ViewHolder(getLayout(parent.getContext(), R.layout.procurement_layout_item));
         return viewHolder;
     }
 

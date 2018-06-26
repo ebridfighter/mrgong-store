@@ -5,9 +5,9 @@ import android.database.Cursor;
 
 import java.util.Date;
 
-import uk.co.ribot.androidboilerplate.data.model.database.Name;
+import uk.co.ribot.androidboilerplate.data.model.database.NameBean;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.database.Profile;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 
 public class Db {
 
@@ -48,7 +48,7 @@ public class Db {
         }
 
         public static Profile parseCursor(Cursor cursor) {
-            Name name = Name.create(
+            NameBean name = NameBean.create(
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FIRST_NAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LAST_NAME)));
             long dobTime = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_DATE_OF_BIRTH));
@@ -69,10 +69,8 @@ public class Db {
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_IS_TWOUNIT = "isTwoUnit";
-        public static final String COLUMN_SETTLE_PRICE = "settlePrice";
 
         public static final String COLUMN_UOM = "uom";
-        public static final String COLUMN_SETTLEUOMID = "settleUomId";
         public static final String COLUMN_PRICE = "price";
 
         public static final String COLUMN_BARCODE = "barcode";
@@ -91,9 +89,7 @@ public class Db {
                         COLUMN_PRODUCTID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT NOT NULL, " +
                         COLUMN_IS_TWOUNIT + " INTEGER NOT NULL, " +
-                        COLUMN_SETTLE_PRICE + " FLOAT NOT NULL, " +
                         COLUMN_UOM + " TEXT NOT NULL, " +
-                        COLUMN_SETTLEUOMID + " TEXT NOT NULL, " +
                         COLUMN_PRICE + " DOUBLE, " +
                         COLUMN_BARCODE + " TEXT, " +
                         COLUMN_DEFAULTCODE + " TEXT, " +
@@ -103,7 +99,7 @@ public class Db {
                         COLUMN_PRODUCTUOM + " TEXT, " +
                         COLUMN_TRACKING + " TEXT" +
                         " ); ";
-        public static ContentValues toContentValues(ProductListResponse.Product product) {
+        public static ContentValues toContentValues(ProductBean product) {
             ContentValues values = new ContentValues();
 
             values.put(COLUMN_PRODUCTID, product.getProductID());
@@ -114,9 +110,7 @@ public class Db {
                 values.put(COLUMN_IS_TWOUNIT, 0);
             }
 
-            values.put(COLUMN_SETTLE_PRICE, product.getSettlePrice());
             values.put(COLUMN_UOM, product.getUom());
-            values.put(COLUMN_SETTLEUOMID, product.getSettleUomId());
 
             values.put(COLUMN_PRICE, product.getPrice());
             values.put(COLUMN_BARCODE, product.getBarcode());
@@ -131,15 +125,13 @@ public class Db {
 
             return values;
         }
-        public static ProductListResponse.Product parseCursor(Cursor cursor) {
-            ProductListResponse.Product product = new ProductListResponse.Product();
+        public static ProductBean parseCursor(Cursor cursor) {
+            ProductBean product = new ProductBean();
             product.setProductID(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRODUCTID)));
             product.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
             product.setTwoUnit(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_TWOUNIT))==1);
 
-            product.setSettlePrice(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SETTLE_PRICE)));
             product.setUom(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_UOM)));
-            product.setSettleUomId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SETTLEUOMID)));
 
             product.setPrice(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PRICE)));
             product.setBarcode(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BARCODE)));

@@ -24,7 +24,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         Log.i(TAG, "request:" + request.headers().toString());
         Log.i(TAG, "request:" + request.body().toString());
         long t1 = System.nanoTime();
-        okhttp3.Response response = chain.proceed(chain.request());
+        Response response = chain.proceed(chain.request());
         long t2 = System.nanoTime();
         Log.i(TAG, String.format(Locale.getDefault(), "Received response for %s in %.1fms%n%s",
                 response.request().url(), (t2 - t1) / 1e6d, response.headers()));

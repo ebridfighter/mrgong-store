@@ -10,6 +10,7 @@ import android.os.IBinder;
 import javax.inject.Inject;
 
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
@@ -50,29 +51,10 @@ public class SyncService extends Service {
             return START_NOT_STICKY;
         }
         RxUtil.unsubscribe(mSubscription);
-//        mSubscription = mDataManager.syncRibots()
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Observer<Ribot>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Timber.i("Synced successfully!");
-//                        stopSelf(startId);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Timber.w(e, "Error syncing.");
-//                        stopSelf(startId);
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(Ribot ribot) {
-//                    }
-//                });
 
       mDataManager.syncProducts()
                 .subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ProductListResponse>() {
 
                     @Override
@@ -95,6 +77,7 @@ public class SyncService extends Service {
 
                     @Override
                     public void onNext(ProductListResponse productListResponse) {
+                        mDataManager.saveProductListVersion(productListResponse.getVersion());
                     }
                 });
 

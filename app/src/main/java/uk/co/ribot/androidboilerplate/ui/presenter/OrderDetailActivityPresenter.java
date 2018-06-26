@@ -4,17 +4,17 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
+import io.reactivex.MaybeObserver;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import rx.Subscriber;
 import rx.Subscription;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderDetailResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ReturnOrderDetailResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.OrderDetailMvpView;
@@ -105,9 +105,14 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
     public void loadProduct(int productId) {
         checkViewAttached();
         RxUtil.unsubscribe(mCategorySubscription);
-        mCategorySubscription = mDataManager.loadProduct(productId).subscribe(new Subscriber<ProductListResponse.Product>() {
+        mDataManager.loadProduct(productId).subscribe(new MaybeObserver<ProductBean>() {
             @Override
-            public void onCompleted() {
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(ProductBean product) {
 
             }
 
@@ -117,7 +122,7 @@ public class OrderDetailActivityPresenter extends BasePresenter<OrderDetailMvpVi
             }
 
             @Override
-            public void onNext(ProductListResponse.Product product) {
+            public void onComplete() {
 
             }
         });

@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.DataManager;
-import uk.co.ribot.androidboilerplate.data.model.database.Product;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
@@ -76,14 +76,14 @@ public class MakeInventoryDetailPresenter extends BasePresenter<MakeInventoryDet
         mDataManager.loadProducts()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<List<Product>>() {
+                .subscribe(new SingleObserver<List<ProductBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(List<Product> products) {
+                    public void onSuccess(List<ProductBean> products) {
                         if (products.isEmpty()) {
                             getMvpView().showProductsEmpty();
                         } else {

@@ -29,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.AddedProduct;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
@@ -41,10 +41,10 @@ import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
 public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapter.ViewHolder> {
     private boolean mCanSeePrice;
     private Activity mActivity;
-    List<ProductListResponse.Product> mProducts = new ArrayList<>();
+    List<ProductBean> mProducts = new ArrayList<>();
     private HashMap<String, AddedProduct> mCountMap;
 
-    public void setProducts(List<ProductListResponse.Product> products) {
+    public void setProducts(List<ProductBean> products) {
         mProducts = products;
         notifyDataSetChanged();
     }
@@ -73,7 +73,7 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final ProductListResponse.Product bean = (ProductListResponse.Product) mProducts.get(position);
+        final ProductBean bean = (ProductBean) mProducts.get(position);
         holder.mNwet.setTag(position);
         holder.mNwet.removeTextChangedListener();
         holder.mNwet.addTextChangedListener(new TextWatcher() {
@@ -92,7 +92,7 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
                     return;
                 }
                 int position = (int) holder.mNwet.getTag();
-                ProductListResponse.Product listBean = mProducts.get(position);
+                ProductBean listBean = mProducts.get(position);
                 int changedNum = 0;
                 if (!TextUtils.isEmpty(s)) {
                     changedNum = Integer.valueOf(s.toString());
@@ -198,17 +198,10 @@ public class PlaceOrderProductAdapter extends BaseAdapter<PlaceOrderProductAdapt
         DecimalFormat df = new DecimalFormat("#.##");
         if (mCanSeePrice) {
             StringBuffer sb1 = new StringBuffer();
-            if (bean.isTwoUnit()) {
-                sb1.append("¥")
-                        .append(df.format(Double.valueOf(bean.getSettlePrice())))
-                        .append("元/")
-                        .append(bean.getSettleUomId());
-            } else {
                 sb1.append("¥")
                         .append(df.format(Double.valueOf(bean.getPrice())))
                         .append("元/")
                         .append(bean.getUom());
-            }
             holder.mTvPrice.setText(sb1.toString());
         } else {
             holder.mTvPrice.setText("");

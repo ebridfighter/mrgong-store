@@ -40,13 +40,13 @@ public class ReturnOrderListAdapter extends BaseAdapter<ReturnOrderListAdapter.V
 
 
     @Override
-    public ReturnOrderListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = getLayout(parent.getContext(),R.layout.item_return_order);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ReturnOrderListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         ReturnOrderListResponse.ListBean bean = mReturnOrders.get(position);
 
         if("process".equals(bean.getState())) {

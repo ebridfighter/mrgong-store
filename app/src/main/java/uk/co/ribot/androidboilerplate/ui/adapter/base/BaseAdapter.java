@@ -58,6 +58,7 @@ public abstract class BaseAdapter<T extends RecyclerView.ViewHolder> extends Rec
             public void onClick(View view) {
                 if (mOnChildItemClickListener != null) {
                     mOnChildItemClickListener.onItemClick(view, (Integer) view.getTag());
+                    notifyDataSetChanged();
                 }
             }
         });

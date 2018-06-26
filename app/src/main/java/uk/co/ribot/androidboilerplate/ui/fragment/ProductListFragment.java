@@ -23,9 +23,9 @@ import butterknife.Unbinder;
 import rx.Subscriber;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.business.AddedProduct;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.event.ProductCountChangeEvent;
 import uk.co.ribot.androidboilerplate.data.model.event.ProductQueryEvent;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.adapter.PlaceOrderProductAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
@@ -47,7 +47,7 @@ public class ProductListFragment extends BaseFragment {
     //选中数量map
     private static HashMap<String, AddedProduct> countMap = new HashMap<>();
     //缓存全部商品列表
-    private ArrayList<ProductListResponse.Product> arrayList;
+    private ArrayList<ProductBean> arrayList;
 
     public static final String BUNDLE_KEY_LIST = "bundle_key_list";
 
@@ -102,7 +102,7 @@ public class ProductListFragment extends BaseFragment {
                     ProductQueryEvent productQueryEvent = (ProductQueryEvent) object;
                     String word = productQueryEvent.getSearchWord();
                     //只在当前类型下面找名称包括的元素
-                    List<ProductListResponse.Product> findArray = findArrayByWord(word);
+                    List<ProductBean> findArray = findArrayByWord(word);
                     mPlaceOrderProductAdapter.setProducts(findArray);
                 }
             }
@@ -112,10 +112,10 @@ public class ProductListFragment extends BaseFragment {
     public void setUpListData() {
         //得到数据，更新UI
         if (arrayList == null) {
-            arrayList = (ArrayList<ProductListResponse.Product>) getArguments().getSerializable(BUNDLE_KEY_LIST);
+            arrayList = (ArrayList<ProductBean>) getArguments().getSerializable(BUNDLE_KEY_LIST);
         }
         //先统计一次id,个数
-        for (ProductListResponse.Product bean : arrayList) {
+        for (ProductBean bean : arrayList) {
             //同时根据上个页面传值更新一次
             int count = existInLastPager(bean);
             AddedProduct addedProduct = new AddedProduct();
@@ -132,9 +132,9 @@ public class ProductListFragment extends BaseFragment {
     }
 
     //返回当前标签下名称包含的
-    private List<ProductListResponse.Product> findArrayByWord(String word) {
-        List<ProductListResponse.Product> findList = new ArrayList<>();
-        for (ProductListResponse.Product bean : arrayList) {
+    private List<ProductBean> findArrayByWord(String word) {
+        List<ProductBean> findList = new ArrayList<>();
+        for (ProductBean bean : arrayList) {
             if (bean.getName().contains(word)) {
                 findList.add(bean);
             }
@@ -147,7 +147,7 @@ public class ProductListFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-    private int existInLastPager(ProductListResponse.Product bean) {
+    private int existInLastPager(ProductBean bean) {
         if (addedPros != null) {
             for (AddedProduct product : addedPros) {
                 if (product.getProductId().equals(String.valueOf(bean.getProductID()))) {

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ import uk.co.ribot.androidboilerplate.ui.fragment.PlaceOrderFragment;
 import uk.co.ribot.androidboilerplate.ui.fragment.StockFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.MainPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.MainMvpView;
-@Route(path = "/test/MainActivity")
 public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Inject

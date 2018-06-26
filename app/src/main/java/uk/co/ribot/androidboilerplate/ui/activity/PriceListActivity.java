@@ -18,8 +18,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.SyncService;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.injection.component.ProductListActivityComponent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
@@ -38,7 +38,7 @@ public class PriceListActivity extends BaseActivity implements ProductListMvpVie
     int mSynFlag = 0;
     public static final int MAX_SYN_FLAG = 2;
     CategoryResponse mCategoryResponse;
-    List<ProductListResponse.Product> mProducts;
+    List<ProductBean> mProducts;
     FragmentAdapter mFragmentAdapter;
     @BindView(R.id.cddv)
     CategoryDropDownView mCddv;
@@ -70,19 +70,19 @@ public class PriceListActivity extends BaseActivity implements ProductListMvpVie
         mUserInfoResponse = mProductListPresenter.loadUser();
     }
 
-    private void setUpDataForViewPage(List<ProductListResponse.Product> products) {
+    private void setUpDataForViewPage(List<ProductBean> products) {
         List<Fragment> fragments = new ArrayList<>();
         List<String> titles = new ArrayList<>();
-        HashMap<String, ArrayList<ProductListResponse.Product>> map = new HashMap<>();
+        HashMap<String, ArrayList<ProductBean>> map = new HashMap<>();
         titles.add(getString(R.string.category_all));
         for (String category : mCategoryResponse.getCategoryList()) {
             titles.add(category);
             map.put(category, new ArrayList<>());
         }
 
-        for (ProductListResponse.Product Product : products) {
+        for (ProductBean Product : products) {
             if (!TextUtils.isEmpty(Product.getCategory())) {
-                ArrayList<ProductListResponse.Product> tempListBeen = map.get(Product.getCategory());
+                ArrayList<ProductBean> tempListBeen = map.get(Product.getCategory());
                 if (tempListBeen == null) {
                     tempListBeen = new ArrayList<>();
                     map.put(Product.getCategory(), tempListBeen);
@@ -92,11 +92,11 @@ public class PriceListActivity extends BaseActivity implements ProductListMvpVie
         }
 
         for (String category : mCategoryResponse.getCategoryList()) {
-            ArrayList<ProductListResponse.Product> value = map.get(category);
+            ArrayList<ProductBean> value = map.get(category);
             fragments.add(newPriceListFragment(value));
         }
 
-        fragments.add(0, newPriceListFragment((ArrayList<ProductListResponse.Product>) products));
+        fragments.add(0, newPriceListFragment((ArrayList<ProductBean>) products));
         initUI(titles, fragments);
     }
 
@@ -125,7 +125,7 @@ public class PriceListActivity extends BaseActivity implements ProductListMvpVie
         });
     }
 
-    public PriceListFragment newPriceListFragment(ArrayList<ProductListResponse.Product> value) {
+    public PriceListFragment newPriceListFragment(ArrayList<ProductBean> value) {
         PriceListFragment priceListFragment = new PriceListFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(PriceListFragment.BUNDLE_KEY_LIST, value);
@@ -142,7 +142,7 @@ public class PriceListActivity extends BaseActivity implements ProductListMvpVie
     }
 
     @Override
-    public void showProducts(List<ProductListResponse.Product> products) {
+    public void showProducts(List<ProductBean> products) {
         mSynFlag++;
         mProducts = products;
         setUpFragment();

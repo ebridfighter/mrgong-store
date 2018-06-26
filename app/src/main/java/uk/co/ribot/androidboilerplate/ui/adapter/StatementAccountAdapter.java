@@ -37,14 +37,14 @@ public class StatementAccountAdapter extends BaseAdapter<StatementAccountAdapter
     }
 
     @Override
-    public StatementAccountAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = getLayout(parent.getContext(), R.layout.item_statement_account);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(StatementAccountAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         StatementAccountListResponse.BankStatementBean bankStatementBean = mBankStatementBeans.get(position);
         holder.mTvDate.setText(TimeUtils.getTimeStamps4(bankStatementBean.getBeginDate()) + "至" + TimeUtils.getTimeStamps4(bankStatementBean.getEndDate()));
         holder.mTvName.setText(bankStatementBean.getName());

@@ -2,26 +2,39 @@ package uk.co.ribot.androidboilerplate.data.local;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.rx2.language.RXSQLite;
+import com.raizlabs.android.dbflow.sql.language.Delete;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean_Table;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
+import uk.co.ribot.androidboilerplate.data.model.database.UserBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
-
-import static uk.co.ribot.androidboilerplate.data.local.Db.ProductProfileTable.COLUMN_PRODUCTID;
 
 @Singleton
 public class DatabaseHelper {
@@ -77,20 +90,33 @@ public class DatabaseHelper {
             @Override
             public void subscribe(ObservableEmitter<ProductListResponse> e) throws Exception {
                 if (e.isDisposed()) return;
-                BriteDatabase.Transaction transaction = mDb.newTransaction();
-                try {
-                    mDb.delete(Db.ProductProfileTable.TABLE_NAME, null);
-                    for (ProductListResponse.Product product : productListResponse.getList()) {
-                        long result = mDb.insert(Db.ProductProfileTable.TABLE_NAME,
-                                Db.ProductProfileTable.toContentValues(product),
-                                SQLiteDatabase.CONFLICT_REPLACE);
-                        if (result >= 0) e.onNext(productListResponse);
-                    }
-                    transaction.markSuccessful();
-                    e.onComplete();
-                } finally {
-                    transaction.end();
+                if (productListResponse.getProducts().size() > 0){
+                    Delete.table(ProductBean.class);
                 }
+//                同步事务
+//                FlowManager.getDatabase(AppDatabase.class)
+//                        .executeTransaction(new ProcessModelTransaction.Builder<ProductBean>(
+//                                BaseModel::insert
+//                        ).addAll(productListResponse.getProducts()).build());
+                //异步事务
+                FlowManager.getDatabase(AppDatabase.class)
+                        .beginTransactionAsync(new ProcessModelTransaction.Builder<ProductBean>(
+                                BaseModel::insert
+                        ).addAll(productListResponse.getProducts()).build())
+                        .error(new Transaction.Error() {
+                            @Override
+                            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                                Timber.e(error, "There was an error save the products.");
+                            }
+                        })
+                        .success(new Transaction.Success() {
+                            @Override
+                            public void onSuccess(@NonNull Transaction transaction) {
+                                e.onNext(productListResponse);
+                            }
+                        })
+                        .build()
+                        .execute();
             }
         });
     }
@@ -105,34 +131,32 @@ public class DatabaseHelper {
         });
     }
 
-    public rx.Observable<List<ProductListResponse.Product>> getProducts() {
-        return mDb.createQuery(Db.ProductProfileTable.TABLE_NAME,
-                "SELECT * FROM " + Db.ProductProfileTable.TABLE_NAME)
-                .mapToList(new Func1<Cursor, ProductListResponse.Product>() {
-                    @Override
-                    public ProductListResponse.Product call(Cursor cursor) {
-                        return Db.ProductProfileTable.parseCursor(cursor);
-                    }
-                });
+    public void saveUser(String companyName,String userName,String password){
+        UserBean userBean = new UserBean();
+        userBean.setId(companyName+userName);
+        userBean.setCompanyName(companyName);
+        userBean.setPassword(password);
+        userBean.setUserName(userName);
+//        注意这里是同步操作,但只是操作一个实体，对整体的性能影响不大，批量操作使用异步事务
+        userBean.save();
     }
 
-    public rx.Observable<ProductListResponse.Product> getProduct(int productId) {
-        return mDb.createQuery(Db.ProductProfileTable.TABLE_NAME,
-                "SELECT * FROM " + Db.ProductProfileTable.TABLE_NAME,COLUMN_PRODUCTID+"=?",String.valueOf(productId))
-                .mapToList(new Func1<Cursor, ProductListResponse.Product>() {
-                    @Override
-                    public ProductListResponse.Product call(Cursor cursor) {
-                        return Db.ProductProfileTable.parseCursor(cursor);
-                    }
-                }).map(new Func1<List<ProductListResponse.Product>, ProductListResponse.Product>() {
-                    @Override
-                    public ProductListResponse.Product call(List<ProductListResponse.Product> products) {
-                        if (products.size() > 0){
-                            return products.get(0);
-                        }
-                        return null;
-                    }
-                });
+    public Single<List<UserBean>> loadUserList(){
+        return RXSQLite.rx(SQLite.select().from(UserBean.class)).queryList();
+    }
+
+    public Single<List<ProductBean>> loadProducts() {
+        return RXSQLite.rx(SQLite.select().from(ProductBean.class)).queryList();
+    }
+
+
+    public Maybe<ProductBean> loadProduct(int productId) {
+        return RXSQLite.rx(SQLite.select().from(ProductBean.class).where(ProductBean_Table.productID.eq(productId))).querySingle();
+    }
+
+
+    public void deleteUser(UserBean userBean){
+        userBean.delete();
     }
 
 }

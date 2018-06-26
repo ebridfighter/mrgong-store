@@ -56,13 +56,13 @@ public class OrderProductsAdapter extends BaseAdapter<OrderProductsAdapter.ViewH
     }
 
     @Override
-    public OrderProductsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder viewHolder = new ViewHolder(getLayout(parent.getContext(), R.layout.item_order_product));
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(OrderProductsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         setOnItemListener(holder.itemView,position);
         final OrderListResponse.ListBean.LinesBean bean = mProducts.get(position);
         int pId = bean.getProductID();

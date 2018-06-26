@@ -4,7 +4,7 @@ import com.raizlabs.android.dbflow.annotation.Database;
 import com.raizlabs.android.dbflow.annotation.Migration;
 import com.raizlabs.android.dbflow.sql.migration.AlterTableMigration;
 
-import uk.co.ribot.androidboilerplate.data.model.database.Product;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 
 /**
  * Created by mike on 2018/6/24.
@@ -22,9 +22,9 @@ public class AppDatabase {
      * 2、增加表字段，考虑到版本兼容性，老版本不建议删除字段
      */
     @Migration(version = VERSION, database = AppDatabase.class)
-    public static class Migration2Product extends AlterTableMigration<Product> {
+    public static class Migration2Product extends AlterTableMigration<ProductBean> {
 
-        public Migration2Product(Class<Product> table) {
+        public Migration2Product(Class<ProductBean> table) {
             super(table);
         }
 

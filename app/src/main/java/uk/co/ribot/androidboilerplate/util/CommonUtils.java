@@ -237,14 +237,14 @@ public class CommonUtils {
 	 */
 	public static String getProduct(){
 
-		return android.os.Build.PRODUCT;
+		return Build.PRODUCT;
 	}
 	/**
 	 * 手机系统版本
 	 * @return
 	 */
 	public static String getOsVersion(){
-		return android.os.Build.VERSION.RELEASE;
+		return Build.VERSION.RELEASE;
 	}
 	/**
 	 * 获取当前的版本号
@@ -275,7 +275,7 @@ public class CommonUtils {
 		try {
 			packageManager = context.getApplicationContext().getPackageManager();
 			applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
-		} catch (PackageManager.NameNotFoundException e) {
+		} catch (NameNotFoundException e) {
 			applicationInfo = null;
 		}
 		String applicationName =
@@ -571,7 +571,7 @@ public class CommonUtils {
 	 * @return
 	 */
 	public static boolean isExitsSdcard() {
-		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 			return true;
 		else
 			return false;
@@ -660,7 +660,7 @@ public class CommonUtils {
 	public static String getImageAbsolutePath(Context context, Uri imageUri) {
 		if (context == null || imageUri == null)
 			return null;
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, imageUri)) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, imageUri)) {
 			if (isExternalStorageDocument(imageUri)) {
 				String docId = DocumentsContract.getDocumentId(imageUri);
 				String[] split = docId.split(":");
@@ -875,10 +875,10 @@ public class CommonUtils {
 			float scale = resources.getDisplayMetrics().density;
 			Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
 
-			android.graphics.Bitmap.Config bitmapConfig =   bitmap.getConfig();
+			Bitmap.Config bitmapConfig =   bitmap.getConfig();
 			// set default bitmap config if none
 			if(bitmapConfig == null) {
-				bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+				bitmapConfig = Bitmap.Config.ARGB_8888;
 			}
 			// resource bitmaps are imutable,
 			// so we need to convert it to mutable one

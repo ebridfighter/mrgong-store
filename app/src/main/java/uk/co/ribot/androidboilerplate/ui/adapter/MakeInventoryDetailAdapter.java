@@ -17,8 +17,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.ribot.androidboilerplate.R;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.PandianResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.remote.RunwiseService;
 import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 import uk.co.ribot.androidboilerplate.ui.adapter.base.BaseAdapter;
@@ -42,15 +42,15 @@ public class MakeInventoryDetailAdapter extends BaseAdapter<MakeInventoryDetailA
     }
 
     @Override
-    public MakeInventoryDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = getLayout(parent.getContext(),R.layout.item_make_inventory_detail);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MakeInventoryDetailAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         final PandianResponse.InventoryBean.LinesBean bean =  mLinesBeans.get(position);
-        ProductListResponse.Product productBean = bean.getProduct();
+        ProductBean productBean = bean.getProduct();
         if (productBean != null){
             holder.mTvName.setText(productBean.getName());
             holder.mTvNumber.setText(productBean.getDefaultCode() + " | ");

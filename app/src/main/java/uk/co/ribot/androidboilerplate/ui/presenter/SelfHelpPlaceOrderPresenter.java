@@ -4,16 +4,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.MaybeObserver;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import rx.Subscriber;
 import rx.Subscription;
 import uk.co.ribot.androidboilerplate.data.DataManager;
+import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.request.CommitOrderRequest;
 import uk.co.ribot.androidboilerplate.data.model.net.response.OrderCommitResponse;
-import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.data.model.net.response.UserInfoResponse;
 import uk.co.ribot.androidboilerplate.ui.base.BasePresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.SelfHelpPlaceOrderMvpView;
@@ -108,10 +108,15 @@ public class SelfHelpPlaceOrderPresenter extends BasePresenter<SelfHelpPlaceOrde
 
     public void loadProduct(int productId) {
         checkViewAttached();
-        mDataManager.loadProduct(productId) .observeOn(rx.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribeOn(rx.schedulers.Schedulers.io()).subscribe(new Subscriber<ProductListResponse.Product>() {
+        mDataManager.loadProduct(productId) .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new MaybeObserver<ProductBean>() {
             @Override
-            public void onCompleted() {
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(ProductBean product) {
 
             }
 
@@ -121,8 +126,8 @@ public class SelfHelpPlaceOrderPresenter extends BasePresenter<SelfHelpPlaceOrde
             }
 
             @Override
-            public void onNext(ProductListResponse.Product product) {
-                getMvpView().showProductSuccess(product);
+            public void onComplete() {
+
             }
         });
     }
