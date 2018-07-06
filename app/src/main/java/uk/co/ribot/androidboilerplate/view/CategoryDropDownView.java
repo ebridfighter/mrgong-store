@@ -79,7 +79,7 @@ public class CategoryDropDownView extends FrameLayout {
         mTabListener = listener;
     }
 
-    public void setup(Activity activity, ViewPager viewPager, List<String> titles){
+    public void setUp(Activity activity, ViewPager viewPager, List<String> titles){
         mScreenHeight = DensityUtil.getScreenH(activity);
         mTitles = titles;
         mViewPager = viewPager;

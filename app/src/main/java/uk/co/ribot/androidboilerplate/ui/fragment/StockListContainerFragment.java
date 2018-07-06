@@ -102,7 +102,7 @@ public class StockListContainerFragment extends BaseFragment implements StockLis
         adapter = new TabPageIndicatorAdapter(this.getChildFragmentManager(),titles,repertoryEntityFragmentList);
         mVpStocks.setAdapter(adapter);
         mVpStocks.setOffscreenPageLimit(adapter.getCount());
-        mTabsCatogory.setup(getActivity(),mVpStocks,titles);
+        mTabsCatogory.setUp(getActivity(),mVpStocks,titles);
         mTabsCatogory.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

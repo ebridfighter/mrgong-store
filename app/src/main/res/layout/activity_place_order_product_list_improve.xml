@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_bottom_bar">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title_bar"
+            android:background="@color/windowBackground"
+            android:orientation="vertical">
+
+            <uk.co.ribot.androidboilerplate.view.CategoryDropDownView
+                android:id="@+id/category_drop_down_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_product_fragments"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!--用于智能下单的loading动画-->
+        <RelativeLayout
+            android:id="@+id/ttt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title_bar"
+            android:background="@color/windowBackground"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/loadingImg"
+                android:layout_width="64dp"
+                android:layout_height="170dp"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/loadingTv"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@id/loadingImg"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="正在计算..."
+                android:textColor="#999999"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <com.runwise.commomlibrary.view.LoadingLayout
+            android:id="@+id/loadingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/title_bar"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!-- 购物车弹出框 -->
+    <RelativeLayout
+        android:id="@+id/rl_cart_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_bottom_bar"
+        android:background="#66000000"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/include_cart"
+            layout="@layout/dialog_cart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="127dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_product_cart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/bg_cart_icon" />
+
+        <TextView
+            android:id="@+id/tv_cart_count"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_above="@+id/iv_product_cart"
+            android:layout_marginBottom="-15dp"
+            android:layout_marginLeft="-15dp"
+            android:layout_toRightOf="@+id/iv_product_cart"
+            android:background="@drawable/bg_red_oval"
+            android:gravity="center"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="234"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_product_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="7dp"
+            android:layout_toRightOf="@+id/iv_product_cart"
+            android:text=""
+            android:textColor="@color/textColorRed"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_product_total_count"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_below="@id/tv_product_total_price"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="18dp"
+            android:layout_toRightOf="@+id/iv_product_cart"
+            android:text=""
+            android:textColor="#999999"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_order_commit"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_green_gradient_selector"
+            android:gravity="center"
+            android:text="选好了"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_order_resume"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/tv_order_commit"
+            android:background="@drawable/bg_fec35f_gradient"
+            android:gravity="center"
+            android:text="继续选择"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentTop="true"
+            android:background="#f5f5f5" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

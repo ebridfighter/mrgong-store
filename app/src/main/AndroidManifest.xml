@@ -35,7 +35,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.LauncherActivity"
+        <activity
+            android:name=".ui.activity.LauncherActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,24 +44,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ui.activity.LoginActivity" />
-        <activity android:name=".ui.activity.PriceListActivity"></activity>
-        <activity android:name=".ui.activity.IntelligentPlaceOrderActivity"></activity>
-        <activity android:name=".ui.activity.OrderDetailActivity"></activity>
+        <activity android:name=".ui.activity.PriceListActivity" />
+        <activity android:name=".ui.activity.IntelligentPlaceOrderActivity" />
+        <activity android:name=".ui.activity.OrderDetailActivity" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity android:name=".ui.activity.OrderCommitSuccessActivity" />
         <activity android:name=".ui.activity.SelfHelpPlaceOrderActivity" />
-        <activity android:name=".ui.activity.PlaceOrderProductListActivity"></activity>
-        <activity android:name=".ui.activity.OrderListActivity"></activity>
-        <activity android:name=".ui.activity.ReturnOrderListActivity"></activity>
-        <activity android:name=".ui.activity.UserInfoActivity"></activity>
-        <activity android:name=".ui.activity.StatementAccountActivity"></activity>
-        <activity android:name=".ui.activity.MakeInventoryActivity"></activity>
-        <activity android:name=".ui.activity.MakeInventoryDetailActivity"></activity>
-        <activity android:name=".ui.activity.ProcurementActivity"></activity>
+        <activity android:name=".ui.activity.PlaceOrderProductListActivity" />
+        <activity android:name=".ui.activity.OrderListActivity" />
+        <activity android:name=".ui.activity.ReturnOrderListActivity" />
+        <activity android:name=".ui.activity.UserInfoActivity" />
+        <activity android:name=".ui.activity.StatementAccountActivity" />
+        <activity android:name=".ui.activity.MakeInventoryActivity" />
+        <activity android:name=".ui.activity.MakeInventoryDetailActivity" />
+        <activity android:name=".ui.activity.ProcurementActivity" />
+        <activity android:name=".ui.activity.PlaceOrderProductListImproveActivity"></activity>
     </application>
 
 </manifest>

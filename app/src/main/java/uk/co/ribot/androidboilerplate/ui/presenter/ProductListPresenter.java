@@ -25,8 +25,7 @@ import uk.co.ribot.androidboilerplate.util.RxUtil;
 
 public class ProductListPresenter extends BasePresenter<ProductListMvpView> {
     private final DataManager mDataManager;
-    private Subscription mSubscription;
-    private Subscription mCategorySubscription;
+    private Disposable mCategoryDisposable;
 
     @Inject
     public ProductListPresenter(DataManager dataManager) {
@@ -41,52 +40,25 @@ public class ProductListPresenter extends BasePresenter<ProductListMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mSubscription != null) mSubscription.unsubscribe();
-        if (mCategorySubscription != null) mCategorySubscription.unsubscribe();
+        RxUtil.dispose(mCategoryDisposable);
+
     }
 
     public UserInfoResponse loadUser() {
         return mDataManager.loadUser();
     }
 
-    public void getCategorys() {
+
+    public void loadProductsByCategoryParent(String categoryParent) {
         checkViewAttached();
-        mDataManager.getCategorys()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Observer<CategoryResponse>() {
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(CategoryResponse categoryResponse) {
-                getMvpView().showCategorys(categoryResponse);
-            }
-        });
-    }
-
-    public void loadProducts() {
-        checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mDataManager.loadProducts()
+        RxUtil.dispose(mCategoryDisposable);
+        mDataManager.loadProductsByCategoryParent(categoryParent)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ProductBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        mCategoryDisposable = d;
                     }
 
                     @Override

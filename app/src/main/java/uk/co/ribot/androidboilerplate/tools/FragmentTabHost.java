@@ -168,7 +168,7 @@ public class FragmentTabHost extends TabHost implements
     }
 
     /**
-     * @deprecated Don't call the original TabHost setup, you must instead call
+     * @deprecated Don't call the original TabHost setUp, you must instead call
      *             {@link #setup(Context, FragmentManager)} or
      *             {@link #setup(Context, FragmentManager, int)}.
      */
@@ -176,11 +176,11 @@ public class FragmentTabHost extends TabHost implements
     @Deprecated
     public void setup() {
         throw new IllegalStateException(
-                "Must call setup() that takes a Context and FragmentManager");
+                "Must call setUp() that takes a Context and FragmentManager");
     }
 
     public void setup(Context context, FragmentManager manager) {
-        ensureHierarchy(context); // Ensure views required by super.setup()
+        ensureHierarchy(context); // Ensure views required by super.setUp()
         super.setup();
         mContext = context;
         mFragmentManager = manager;
@@ -188,7 +188,7 @@ public class FragmentTabHost extends TabHost implements
     }
 
     public void setup(Context context, FragmentManager manager, int containerId) {
-        ensureHierarchy(context); // Ensure views required by super.setup()
+        ensureHierarchy(context); // Ensure views required by super.setUp()
         super.setup();
         mContext = context;
         mFragmentManager = manager;

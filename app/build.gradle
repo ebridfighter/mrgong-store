@@ -23,7 +23,7 @@ android {
         multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [ moduleName : project.getName() ]
+                arguments = [moduleName: project.getName()]
             }
         }
     }
@@ -228,7 +228,7 @@ dependencies {
     } else {
         compile project(':moduleInventory')
     }
-
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.25'
 }
 
 // Log out test results to console

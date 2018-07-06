@@ -13,6 +13,7 @@ import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.database.UserBean;
@@ -90,6 +91,13 @@ public class DataManager {
 
     public Single<List<ProductBean>> loadProducts() {
         return mDatabaseHelper.loadProducts();
+    }
+    public Single<List<ProductBean>> loadProductsByCategoryParent(String categoryParent) {
+        return mDatabaseHelper.loadProductsByCategoryParent(categoryParent);
+    }
+
+    public Single<List<CategoryBean>> loadCategorys() {
+        return mDatabaseHelper.loadCategorys();
     }
 
     public Observable<LoginResponse> login(String account, String password) {

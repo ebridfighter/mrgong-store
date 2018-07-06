@@ -103,7 +103,7 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
             @Override
             public void onPageSelected(int position) {
                 //通知子fragment更新list产品数量
-                getRxBus().post(new ProductCountChangeEvent());
+//                getRxBus().post(new ProductCountChangeEvent());
             }
 
             @Override
@@ -138,21 +138,21 @@ public class PlaceOrderProductListActivity extends BaseActivity implements Place
                 Bundle bundle = new Bundle();
                 //当前选中的商品信息
                 ArrayList<AddedProduct> addedList = new ArrayList<>();
-                HashMap<String, AddedProduct> countMap = ProductListFragment.getCountMap();
-                Iterator iter = countMap.entrySet().iterator();
-                while (iter.hasNext()) {
-                    Map.Entry<String, AddedProduct> entry = (Map.Entry) iter.next();
-                    String key = entry.getKey();
-                    AddedProduct pro = entry.getValue();
-                    if (pro.getCount() != 0) {
-                        pro.setProductId(String.valueOf(pro.getProduct().getProductID()));
-                        addedList.add(pro);
-                    }
-                }
-                bundle.putSerializable(INTENT_KEY_BACKAP, addedList);
-                intent.putExtras(bundle);
-                setResult(RESULT_OK, intent);
-                finish();
+//                HashMap<String, AddedProduct> countMap = ProductListFragment.getCountMap();
+//                Iterator iter = countMap.entrySet().iterator();
+//                while (iter.hasNext()) {
+//                    Map.Entry<String, AddedProduct> entry = (Map.Entry) iter.next();
+//                    String key = entry.getKey();
+//                    AddedProduct pro = entry.getValue();
+//                    if (pro.getCount() != 0) {
+//                        pro.setProductId(String.valueOf(pro.getProduct().getProductID()));
+//                        addedList.add(pro);
+//                    }
+//                }
+//                bundle.putSerializable(INTENT_KEY_BACKAP, addedList);
+//                intent.putExtras(bundle);
+//                setResult(RESULT_OK, intent);
+//                finish();
                 break;
             case R.id.title_iv_left:
                 finish();

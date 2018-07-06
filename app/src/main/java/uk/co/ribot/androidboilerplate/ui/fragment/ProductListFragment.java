@@ -3,8 +3,6 @@ package uk.co.ribot.androidboilerplate.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 import com.runwise.commomlibrary.view.LoadingLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,42 +19,32 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import rx.Subscriber;
 import uk.co.ribot.androidboilerplate.R;
-import uk.co.ribot.androidboilerplate.data.model.business.AddedProduct;
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean;
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryChildBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
-import uk.co.ribot.androidboilerplate.data.model.event.ProductCountChangeEvent;
-import uk.co.ribot.androidboilerplate.data.model.event.ProductQueryEvent;
+import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
-import uk.co.ribot.androidboilerplate.ui.adapter.PlaceOrderProductAdapter;
+import uk.co.ribot.androidboilerplate.ui.activity.PlaceOrderProductListImproveActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
+import uk.co.ribot.androidboilerplate.ui.base.ProductCountSetter;
 import uk.co.ribot.androidboilerplate.ui.presenter.ProductListPresenter;
+import uk.co.ribot.androidboilerplate.ui.view_interface.ProductListMvpView;
+import uk.co.ribot.androidboilerplate.view.LinkageListContainer;
 
 
-public class ProductListFragment extends BaseFragment {
+public class ProductListFragment extends BaseFragment implements ProductListMvpView {
 
-    @BindView(R.id.rv_product)
-    RecyclerView mRvProduct;
+    @Inject
+    ProductListPresenter mProductListPresenter;
+    @BindView(R.id.linkage_list_container)
+    LinkageListContainer mLinkageListContainer;
     @BindView(R.id.loadingLayout)
     LoadingLayout mLoadingLayout;
     Unbinder unbinder;
-    @Inject
-    PlaceOrderProductAdapter mPlaceOrderProductAdapter;
-    @Inject
-    ProductListPresenter mProductListPresenter;
-    private ArrayList<AddedProduct> addedPros;
-    //选中数量map
-    private static HashMap<String, AddedProduct> countMap = new HashMap<>();
-    //缓存全部商品列表
-    private ArrayList<ProductBean> arrayList;
 
-    public static final String BUNDLE_KEY_LIST = "bundle_key_list";
-
-
-    public static HashMap<String, AddedProduct> getCountMap() {
-        return countMap;
-    }
-
-    private boolean canSeePrice = true;             //默认价格中可见
-
+    public static final String ARGUMENT_KEY_CATEGORY = "argument_key_category";
+    private CategoryBean mCategoryParent;
+    ProductCountSetter mProductCountSetter;
     @Inject
     public ProductListFragment() {
     }
@@ -74,13 +61,11 @@ public class ProductListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mCategoryParent = (CategoryBean) getArguments().getSerializable(ARGUMENT_KEY_CATEGORY);
         mFragmentBaseComponent.productListFragmentComponent(new ActivityModule(getActivity())).inject(this);
-        addedPros = (ArrayList<AddedProduct>) getArguments().getSerializable("ap");
-        mRvProduct.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRvProduct.setAdapter(mPlaceOrderProductAdapter);
-        canSeePrice = mProductListPresenter.loadUser().isCanSeePrice();
-        setUpListData();
-
+        mLoadingLayout.setStatusLoading();
+        mProductListPresenter.attachView(this);
+        mProductListPresenter.loadProductsByCategoryParent(mCategoryParent.getCategoryParent());
         getRxBusObservable().subscribe(new Subscriber<Object>() {
             @Override
             public void onCompleted() {
@@ -94,75 +79,48 @@ public class ProductListFragment extends BaseFragment {
 
             @Override
             public void onNext(Object object) {
-                //收到了登出事件
-                if (ProductCountChangeEvent.class.isInstance(object)) {
-                    mPlaceOrderProductAdapter.notifyDataSetChanged();
-                }
-                if (ProductQueryEvent.class.isInstance(object)) {
-                    ProductQueryEvent productQueryEvent = (ProductQueryEvent) object;
-                    String word = productQueryEvent.getSearchWord();
-                    //只在当前类型下面找名称包括的元素
-                    List<ProductBean> findArray = findArrayByWord(word);
-                    mPlaceOrderProductAdapter.setProducts(findArray);
-                }
+//                用于接收刷新商品数量的事件
             }
         });
     }
 
-    public void setUpListData() {
-        //得到数据，更新UI
-        if (arrayList == null) {
-            arrayList = (ArrayList<ProductBean>) getArguments().getSerializable(BUNDLE_KEY_LIST);
-        }
-        //先统计一次id,个数
-        for (ProductBean bean : arrayList) {
-            //同时根据上个页面传值更新一次
-            int count = existInLastPager(bean);
-            AddedProduct addedProduct = new AddedProduct();
-            addedProduct.setProduct(bean);
-            addedProduct.setCount(count);
-            countMap.put(String.valueOf(bean.getProductID()), addedProduct);
-        }
-
-        mPlaceOrderProductAdapter.setProducts(arrayList);
-        mPlaceOrderProductAdapter.setActivity(getActivity());
-        mPlaceOrderProductAdapter.setCanSeePrice(canSeePrice);
-        mPlaceOrderProductAdapter.setCountMap(getCountMap());
-        mLoadingLayout.onSuccess(mPlaceOrderProductAdapter.getItemCount(), "这里是空哒~~", R.drawable.default_ico_none);
-    }
-
-    //返回当前标签下名称包含的
-    private List<ProductBean> findArrayByWord(String word) {
-        List<ProductBean> findList = new ArrayList<>();
-        for (ProductBean bean : arrayList) {
-            if (bean.getName().contains(word)) {
-                findList.add(bean);
-            }
-        }
-        return findList;
-    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
-    private int existInLastPager(ProductBean bean) {
-        if (addedPros != null) {
-            for (AddedProduct product : addedPros) {
-                if (product.getProductId().equals(String.valueOf(bean.getProductID()))) {
-                    return product.getCount();
-                }
-            }
+
+    @Override
+    public void showProducts(List<ProductBean> products) {
+        mLoadingLayout.onSuccess(products.size(),"");
+        ArrayList<String> categoryList = new ArrayList<>();
+        for(CategoryChildBean categoryChildBean : mCategoryParent.getCategoryChildBeans()){
+            categoryList.add(categoryChildBean.getName());
         }
-        return 0;
+        mLinkageListContainer.init(mCategoryParent.getCategoryParent(),products,categoryList,mProductCountSetter);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        countMap.clear();
+    public void showProductsEmpty() {
+        mLoadingLayout.onSuccess(0,"没有商品数据");
     }
 
+    @Override
+    public void showError() {
 
+    }
+
+    @Override
+    public void showCategorys(CategoryResponse categoryResponse) {
+
+    }
+
+    @Override
+    public void showCategorysError() {
+
+    }
+    public void setProductCountSetter(ProductCountSetter productCountSetter) {
+        mProductCountSetter = productCountSetter;
+    }
 }

@@ -109,5 +109,12 @@
     <string name="toast_company_no_exist">该企业号不存在!</string>
     <string name="purchase_record">自采记录</string>
 
+    <string name="scroll_behavior">@string/appbar_scrolling_view_behavior</string>
+    <string name="detail_header_behavior">com.k.neleme.detail.DetailHeaderBehavior</string>
+    <string name="sales_promotion">促销商品</string>
+    <string name="title_all_product">全部商品</string>
+    <string name="loading_products">加载商品中...</string>
+
+    <item type="id" name="view_tag"/>
 
 </resources>

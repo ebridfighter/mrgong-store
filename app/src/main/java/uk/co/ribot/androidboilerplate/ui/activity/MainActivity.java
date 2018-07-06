@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         MainActivityComponent activityComponent = configPersistentComponent.mainActivityComponent(new ActivityModule(this));
         activityComponent.inject(this);
         mMainPresenter.attachView(this);
-        startService(SyncService.getStartIntent(this));
 
         setUpFragmentList();
         MainFragmentAdapter fragmentAdapter = new MainFragmentAdapter(getActivityContext(), getSupportFragmentManager(), mFragmentList);
@@ -104,6 +103,12 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(SyncService.getStartIntent(this));
     }
 
     public View newTabView(int position) {

@@ -3,6 +3,7 @@ package uk.co.ribot.androidboilerplate.data.model.net.response;
 import java.io.Serializable;
 import java.util.List;
 
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 
 /**
@@ -36,26 +37,6 @@ public class ProductListResponse implements Serializable {
 
     public void setCategory(List<CategoryBean> category) {
         this.category = category;
-    }
-
-    public class CategoryBean implements Serializable{
-        private String categoryParent;
-        private List<String> categoryChild;
-
-        public String getCategoryParent() {
-            return categoryParent;
-        }
-
-        public void setCategoryParent(String categoryParent) {
-            this.categoryParent = categoryParent;
-        }
-        public List<String> getCategoryChild() {
-            return categoryChild;
-        }
-
-        public void setCategoryChild(List<String> categoryChild) {
-            this.categoryChild = categoryChild;
-        }
     }
 
 }

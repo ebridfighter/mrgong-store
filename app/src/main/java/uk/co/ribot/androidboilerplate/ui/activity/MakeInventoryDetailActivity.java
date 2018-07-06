@@ -200,7 +200,7 @@ public class MakeInventoryDetailActivity extends BaseActivity implements MakeInv
 
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), titles, orderProductFragmentList);
         mVp.setAdapter(fragmentAdapter);//给ViewPager设置适配器
-        mCategoryDropDownView.setup(getActivityContext(), mVp, titles);//将TabLayout和ViewPager关联起来
+        mCategoryDropDownView.setUp(getActivityContext(), mVp, titles);//将TabLayout和ViewPager关联起来
         mCategoryDropDownView.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

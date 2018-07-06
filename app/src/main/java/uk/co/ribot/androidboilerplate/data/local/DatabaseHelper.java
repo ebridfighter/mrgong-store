@@ -14,6 +14,7 @@ import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -29,6 +30,8 @@ import io.reactivex.Single;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean;
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryChildBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean_Table;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
@@ -90,7 +93,7 @@ public class DatabaseHelper {
             @Override
             public void subscribe(ObservableEmitter<ProductListResponse> e) throws Exception {
                 if (e.isDisposed()) return;
-                if (productListResponse.getProducts().size() > 0){
+                if (productListResponse.getProducts().size() > 0) {
                     Delete.table(ProductBean.class);
                 }
 //                同步事务
@@ -98,10 +101,10 @@ public class DatabaseHelper {
 //                        .executeTransaction(new ProcessModelTransaction.Builder<ProductBean>(
 //                                BaseModel::insert
 //                        ).addAll(productListResponse.getProducts()).build());
-                //异步事务
+                //异步事务 存商品数据
                 FlowManager.getDatabase(AppDatabase.class)
                         .beginTransactionAsync(new ProcessModelTransaction.Builder<ProductBean>(
-                                BaseModel::insert
+                                BaseModel::save
                         ).addAll(productListResponse.getProducts()).build())
                         .error(new Transaction.Error() {
                             @Override
@@ -117,9 +120,61 @@ public class DatabaseHelper {
                         })
                         .build()
                         .execute();
+
+                setCategoryChild(productListResponse.getCategory());
+                setCategoryParent(productListResponse.getCategory());
             }
         });
     }
+
+    private void setCategoryParent(List<CategoryBean> categoryBeanList){
+        //异步事务 存商品父分类数据
+        FlowManager.getDatabase(AppDatabase.class)
+                .beginTransactionAsync(new ProcessModelTransaction.Builder<CategoryBean>(
+                        BaseModel::save
+                ).addAll(categoryBeanList).build())
+                .error(new Transaction.Error() {
+                    @Override
+                    public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                        Timber.e(error, "There was an error save the CategoryParents.");
+                    }
+                })
+                .success(new Transaction.Success() {
+                    @Override
+                    public void onSuccess(@NonNull Transaction transaction) {
+
+                    }
+                })
+                .build()
+                .execute();
+    }
+
+
+    private void setCategoryChild(List<CategoryBean> categoryBeanList) {
+        List<CategoryChildBean> categoryChildBeanList = new ArrayList<>();
+        for (CategoryBean categoryBean : categoryBeanList) {
+            categoryChildBeanList.addAll(categoryBean.getCategoryChildBeans());
+        }
+        //异步事务 存商品子分类数据
+        FlowManager.getDatabase(AppDatabase.class)
+                .beginTransactionAsync(new ProcessModelTransaction.Builder<CategoryChildBean>(
+                        BaseModel::save
+                ).addAll(categoryChildBeanList).build())
+                .error(new Transaction.Error() {
+                    @Override
+                    public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                        Timber.e(error, "There was an error save the categoryChildBeans.");
+                    }
+                })
+                .success(new Transaction.Success() {
+                    @Override
+                    public void onSuccess(@NonNull Transaction transaction) {
+                    }
+                })
+                .build()
+                .execute();
+    }
+
 
     public Observable<OrderListResponse> setOrders(final OrderListResponse orderListResponse) {
         return Observable.create(new ObservableOnSubscribe<OrderListResponse>() {
@@ -131,9 +186,9 @@ public class DatabaseHelper {
         });
     }
 
-    public void saveUser(String companyName,String userName,String password){
+    public void saveUser(String companyName, String userName, String password) {
         UserBean userBean = new UserBean();
-        userBean.setId(companyName+userName);
+        userBean.setId(companyName + userName);
         userBean.setCompanyName(companyName);
         userBean.setPassword(password);
         userBean.setUserName(userName);
@@ -141,7 +196,7 @@ public class DatabaseHelper {
         userBean.save();
     }
 
-    public Single<List<UserBean>> loadUserList(){
+    public Single<List<UserBean>> loadUserList() {
         return RXSQLite.rx(SQLite.select().from(UserBean.class)).queryList();
     }
 
@@ -153,10 +208,18 @@ public class DatabaseHelper {
     public Maybe<ProductBean> loadProduct(int productId) {
         return RXSQLite.rx(SQLite.select().from(ProductBean.class).where(ProductBean_Table.productID.eq(productId))).querySingle();
     }
+    public Single<List<ProductBean>> loadProductsByCategoryParent(String categoryParent) {
+        return RXSQLite.rx(SQLite.select().from(ProductBean.class).where(ProductBean_Table.categoryParent.eq(categoryParent))).queryList();
+    }
+
+    public Single<List<CategoryBean>> loadCategorys() {
+        return RXSQLite.rx(SQLite.select().from(CategoryBean.class)).queryList();
+    }
 
 
-    public void deleteUser(UserBean userBean){
+    public void deleteUser(UserBean userBean) {
         userBean.delete();
     }
+
 
 }

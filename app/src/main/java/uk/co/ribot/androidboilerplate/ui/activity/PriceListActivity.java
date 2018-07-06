@@ -65,8 +65,6 @@ public class PriceListActivity extends BaseActivity implements ProductListMvpVie
         mProductListPresenter.attachView(this);
 
         startService(SyncService.getStartIntent(this));
-        mProductListPresenter.getCategorys();
-        mProductListPresenter.loadProducts();
         mUserInfoResponse = mProductListPresenter.loadUser();
     }
 
@@ -105,7 +103,7 @@ public class PriceListActivity extends BaseActivity implements ProductListMvpVie
         mFragmentAdapter = new FragmentAdapter(this.getSupportFragmentManager(), titles, priceFragmentList);
         mVp.setAdapter(mFragmentAdapter);
         mVp.setOffscreenPageLimit(priceFragmentList.size());
-        mCddv.setup(getActivityContext(),mVp,titles);
+        mCddv.setUp(getActivityContext(),mVp,titles);
         mCddv.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

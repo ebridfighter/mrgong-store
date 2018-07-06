@@ -71,11 +71,13 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
                     //有数据返回,但是没有data这个key
                     dataJson = responseJson.optJSONObject("result");
                 }
-                StringReader stringReader = new StringReader(dataJson.toString());
-                try {
-                    return adapter.read(gson.newJsonReader(stringReader));
-                } finally {
-                    value.close();
+                if (dataJson != null){
+                    StringReader stringReader = new StringReader(dataJson.toString());
+                    try {
+                        return adapter.read(gson.newJsonReader(stringReader));
+                    } finally {
+                        value.close();
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
