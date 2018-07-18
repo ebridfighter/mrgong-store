@@ -50,6 +50,7 @@ public class CategoryBean extends BaseModel implements Serializable {
             categoryChildBeans = SQLite.select()
                     .from(CategoryChildBean.class)
                     .where(CategoryChildBean_Table.categoryParent.eq(categoryParent))
+            .orderBy(CategoryChildBean_Table.orderBy,true)
                     .queryList();
         }
         return categoryChildBeans;

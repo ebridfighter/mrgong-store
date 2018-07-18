@@ -24,7 +24,6 @@ import java.util.List;
 
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
-import uk.co.ribot.androidboilerplate.ui.activity.PlaceOrderProductListImproveActivity;
 import uk.co.ribot.androidboilerplate.ui.adapter.ProductListAdapter;
 import uk.co.ribot.androidboilerplate.ui.adapter.TypeAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.ProductCountSetter;
@@ -45,15 +44,15 @@ public class LinkageListContainer extends LinearLayout {
     public ListView getProductListView() {
         return mProductListView;
     }
-    public ProductListAdapter getProductAdapterV2() {
-        return mProductAdapterV2;
+    public ProductListAdapter getProductListAdapter() {
+        return mProductListAdapter;
     }
 
-    public void setProductAdapterV2(ProductListAdapter productAdapterV2) {
-        mProductAdapterV2 = productAdapterV2;
+    public void setProductListAdapter(ProductListAdapter productListAdapter) {
+        mProductListAdapter = productListAdapter;
     }
 
-    public ProductListAdapter mProductAdapterV2;
+    public ProductListAdapter mProductListAdapter;
     private TextView tvStickyHeaderView;
     private View stickView;
 
@@ -67,8 +66,8 @@ public class LinkageListContainer extends LinearLayout {
         this.mProductBeanList = foodBeanList;
         mCategoryList = categoryList;
         typeAdapter = new TypeAdapter(categoryList, category);
-        RecyclerView recyclerView1 = (RecyclerView) findViewById(R.id.recycler1);
-        mProductListView = (ListView) findViewById(R.id.recycler2);
+        RecyclerView recyclerView1 = findViewById(R.id.recycler1);
+        mProductListView = findViewById(R.id.recycler2);
         if (mCategoryList == null||mCategoryList.size() == 0) {
             recyclerView1.setVisibility(View.GONE);
             findViewById(R.id.stick_header).setVisibility(View.GONE);
@@ -109,7 +108,7 @@ public class LinkageListContainer extends LinearLayout {
             }
         });
         setUpProductRecyclerView();
-        mProductAdapterV2.setProductCountSetter(productCountSetter);
+        mProductListAdapter.setProductCountSetter(productCountSetter);
     }
 
 
@@ -126,9 +125,9 @@ public class LinkageListContainer extends LinearLayout {
     private boolean scrollFlag = false;// 标记是否滑动
     private int lastVisibleItemPosition;// 标记上次滑动位置
     public void setUpProductRecyclerView() {
-        mProductAdapterV2 = new ProductListAdapter(mProductBeanList,false);
+        mProductListAdapter = new ProductListAdapter(mProductBeanList,false);
         stickView = findViewById(R.id.stick_header);
-        mProductListView.setAdapter(mProductAdapterV2);
+        mProductListView.setAdapter(mProductListAdapter);
         tvStickyHeaderView = (TextView) findViewById(R.id.tv_header);
         tvStickyHeaderView.setText(mProductBeanList.get(0).getCategoryChild());
         mProductListView.setOnTouchListener(new OnTouchListener() {

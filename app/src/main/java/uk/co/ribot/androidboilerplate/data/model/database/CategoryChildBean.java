@@ -17,6 +17,8 @@ public class CategoryChildBean extends BaseModel implements Serializable {
     String name;
     @Column
     String categoryParent;
+    @Column
+    int orderBy;
     public String getName() {
         return name;
     }
@@ -39,5 +41,13 @@ public class CategoryChildBean extends BaseModel implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(int orderBy) {
+        this.orderBy = orderBy;
     }
 }

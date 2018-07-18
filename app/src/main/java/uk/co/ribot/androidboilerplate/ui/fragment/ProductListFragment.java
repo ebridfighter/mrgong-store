@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import com.runwise.commomlibrary.view.LoadingLayout;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -24,7 +26,6 @@ import uk.co.ribot.androidboilerplate.data.model.database.CategoryChildBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.net.response.CategoryResponse;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
-import uk.co.ribot.androidboilerplate.ui.activity.PlaceOrderProductListImproveActivity;
 import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.base.ProductCountSetter;
 import uk.co.ribot.androidboilerplate.ui.presenter.ProductListPresenter;
@@ -80,6 +81,12 @@ public class ProductListFragment extends BaseFragment implements ProductListMvpV
             @Override
             public void onNext(Object object) {
 //                用于接收刷新商品数量的事件
+                if (object instanceof ProductBean){
+                    ProductBean productBean = (ProductBean)object;
+                    if (productBean.getCategoryParent().equals(mCategoryParent.getCategoryParent())){
+                        mLinkageListContainer.getProductListAdapter().notifyDataSetChanged();
+                    }
+                }
             }
         });
     }
@@ -94,11 +101,19 @@ public class ProductListFragment extends BaseFragment implements ProductListMvpV
     @Override
     public void showProducts(List<ProductBean> products) {
         mLoadingLayout.onSuccess(products.size(),"");
-        ArrayList<String> categoryList = new ArrayList<>();
-        for(CategoryChildBean categoryChildBean : mCategoryParent.getCategoryChildBeans()){
-            categoryList.add(categoryChildBean.getName());
+        ArrayList<String> categoryChildNameList = new ArrayList<>();
+
+        LinkedHashMap<String,String> linkedHashMap = new LinkedHashMap<>();
+        for (ProductBean productBean:products){
+            linkedHashMap.put(productBean.getCategoryChild(),"");
         }
-        mLinkageListContainer.init(mCategoryParent.getCategoryParent(),products,categoryList,mProductCountSetter);
+
+        Set<String> categoryChildNameSet = linkedHashMap.keySet();
+        for (String categoryChildName:categoryChildNameSet){
+            categoryChildNameList.add(categoryChildName);
+        }
+
+        mLinkageListContainer.init(mCategoryParent.getCategoryParent(),products,categoryChildNameList,mProductCountSetter);
     }
 
     @Override

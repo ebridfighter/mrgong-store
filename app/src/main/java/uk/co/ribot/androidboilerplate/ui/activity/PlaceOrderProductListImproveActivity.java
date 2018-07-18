@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -16,17 +17,21 @@ import android.widget.TextView;
 import com.runwise.commomlibrary.view.LoadingLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.ribot.androidboilerplate.BoilerplateApplication;
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
+import uk.co.ribot.androidboilerplate.data.model.event.ProductCountUpdateEvent;
 import uk.co.ribot.androidboilerplate.injection.module.ActivityModule;
 import uk.co.ribot.androidboilerplate.ui.adapter.FragmentAdapter;
+import uk.co.ribot.androidboilerplate.ui.adapter.ProductListAdapter;
 import uk.co.ribot.androidboilerplate.ui.base.BaseActivity;
 import uk.co.ribot.androidboilerplate.ui.base.ProductCountSetter;
 import uk.co.ribot.androidboilerplate.ui.fragment.ProductListFragment;
@@ -82,6 +87,8 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
     @BindView(R.id.rl_bottom_bar)
     RelativeLayout mRlBottomBar;
 
+    HashMap<ProductBean,Double> mCounterMap = new HashMap<>();
+
     public static final Intent getStartIntent(Context context) {
         Intent intent = new Intent(context, PlaceOrderProductListImproveActivity.class);
         return intent;
@@ -100,27 +107,32 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
         mPlaceOrderProductListImprovePresenter.loadCategorys();
     }
 
+    private void updateCart(){
+        int productTypeCount = mCounterMap.size();
+        mTvCartCount.setVisibility(productTypeCount > 0? View.VISIBLE:View.GONE);
+        mTvCartCount.setText(String.valueOf(productTypeCount));
+    }
+
 
     ProductCountSetter mProductCountSetter = new ProductCountSetter() {
         @Override
         public void setCount(ProductBean bean, double count) {
-
-        }
-
-        @Override
-        public void setRemark(ProductBean bean) {
-
+            mCounterMap.put(bean, count);
+//            通知fragment去更新
+            ProductCountUpdateEvent productCountUpdateEvent = new ProductCountUpdateEvent(bean, count);
+            getRxBus().post(productCountUpdateEvent);
+            updateCart();
         }
 
         @Override
         public double getCount(ProductBean bean) {
-            return 0;
+            Double count = mCounterMap.get(bean);
+            if (count == null){
+                return 0;
+            }
+            return count;
         }
 
-        @Override
-        public String getRemark(ProductBean bean) {
-            return null;
-        }
     };
 
     @Override

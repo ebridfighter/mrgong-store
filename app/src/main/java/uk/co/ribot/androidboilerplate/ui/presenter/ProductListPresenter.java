@@ -1,5 +1,7 @@
 package uk.co.ribot.androidboilerplate.ui.presenter;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -66,6 +68,23 @@ public class ProductListPresenter extends BasePresenter<ProductListMvpView> {
                         if (products.isEmpty()) {
                             getMvpView().showProductsEmpty();
                         } else {
+                            LinkedHashMap<String, List<ProductBean>> productBeanListMap = new LinkedHashMap<>(products.size());
+//                            手动分类
+                            for (ProductBean productBean : products) {
+                                List<ProductBean> productBeans = productBeanListMap.get(productBean.getCategoryChild());
+                                if (productBeans != null) {
+                                    productBeans.add(productBean);
+                                } else {
+                                    productBeans = new ArrayList<>();
+                                    productBeans.add(productBean);
+                                    productBeanListMap.put(productBean.getCategoryChild(), productBeans);
+                                }
+                            }
+                            products.clear();
+//                          遍历组装
+                            for (List<ProductBean> productBeans : productBeanListMap.values()) {
+                                products.addAll(productBeans);
+                            }
                             getMvpView().showProducts(products);
                         }
                     }

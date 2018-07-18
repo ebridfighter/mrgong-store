@@ -2,8 +2,10 @@ package uk.co.ribot.androidboilerplate.data.local;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 import com.raizlabs.android.dbflow.annotation.Migration;
+import com.raizlabs.android.dbflow.sql.SQLiteType;
 import com.raizlabs.android.dbflow.sql.migration.AlterTableMigration;
 
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryChildBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 
 /**
@@ -14,7 +16,7 @@ public class AppDatabase {
     //数据库名称
     public static final String NAME = "androidRunwise";
     //数据库版本号
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     /**
      * 数据库的修改：
@@ -31,6 +33,20 @@ public class AppDatabase {
         @Override
         public void onPreMigrate() {
 //            addColumn(SQLiteType.TEXT, "content");
+
+        }
+    }
+    @Migration(version = VERSION, database = AppDatabase.class)
+    public static class Migration2CategoryChild extends AlterTableMigration<CategoryChildBean> {
+
+        public Migration2CategoryChild(Class<CategoryChildBean> table) {
+            super(table);
+        }
+
+        @Override
+        public void onPreMigrate() {
+            addColumn(SQLiteType.INTEGER, "orderBy");
+
         }
     }
 }

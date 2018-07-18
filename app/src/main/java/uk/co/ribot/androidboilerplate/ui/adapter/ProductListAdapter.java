@@ -31,7 +31,7 @@ import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 import uk.co.ribot.androidboilerplate.ui.activity.PlaceOrderProductListImproveActivity;
 import uk.co.ribot.androidboilerplate.ui.base.ProductCountSetter;
 
-public class ProductListAdapter extends BaseAdapter{
+public class ProductListAdapter extends BaseAdapter {
     //    ProductBean
     public static final int FIRST_STICKY_VIEW = 1;
     public static final int HAS_STICKY_VIEW = 2;
@@ -43,8 +43,7 @@ public class ProductListAdapter extends BaseAdapter{
     DecimalFormat df = new DecimalFormat("#.##");
     private List<ProductBean> mData;
 
-    public ProductListAdapter(@Nullable List<ProductBean> data,boolean canSeePrice) {
-//        super(R.layout.item_product_with_subcategory, data);
+    public ProductListAdapter(@Nullable List<ProductBean> data, boolean canSeePrice) {
         this.canSeePrice = canSeePrice;
         mData = data;
     }
@@ -53,8 +52,8 @@ public class ProductListAdapter extends BaseAdapter{
         this.productCountSetter = productCountSetter;
     }
 
-    public void setList(List<ProductBean> productBeanList){
-        if (mData == null){
+    public void setList(List<ProductBean> productBeanList) {
+        if (mData == null) {
             mData = new ArrayList<>();
         }
         mData.clear();
@@ -84,18 +83,18 @@ public class ProductListAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
-        if (convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product_with_subcategory, null);
             convertView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             viewHolder = new ViewHolder(convertView);
-            convertView.setTag(R.id.view_tag,viewHolder);
-        }else{
+            convertView.setTag(R.id.view_tag, viewHolder);
+        } else {
             viewHolder = (ViewHolder) convertView.getTag(R.id.view_tag);
         }
         ProductBean listBean = mData.get(position);
         if (position == 0) {
             String headText = listBean.getCategoryChild();
-            viewHolder.mStickHeader.setVisibility(!TextUtils.isEmpty(headText)?View.VISIBLE:View.GONE);
+            viewHolder.mStickHeader.setVisibility(!TextUtils.isEmpty(headText) ? View.VISIBLE : View.GONE);
             viewHolder.mTvHeader.setText(headText);
             viewHolder.mFoodMain.setTag(FIRST_STICKY_VIEW);
         } else {
@@ -135,7 +134,6 @@ public class ProductListAdapter extends BaseAdapter{
 
             @Override
             public void onClick(View v) {
-//                int currentNum = mCountMap.get(listBean)==null?0:mCountMap.get(listBean);
                 double currentNum = productCountSetter.getCount(listBean);
                 if (currentNum > 0) {
                     //https://stackoverflow.com/questions/179427/how-to-resolve-a-java-rounding-double-issue
@@ -149,9 +147,6 @@ public class ProductListAdapter extends BaseAdapter{
                         viewHolder.mTvProductCount.setVisibility(View.INVISIBLE);
                         viewHolder.mIvProductAdd.setBackgroundResource(R.drawable.order_btn_add_gray);
                     }
-                    ProductCountUpdateEvent productCountUpdateEvent = new ProductCountUpdateEvent(listBean, currentNum);
-                    productCountUpdateEvent.setException(ProductListAdapter.this);
-                    BoilerplateApplication.get(v.getContext()).getComponent().eventBus().post(productCountUpdateEvent);
                 }
 
             }
@@ -172,9 +167,6 @@ public class ProductListAdapter extends BaseAdapter{
                     viewHolder.mTvProductCount.setVisibility(View.VISIBLE);
                     viewHolder.mIvProductAdd.setBackgroundResource(R.drawable.ic_order_btn_add_green_part);
                 }
-                ProductCountUpdateEvent productCountUpdateEvent = new ProductCountUpdateEvent(listBean, currentNum);
-                productCountUpdateEvent.setException(ProductListAdapter.this);
-                BoilerplateApplication.get(v.getContext()).getComponent().eventBus().post(productCountUpdateEvent);
             }
         });
         /**

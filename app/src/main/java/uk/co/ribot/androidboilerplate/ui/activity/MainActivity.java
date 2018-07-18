@@ -32,6 +32,7 @@ import uk.co.ribot.androidboilerplate.ui.fragment.PlaceOrderFragment;
 import uk.co.ribot.androidboilerplate.ui.fragment.StockFragment;
 import uk.co.ribot.androidboilerplate.ui.presenter.MainPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.MainMvpView;
+
 public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Inject
@@ -105,6 +106,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         });
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -113,8 +115,8 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     public View newTabView(int position) {
         View tabView = getLayout(R.layout.item_main_tab);
-        ImageView imageView = (ImageView) tabView.findViewById(R.id.iv_tab);
-        TextView textView = (TextView) tabView.findViewById(R.id.tv_tab);
+        ImageView imageView = tabView.findViewById(R.id.iv_tab);
+        TextView textView = tabView.findViewById(R.id.tv_tab);
         switch (position) {
             case 0:
                 imageView.setImageResource(R.drawable.tab_1_selector);

@@ -31,6 +31,7 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean;
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean_Table;
 import uk.co.ribot.androidboilerplate.data.model.database.CategoryChildBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean_Table;
@@ -95,6 +96,8 @@ public class DatabaseHelper {
                 if (e.isDisposed()) return;
                 if (productListResponse.getProducts().size() > 0) {
                     Delete.table(ProductBean.class);
+                    Delete.table(CategoryBean.class);
+                    Delete.table(CategoryChildBean.class);
                 }
 //                同步事务
 //                FlowManager.getDatabase(AppDatabase.class)
@@ -153,7 +156,15 @@ public class DatabaseHelper {
     private void setCategoryChild(List<CategoryBean> categoryBeanList) {
         List<CategoryChildBean> categoryChildBeanList = new ArrayList<>();
         for (CategoryBean categoryBean : categoryBeanList) {
-            categoryChildBeanList.addAll(categoryBean.getCategoryChildBeans());
+            List<String> categoryChildList = categoryBean.getCategoryChild();
+            for (int i = 0;i<categoryChildList.size();i++){
+                String categoryChildName = categoryChildList.get(i);
+                CategoryChildBean categoryChildBean = new CategoryChildBean();
+                categoryChildBean.setOrderBy(i);
+                categoryChildBean.setCategoryParent(categoryBean.getCategoryParent());
+                categoryChildBean.setName(categoryChildName);
+                categoryChildBeanList.add(categoryChildBean);
+            }
         }
         //异步事务 存商品子分类数据
         FlowManager.getDatabase(AppDatabase.class)
@@ -206,14 +217,14 @@ public class DatabaseHelper {
 
 
     public Maybe<ProductBean> loadProduct(int productId) {
-        return RXSQLite.rx(SQLite.select().from(ProductBean.class).where(ProductBean_Table.productID.eq(productId))).querySingle();
+        return RXSQLite.rx(SQLite.select().from(ProductBean.class).where(ProductBean_Table.productID.eq(productId)).orderBy(ProductBean_Table.orderBy,true)).querySingle();
     }
     public Single<List<ProductBean>> loadProductsByCategoryParent(String categoryParent) {
-        return RXSQLite.rx(SQLite.select().from(ProductBean.class).where(ProductBean_Table.categoryParent.eq(categoryParent))).queryList();
+        return RXSQLite.rx(SQLite.select().from(ProductBean.class).where(ProductBean_Table.categoryParent.eq(categoryParent)).orderBy(ProductBean_Table.orderBy,true)).queryList();
     }
 
     public Single<List<CategoryBean>> loadCategorys() {
-        return RXSQLite.rx(SQLite.select().from(CategoryBean.class)).queryList();
+        return RXSQLite.rx(SQLite.select().from(CategoryBean.class).orderBy(CategoryBean_Table.orderBy,true)).queryList();
     }
 
 
