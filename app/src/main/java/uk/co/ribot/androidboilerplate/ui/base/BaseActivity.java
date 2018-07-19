@@ -107,7 +107,7 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
         mLoadingDialog = new LoadingDialog(getActivityContext());
     }
 
-    ViewHolder mViewHolder;
+    protected ViewHolder mViewHolder;
 
     public void setContentView(int layoutId) {
         LinearLayout parentView = (LinearLayout) getLayout(R.layout.layout_base);
@@ -337,7 +337,7 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
 
     }
 
-    static class ViewHolder {
+    public static class ViewHolder {
         @BindView(R.id.iv_titile_left)
         ImageView mIvTitileLeft;
         @BindView(R.id.tv_titile_left)
@@ -361,7 +361,7 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
         @BindView(R.id.fl_title)
         FrameLayout mFlTitle;
         @BindView(R.id.ll_root)
-        LinearLayout mLlRoot;
+        public LinearLayout mLlRoot;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

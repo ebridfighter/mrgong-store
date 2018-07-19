@@ -11,4 +11,9 @@
         <attr name="tvTextSize" format="dimension" />
         <attr name="btnTextSize" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="OperationWidget">
+        <attr name="circle_anim" format="boolean"/>
+        <attr name="sub_anim" format="boolean"/>
+    </declare-styleable>
 </resources>

@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -30,6 +31,7 @@ import uk.co.ribot.androidboilerplate.data.model.event.ProductCountUpdateEvent;
 import uk.co.ribot.androidboilerplate.tools.fresco.FrecoFactory;
 import uk.co.ribot.androidboilerplate.ui.activity.PlaceOrderProductListImproveActivity;
 import uk.co.ribot.androidboilerplate.ui.base.ProductCountSetter;
+import uk.co.ribot.androidboilerplate.view.OperationWidget;
 
 public class ProductListAdapter extends BaseAdapter {
     //    ProductBean
@@ -42,10 +44,12 @@ public class ProductListAdapter extends BaseAdapter {
     boolean canSeePrice = false;
     DecimalFormat df = new DecimalFormat("#.##");
     private List<ProductBean> mData;
+    private OperationWidget.OnClick mOnClick;
 
-    public ProductListAdapter(@Nullable List<ProductBean> data, boolean canSeePrice) {
+    public ProductListAdapter(@Nullable List<ProductBean> data,OperationWidget.OnClick onClick, boolean canSeePrice) {
         this.canSeePrice = canSeePrice;
         mData = data;
+        mOnClick = onClick;
     }
 
     public void setProductCountSetter(ProductCountSetter productCountSetter) {
@@ -108,6 +112,8 @@ public class ProductListAdapter extends BaseAdapter {
             }
         }
         convertView.setContentDescription(listBean.getCategoryChild());
+
+        viewHolder.mOperationWidget.setData(mOnClick,listBean);
 
         //标签
         if (TextUtils.isEmpty(listBean.getProductTag())) {
@@ -235,8 +241,8 @@ public class ProductListAdapter extends BaseAdapter {
     static class ViewHolder {
         @BindView(R.id.tv_header)
         TextView mTvHeader;
-        @BindView(R.id.stick_header)
-        FrameLayout mStickHeader;
+        @BindView(R.id.include_view_stick_header)
+        View mStickHeader;
         @BindView(R.id.sdv_product_image)
         SimpleDraweeView mSdvProductImage;
         @BindView(R.id.tv_product_name)
@@ -260,7 +266,9 @@ public class ProductListAdapter extends BaseAdapter {
         @BindView(R.id.iv_product_add)
         ImageButton mIvProductAdd;
         @BindView(R.id.food_main)
-        LinearLayout mFoodMain;
+        RelativeLayout mFoodMain;
+        @BindView(R.id.operationWidget)
+        OperationWidget mOperationWidget;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

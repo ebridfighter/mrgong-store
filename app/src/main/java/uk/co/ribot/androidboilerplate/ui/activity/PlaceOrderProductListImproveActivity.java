@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ViewUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.runwise.commomlibrary.util.DensityUtil;
 import com.runwise.commomlibrary.view.LoadingLayout;
 
 import java.util.ArrayList;
@@ -86,8 +89,10 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
     TextView mTvOrderResume;
     @BindView(R.id.rl_bottom_bar)
     RelativeLayout mRlBottomBar;
+    @BindView(R.id.rl_root)
+    ViewGroup mRlRoot;
 
-    HashMap<ProductBean,Double> mCounterMap = new HashMap<>();
+    HashMap<ProductBean, Double> mCounterMap = new HashMap<>();
 
     public static final Intent getStartIntent(Context context) {
         Intent intent = new Intent(context, PlaceOrderProductListImproveActivity.class);
@@ -107,9 +112,9 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
         mPlaceOrderProductListImprovePresenter.loadCategorys();
     }
 
-    private void updateCart(){
+    private void updateCart() {
         int productTypeCount = mCounterMap.size();
-        mTvCartCount.setVisibility(productTypeCount > 0? View.VISIBLE:View.GONE);
+        mTvCartCount.setVisibility(productTypeCount > 0 ? View.VISIBLE : View.GONE);
         mTvCartCount.setText(String.valueOf(productTypeCount));
     }
 
@@ -117,7 +122,11 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
     ProductCountSetter mProductCountSetter = new ProductCountSetter() {
         @Override
         public void setCount(ProductBean bean, double count) {
-            mCounterMap.put(bean, count);
+            if (count <= 0){
+                mCounterMap.remove(bean);
+            }else{
+                mCounterMap.put(bean, count);
+            }
 //            通知fragment去更新
             ProductCountUpdateEvent productCountUpdateEvent = new ProductCountUpdateEvent(bean, count);
             getRxBus().post(productCountUpdateEvent);
@@ -127,7 +136,7 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
         @Override
         public double getCount(ProductBean bean) {
             Double count = mCounterMap.get(bean);
-            if (count == null){
+            if (count == null) {
                 return 0;
             }
             return count;
@@ -138,6 +147,12 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
     @Override
     public void showCategorys(List<CategoryBean> categoryBeans) {
         dismissLoadingDialog();
+        //获取购物车图标的屏幕坐标
+        int[] shopCarLocation = new int[2];
+        mIvProductCart.getLocationInWindow(shopCarLocation);
+        shopCarLocation[0] = shopCarLocation[0] + mIvProductCart.getWidth() / 2 - DensityUtil.dip2px(getActivityContext(),10);
+        shopCarLocation[1] = shopCarLocation[1] - mIvProductCart.getHeight();
+
         ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         for (CategoryBean categoryBean : categoryBeans) {
@@ -146,6 +161,8 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
             bundle.putSerializable(ARGUMENT_KEY_CATEGORY, categoryBean);
             productListFragment.setArguments(bundle);
             productListFragment.setProductCountSetter(mProductCountSetter);
+            productListFragment.setShopCartLocation(shopCarLocation);
+            productListFragment.setRootView(mViewHolder.mLlRoot);
             fragmentArrayList.add(productListFragment);
             titles.add(categoryBean.getCategoryParent());
         }

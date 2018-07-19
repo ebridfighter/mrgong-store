@@ -37,6 +37,7 @@ public class LinkageListContainer extends LinearLayout {
     private ListView mProductListView;
     private List<ProductBean> mProductBeanList;
     private List<String> mCategoryList;
+    OperationWidget.OnClick mOnClick;
     private boolean move;
     private int index;
     private Context mContext;
@@ -62,9 +63,10 @@ public class LinkageListContainer extends LinearLayout {
         super(context);
     }
 
-    public void init(String category, List<ProductBean> foodBeanList, List<String> categoryList, ProductCountSetter productCountSetter) {
+    public void init(String category, List<ProductBean> foodBeanList, List<String> categoryList, OperationWidget.OnClick onClick,ProductCountSetter productCountSetter) {
         this.mProductBeanList = foodBeanList;
         mCategoryList = categoryList;
+        mOnClick = onClick;
         typeAdapter = new TypeAdapter(categoryList, category);
         RecyclerView recyclerView1 = findViewById(R.id.recycler1);
         mProductListView = findViewById(R.id.recycler2);
@@ -125,7 +127,7 @@ public class LinkageListContainer extends LinearLayout {
     private boolean scrollFlag = false;// 标记是否滑动
     private int lastVisibleItemPosition;// 标记上次滑动位置
     public void setUpProductRecyclerView() {
-        mProductListAdapter = new ProductListAdapter(mProductBeanList,false);
+        mProductListAdapter = new ProductListAdapter(mProductBeanList,mOnClick,false);
         stickView = findViewById(R.id.stick_header);
         mProductListView.setAdapter(mProductListAdapter);
         tvStickyHeaderView = (TextView) findViewById(R.id.tv_header);

@@ -3,6 +3,7 @@ package uk.co.ribot.androidboilerplate.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.ViewUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +31,12 @@ import uk.co.ribot.androidboilerplate.ui.base.BaseFragment;
 import uk.co.ribot.androidboilerplate.ui.base.ProductCountSetter;
 import uk.co.ribot.androidboilerplate.ui.presenter.ProductListPresenter;
 import uk.co.ribot.androidboilerplate.ui.view_interface.ProductListMvpView;
+import uk.co.ribot.androidboilerplate.util.ViewUtil;
 import uk.co.ribot.androidboilerplate.view.LinkageListContainer;
+import uk.co.ribot.androidboilerplate.view.OperationWidget;
 
 
-public class ProductListFragment extends BaseFragment implements ProductListMvpView {
+public class ProductListFragment extends BaseFragment implements ProductListMvpView,OperationWidget.OnClick {
 
     @Inject
     ProductListPresenter mProductListPresenter;
@@ -113,7 +116,7 @@ public class ProductListFragment extends BaseFragment implements ProductListMvpV
             categoryChildNameList.add(categoryChildName);
         }
 
-        mLinkageListContainer.init(mCategoryParent.getCategoryParent(),products,categoryChildNameList,mProductCountSetter);
+        mLinkageListContainer.init(mCategoryParent.getCategoryParent(),products,categoryChildNameList,ProductListFragment.this,mProductCountSetter);
     }
 
     @Override
@@ -137,5 +140,33 @@ public class ProductListFragment extends BaseFragment implements ProductListMvpV
     }
     public void setProductCountSetter(ProductCountSetter productCountSetter) {
         mProductCountSetter = productCountSetter;
+    }
+    int[] mShopCartLocation;
+    public void setShopCartLocation(int[] shopCartLocation){
+        mShopCartLocation = shopCartLocation;
+    }
+    ViewGroup mRootView;
+    public void setRootView(ViewGroup rootView){
+        mRootView = rootView;
+    }
+
+    @Override
+    public void onAddClick(View view, ProductBean productBean) {
+        ViewUtil.addTvAnim(view,mShopCartLocation,getActivity(),mRootView, new AnimationFinishCallBack() {
+            @Override
+            public void onFinish() {
+                mProductCountSetter.setCount(productBean,productBean.getCount());
+            }
+        });
+
+    }
+
+    public interface AnimationFinishCallBack{
+        void onFinish();
+    }
+
+    @Override
+    public void onSubClick(ProductBean productBean) {
+        mProductCountSetter.setCount(productBean,productBean.getCount());
     }
 }
