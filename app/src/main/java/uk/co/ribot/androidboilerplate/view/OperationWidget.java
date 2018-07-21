@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.runwise.commomlibrary.util.NumberUtil;
 
 import uk.co.ribot.androidboilerplate.R;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
@@ -77,7 +78,7 @@ public class OperationWidget extends FrameLayout {
                             .start();
                 }
                 count++;
-                tv_count.setText(count + "");
+                tv_count.setText(NumberUtil.getIOrD(count));
                 if (onAddClick != null) {
                     onAddClick.onAddClick(addbutton, mProductBean,count);
                 }
@@ -93,7 +94,7 @@ public class OperationWidget extends FrameLayout {
                     subAnim();
                 }
                 count--;
-                tv_count.setText(count == 0f ? "1" : count + "");
+                tv_count.setText(count == 0f ? "1" : NumberUtil.getIOrD(count));
                 if (onAddClick != null) {
                     onAddClick.onSubClick(mProductBean,count);
                 }
