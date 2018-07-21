@@ -151,11 +151,11 @@ public class ProductListFragment extends BaseFragment implements ProductListMvpV
     }
 
     @Override
-    public void onAddClick(View view, ProductBean productBean) {
+    public void onAddClick(View view, ProductBean productBean,double count) {
         ViewUtil.addTvAnim(view,mShopCartLocation,getActivity(),mRootView, new AnimationFinishCallBack() {
             @Override
             public void onFinish() {
-                mProductCountSetter.setCount(productBean,productBean.getCount());
+                mProductCountSetter.setCount(productBean,count);
             }
         });
 
@@ -166,7 +166,7 @@ public class ProductListFragment extends BaseFragment implements ProductListMvpV
     }
 
     @Override
-    public void onSubClick(ProductBean productBean) {
-        mProductCountSetter.setCount(productBean,productBean.getCount());
+    public void onSubClick(ProductBean productBean,double count) {
+        mProductCountSetter.setCount(productBean,count);
     }
 }

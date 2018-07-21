@@ -7,11 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.ViewUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -31,14 +28,14 @@ public class AddButton extends View implements View.OnClickListener {
     private Path addPath = new Path();
     private Paint addPaint;
 
-    interface AnimListner {
+    interface AnimListener {
         void onStop();
     }
 
-    private AnimListner animListner;
+    private AnimListener mAnimListener;
 
-    void setAnimListner(AnimListner animListner) {
-        this.animListner = animListner;
+    void setAnimListener(AnimListener animListener) {
+        this.mAnimListener = animListener;
     }
 
 
@@ -115,7 +112,7 @@ public class AddButton extends View implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (animListner != null) {
+        if (mAnimListener != null) {
             if (!isCircle) {
                 setClickable(false);
                 ViewAnimator.animate(this)
@@ -127,12 +124,12 @@ public class AddButton extends View implements View.OnClickListener {
                                 isCircle = true;
                                 invalidate();
                                 setClickable(true);
-                                animListner.onStop();
+                                mAnimListener.onStop();
                             }
                         })
                         .start();
             } else {
-                animListner.onStop();
+                mAnimListener.onStop();
             }
         }
     }

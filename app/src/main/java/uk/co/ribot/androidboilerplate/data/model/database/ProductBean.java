@@ -62,7 +62,6 @@ public class ProductBean extends BaseModel implements Serializable {
     private boolean cacheSelected;
     private long cartAddedTime;//加入购物车时间,用于排序
     private String remark;//备注
-    private double count;
     private double actualQty;
     private double presetQty;
     public String imageLocal;
@@ -268,13 +267,6 @@ public class ProductBean extends BaseModel implements Serializable {
         this.remark = remark;
     }
 
-    public double getCount() {
-        return count;
-    }
-
-    public void setCount(double count) {
-        this.count = count;
-    }
 
     public double getActualQty() {
         return actualQty;

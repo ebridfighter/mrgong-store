@@ -16,9 +16,6 @@ public class NumberUtil {
      * @return
      */
     public static String getIOrD(String price){
-        if (isInteger(price)){
-            return price;
-        }else{
             String doubleStr = formatTwoBit(price);
             int index = doubleStr.indexOf(".");
             if (doubleStr.substring(index+1).equals("00")){
@@ -26,7 +23,6 @@ public class NumberUtil {
             }else{
                 return doubleStr;
             }
-        }
     }
 
     public static String getIOrD(double price){

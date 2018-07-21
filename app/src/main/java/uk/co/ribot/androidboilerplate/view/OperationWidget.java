@@ -2,10 +2,8 @@ package uk.co.ribot.androidboilerplate.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -23,16 +21,16 @@ public class OperationWidget extends FrameLayout {
 
     private View sub;
     private TextView tv_count;
-    private long count;
+    private double count;
     private AddButton addbutton;
     private boolean sub_anim, circle_anim;
     private ProductBean mProductBean;
 
     public interface OnClick {
 
-        void onAddClick(View view, ProductBean productBean);
+        void onAddClick(View view, ProductBean productBean,double count);
 
-        void onSubClick(ProductBean productBean);
+        void onSubClick(ProductBean productBean,double count);
     }
     private OnClick onAddClick;
 
@@ -60,10 +58,10 @@ public class OperationWidget extends FrameLayout {
         a.recycle();
         sub = findViewById(R.id.iv_sub);
         tv_count = findViewById(R.id.tv_count);
-        addbutton.setAnimListner(new AddButton.AnimListner() {
+        addbutton.setAnimListener(new AddButton.AnimListener() {
             @Override
             public void onStop() {
-                if (count == 0) {
+                if (count == 0f) {
                     ViewAnimator.animate(sub)
                             .translationX(addbutton.getLeft() - sub.getLeft(), 0)
                             .rotation(360)
@@ -76,31 +74,28 @@ public class OperationWidget extends FrameLayout {
                             .alpha(0, 255)
                             .interpolator(new DecelerateInterpolator())
                             .duration(300)
-                            .start()
-                    ;
+                            .start();
                 }
                 count++;
                 tv_count.setText(count + "");
-                mProductBean.setCount(count);
                 if (onAddClick != null) {
-                    onAddClick.onAddClick(addbutton, mProductBean);
+                    onAddClick.onAddClick(addbutton, mProductBean,count);
                 }
             }
         });
         sub.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (count == 0) {
+                if (count == 0f) {
                     return;
                 }
-                if (count == 1 && sub_anim) {
+                if (count == 1f && sub_anim) {
                     subAnim();
                 }
                 count--;
-                tv_count.setText(count == 0 ? "1" : count + "");
-                mProductBean.setCount(count);
+                tv_count.setText(count == 0f ? "1" : count + "");
                 if (onAddClick != null) {
-                    onAddClick.onSubClick(mProductBean);
+                    onAddClick.onSubClick(mProductBean,count);
                 }
             }
         });
@@ -128,10 +123,10 @@ public class OperationWidget extends FrameLayout {
                 .duration(300)
                 .start();
     }
-    public void setData(OnClick onAddClick, ProductBean productBean) {
+    public void setData(OnClick onAddClick, ProductBean productBean,double tempCount) {
         this.mProductBean = productBean;
         this.onAddClick = onAddClick;
-        count = (long) productBean.getCount();
+        count = tempCount;
         if (count == 0) {
             sub.setAlpha(0);
             tv_count.setAlpha(0);

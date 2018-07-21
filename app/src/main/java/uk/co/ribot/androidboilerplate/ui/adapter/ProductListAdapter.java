@@ -113,7 +113,7 @@ public class ProductListAdapter extends BaseAdapter {
         }
         convertView.setContentDescription(listBean.getCategoryChild());
 
-        viewHolder.mOperationWidget.setData(mOnClick,listBean);
+        viewHolder.mOperationWidget.setData(mOnClick,listBean,productCountSetter.getCount(listBean));
 
         //标签
         if (TextUtils.isEmpty(listBean.getProductTag())) {

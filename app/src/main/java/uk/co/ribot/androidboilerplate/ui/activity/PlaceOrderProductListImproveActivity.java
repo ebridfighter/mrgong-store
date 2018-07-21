@@ -17,11 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.runwise.commomlibrary.util.DensityUtil;
+import com.runwise.commomlibrary.view.DrapBubble.DragBubbleView;
 import com.runwise.commomlibrary.view.LoadingLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -78,7 +80,7 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
     @BindView(R.id.iv_product_cart)
     ImageView mIvProductCart;
     @BindView(R.id.tv_cart_count)
-    TextView mTvCartCount;
+    DragBubbleView mTvCartCount;
     @BindView(R.id.tv_product_total_price)
     TextView mTvProductTotalPrice;
     @BindView(R.id.tv_product_total_count)
@@ -110,10 +112,44 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
         mPlaceOrderProductListImprovePresenter.attachView(this);
         showLoadingDialog(getString(R.string.loading_products));
         mPlaceOrderProductListImprovePresenter.loadCategorys();
+        setUpCartCountListener();
+    }
+
+    private void setUpCartCountListener(){
+        mTvCartCount.setOnBubbleStateListener(new DragBubbleView.OnBubbleStateListener() {
+            @Override
+            public void onDrag() {
+
+            }
+
+            @Override
+            public void onMove() {
+
+            }
+
+            @Override
+            public void onRestore() {
+
+            }
+
+            @Override
+            public void onDismiss() {
+//                通知各个分类fragment更新商品编辑信息
+               Set<ProductBean> productBeanList = mCounterMap.keySet();
+                for (ProductBean productBean:productBeanList){
+                    mCounterMap.put(productBean,new Double(0));
+                    getRxBus().post(productBean);
+                }
+                mCounterMap.clear();
+            }
+        });
     }
 
     private void updateCart() {
         int productTypeCount = mCounterMap.size();
+        if (productTypeCount > 0 && mTvCartCount.getState() == DragBubbleView.STATE_DISMISS){
+            mTvCartCount.reCreate();
+        }
         mTvCartCount.setVisibility(productTypeCount > 0 ? View.VISIBLE : View.GONE);
         mTvCartCount.setText(String.valueOf(productTypeCount));
     }
@@ -121,15 +157,14 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
 
     ProductCountSetter mProductCountSetter = new ProductCountSetter() {
         @Override
-        public void setCount(ProductBean bean, double count) {
+        public void setCount(ProductBean productBean, double count) {
             if (count <= 0){
-                mCounterMap.remove(bean);
+                mCounterMap.remove(productBean);
             }else{
-                mCounterMap.put(bean, count);
+                mCounterMap.put(productBean, count);
             }
 //            通知fragment去更新
-            ProductCountUpdateEvent productCountUpdateEvent = new ProductCountUpdateEvent(bean, count);
-            getRxBus().post(productCountUpdateEvent);
+            getRxBus().post(productBean);
             updateCart();
         }
 
