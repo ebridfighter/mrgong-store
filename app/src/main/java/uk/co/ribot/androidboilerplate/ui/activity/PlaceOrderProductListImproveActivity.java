@@ -174,7 +174,7 @@ public class PlaceOrderProductListImproveActivity extends BaseActivity implement
             if (count == null) {
                 return 0;
             }
-            return count;
+            return count.doubleValue();
         }
 
     };

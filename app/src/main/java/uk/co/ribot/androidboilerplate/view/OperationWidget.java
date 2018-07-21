@@ -128,13 +128,13 @@ public class OperationWidget extends FrameLayout {
         this.mProductBean = productBean;
         this.onAddClick = onAddClick;
         count = tempCount;
-        if (count == 0) {
+        if (count == 0f) {
             sub.setAlpha(0);
             tv_count.setAlpha(0);
         } else {
             sub.setAlpha(1f);
             tv_count.setAlpha(1f);
-            tv_count.setText(count + "");
+            tv_count.setText(NumberUtil.getIOrD(count));
         }
     }
     public void setState(long count) {
@@ -143,8 +143,8 @@ public class OperationWidget extends FrameLayout {
 
     public void expendAdd(long count) {
         this.count = count;
-        tv_count.setText(count == 0 ? "1" : count + "");
-        if (count == 0) {
+        tv_count.setText(count == 0f ? "1" : NumberUtil.getIOrD(count));
+        if (count == 0f) {
             subAnim();
         }
     }
