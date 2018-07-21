@@ -1,9 +1,11 @@
 package uk.co.ribot.androidboilerplate.data.remote.gsonconverterfactory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,13 +73,18 @@ public class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
                     //有数据返回,但是没有data这个key
                     dataJson = responseJson.optJSONObject("result");
                 }
-                if (dataJson != null){
-                    StringReader stringReader = new StringReader(dataJson.toString());
-                    try {
+                //dataJson有可能为null,预设一个默认值
+                String dataJsonString = "{}";
+                if (dataJson != null) {
+                    dataJsonString = dataJson.toString();
+                }
+                StringReader stringReader = new StringReader(dataJsonString);
+                try {
+                    if (stringReader != null) {
                         return adapter.read(gson.newJsonReader(stringReader));
-                    } finally {
-                        value.close();
                     }
+                } finally {
+                    value.close();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

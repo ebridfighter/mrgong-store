@@ -15,6 +15,9 @@ public class ProductListResponse implements Serializable {
     private List<ProductBean> products;
     int version;
     List<CategoryBean> category;
+//    本地字段
+    private String exception;
+
     public List<ProductBean> getProducts() {
         return products;
     }
@@ -39,4 +42,11 @@ public class ProductListResponse implements Serializable {
         this.category = category;
     }
 
+    public String getException() {
+        return exception;
+    }
+
+    public void setException(String exception) {
+        this.exception = exception;
+    }
 }

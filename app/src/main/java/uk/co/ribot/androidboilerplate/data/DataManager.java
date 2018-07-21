@@ -2,6 +2,8 @@ package uk.co.ribot.androidboilerplate.data;
 
 import android.util.Log;
 
+import com.raizlabs.android.dbflow.sql.language.Delete;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,6 +16,7 @@ import io.reactivex.functions.Function;
 import uk.co.ribot.androidboilerplate.data.local.DatabaseHelper;
 import uk.co.ribot.androidboilerplate.data.local.PreferencesHelper;
 import uk.co.ribot.androidboilerplate.data.model.database.CategoryBean;
+import uk.co.ribot.androidboilerplate.data.model.database.CategoryChildBean;
 import uk.co.ribot.androidboilerplate.data.model.database.ProductBean;
 import uk.co.ribot.androidboilerplate.data.model.database.Ribot;
 import uk.co.ribot.androidboilerplate.data.model.database.UserBean;
@@ -161,7 +164,9 @@ public class DataManager {
                 })
                .onErrorReturn(throwable -> {
                     Log.i("onErrorReturn", throwable.toString());
-                    return null;
+                   ProductListResponse productListResponse = new ProductListResponse();
+                   productListResponse.setException(throwable.getMessage());
+                    return productListResponse;
                 });
     }
 
@@ -422,6 +427,10 @@ public class DataManager {
 
     public void deleteUser(UserBean userBean){
         mDatabaseHelper.deleteUser(userBean);
+    }
+
+    public void cleanUpProductsAndCategorys() {
+        mDatabaseHelper.cleanUpProductsAndCategorys();
     }
 
 

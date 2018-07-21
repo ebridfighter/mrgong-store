@@ -130,6 +130,13 @@ public class DatabaseHelper {
         });
     }
 
+    public void cleanUpProductsAndCategorys() {
+        Delete.table(ProductBean.class);
+        Delete.table(CategoryBean.class);
+        Delete.table(CategoryChildBean.class);
+    }
+
+
     private void setCategoryParent(List<CategoryBean> categoryBeanList){
         //异步事务 存商品父分类数据
         FlowManager.getDatabase(AppDatabase.class)

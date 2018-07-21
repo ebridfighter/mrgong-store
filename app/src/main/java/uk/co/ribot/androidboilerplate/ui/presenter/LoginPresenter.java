@@ -114,7 +114,6 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                         public void onNext(LoginResponse loginResponse) {
                             String success = loginResponse.getIsSuccess();
                             mDataManager.saveUserToDB(companyName,account, password);
-                            loadUserList();
                             if (TextUtils.isEmpty(success) || "false".equals(success)) {
                                 getMvpView().loginConflict();
                             } else {

@@ -37,6 +37,7 @@ import uk.co.ribot.androidboilerplate.injection.component.ConfigPersistentCompon
 import uk.co.ribot.androidboilerplate.injection.component.DaggerConfigPersistentComponent;
 import uk.co.ribot.androidboilerplate.injection.component.ExampleActivityComponent;
 import uk.co.ribot.androidboilerplate.ui.activity.LoginActivity;
+import uk.co.ribot.androidboilerplate.ui.presenter.CommonPresenter;
 import uk.co.ribot.androidboilerplate.util.ActivityUtil;
 import uk.co.ribot.androidboilerplate.util.RxEventBus;
 import uk.co.ribot.androidboilerplate.util.ToastUtil;
@@ -47,7 +48,7 @@ import uk.co.ribot.androidboilerplate.view.RunwiseDialog;
  * creation of Dagger components and makes sure that instances of ConfigPersistentComponent survive
  * across configuration changes.
  */
-public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelper.Delegate,OnRefreshListener, OnLoadMoreListener {
+public class BaseActivity extends AppCompatActivity implements MvpView,BGASwipeBackHelper.Delegate,OnRefreshListener, OnLoadMoreListener {
     protected BGASwipeBackHelper mSwipeBackHelper;
     private static final String KEY_ACTIVITY_ID = "KEY_ACTIVITY_ID";
     private static final AtomicLong NEXT_ID = new AtomicLong(0);
@@ -58,6 +59,8 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
     protected View mRootView;
     @Inject
     protected RunwiseDialog mDialog;
+    @Inject
+    protected CommonPresenter mCommonPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,7 @@ public class BaseActivity extends AppCompatActivity implements BGASwipeBackHelpe
                     BoilerplateApplication.get(getActivityContext()).getComponent().preferencesHelper().clear();
                     ActivityUtil.getInstance().finishAll();
                     startActivity(LoginActivity.getStartIntent(getActivityContext()));
+                    mCommonPresenter.cleanUpProductsAndCategorys();
                 }
             }
         });

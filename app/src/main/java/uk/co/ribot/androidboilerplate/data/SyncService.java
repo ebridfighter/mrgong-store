@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
+import android.text.TextUtils;
 
 import javax.inject.Inject;
 
@@ -16,10 +17,12 @@ import io.reactivex.schedulers.Schedulers;
 import rx.Subscription;
 import timber.log.Timber;
 import uk.co.ribot.androidboilerplate.BoilerplateApplication;
+import uk.co.ribot.androidboilerplate.data.model.net.exception.ApiException;
 import uk.co.ribot.androidboilerplate.data.model.net.response.ProductListResponse;
 import uk.co.ribot.androidboilerplate.util.AndroidComponentUtil;
 import uk.co.ribot.androidboilerplate.util.NetworkUtil;
 import uk.co.ribot.androidboilerplate.util.RxUtil;
+import uk.co.ribot.androidboilerplate.util.ToastUtil;
 
 public class SyncService extends Service {
 
@@ -77,6 +80,10 @@ public class SyncService extends Service {
 
                     @Override
                     public void onNext(ProductListResponse productListResponse) {
+                        if (!TextUtils.isEmpty(productListResponse.getException()) && productListResponse.getException().contains("协议已过期或未维护")){
+                            ToastUtil.show(getApplicationContext(),productListResponse.getException());
+                            return;
+                        }
                         mDataManager.saveProductListVersion(productListResponse.getVersion());
                     }
                 });

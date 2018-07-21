@@ -26,6 +26,7 @@ public class CommonPresenter extends BasePresenter<MvpView>{
         return false;
     }
 
-
-
+    public void cleanUpProductsAndCategorys(){
+        mDataManager.cleanUpProductsAndCategorys();
+    }
 }
